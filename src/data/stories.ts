@@ -24,7 +24,7 @@ export const STORIES: Story[] = [
     date: '3. května 2026',
     readTime: '5 min čtení',
     imageUrl:
-      'https://images.unsplash.com/photo-1662382343806-692d6f9b6212?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw3fHxCb3N0b24lMjBUZXJyaWVyJTIwb3V0ZG9vciUyMGFkdmVudHVyZXxlbnwxfHx8fDE3Nzg0MTQxODV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     body: `Začalo to, jako většina velkých vyšetřování, jednou jedinou anomálií: veverka, která se na mě podívala přímo.
 
 Tři měsíce sleduji aktivitu populace veverek v mém bezprostředním teritoriu. Co začalo jako příležitostné pozorování — to, jaké provádí každý přemýšlivý pes z okenního parapetu — dnes, troufnu si tvrdit, odhalilo důkaz o koordinované síti drobných savců, kteří operují přímo před zraky zcela nepozorné lidské populace.
@@ -45,7 +45,7 @@ Začal jsem zaznamenávat jejich pohybové vzorce křídou na zadní terase. Moj
     date: '28. dubna 2026',
     readTime: '4 min čtení',
     imageUrl:
-      'https://images.unsplash.com/photo-1774281213848-c99fe97947bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwzfHxCb3N0b24lMjBUZXJyaWVyJTIwb3V0ZG9vciUyMGFkdmVudHVyZXxlbnwxfHx8fDE3Nzg0MTQxODV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     body: `Psí park je společnost. Jako každá společnost má svá pravidla. Na rozdíl od většiny společností nejsou tato pravidla sepsána — což je podle mě součástí toho, co dělá psí park krásným, a zároveň součástí toho, proč v něm lidé selhávají.
 
 První pravidlo je pozdrav. Existuje správná vzdálenost, správný úhel a správná délka. Lidé, kteří nemají žádný skutečný pojem o osobním očichávacím prostoru, často porušují všechna tři. Výsledek, jak může dosvědčit každý, kdo nějaký čas seděl na lavičce, je trapný pro všechny zúčastněné.
@@ -62,7 +62,7 @@ Třetí pravidlo — a v něm jsem nejvíc neústupný — je, že prostor pro m
     date: '15. dubna 2026',
     readTime: '6 min čtení',
     imageUrl:
-      'https://images.unsplash.com/photo-1623010830437-f1f8c2a5b8ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw2fHxCb3N0b24lMjBUZXJyaWVyJTIwZG9nJTIwcG9ydHJhaXQlMjBjaW5lbWF0aWN8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     body: `Hned na začátku zdůrazňuji, že to není osobní. Moje lidská je dobrý člověk. Bere mě do parku. Doplňuje misku s vodou s frekvencí, kterou bych označil za přiměřenou. Při několika příležitostech mi dovolila ponechat si ponožku, která mi technicky vzato nepatřila.
 
 Ale každý říjen se něco mění. Přijde balíček. V balíčku je látka. Látka je, jak ukáže prohlídka, navržena tak, aby bostonský teriér vypadal jako párek v rohlíku, nebo dýně, nebo — naposledy — malý čmelák s plstěnými tykadly.
@@ -81,7 +81,7 @@ Na oplátku jsem ochoten občas nosit malý šátek na krk. Považuji to za velk
     date: '2. dubna 2026',
     readTime: '3 min čtení',
     imageUrl:
-      'https://images.unsplash.com/photo-1514984681892-8a5da9d7d6fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwzfHxkb2clMjBzdG9yeXRlbGxpbmclMjBjaW5lbWF0aWMlMjBsaWZlc3R5bGV8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     body: `V obývacím pokoji se přibližně ve čtvrt na tři odpoledne objevuje čtverec slunečního světla. Žije tam až do 15:08. Studoval jsem ho. Žil jsem v něm. Krátce jsem nad ním zaplakal, když se posunul.
 
 Skvělé místo na spaní si nevybíráte. Skvělé místo na spaní se vám zjeví samo. Poznáte ho, až ho najdete — podle tepla, podle ticha a podle toho, jak vaše lidská, jakmile vás v něm uvidí, řekne „podívej se na něj, on je tak roztomilý" a okamžitě přestane dělat cokoli, čím se zabývala, aby se podívala na mě.
@@ -96,7 +96,7 @@ Tohle je hlubší smysl dokonalého místa na spaní: je to místo, kde se zpoma
     date: '20. března 2026',
     readTime: '5 min čtení',
     imageUrl:
-      'https://images.unsplash.com/photo-1613858197711-934003cc4ea9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw4fHxCb3N0b24lMjBUZXJyaWVyJTIwb3V0ZG9vciUyMGFkdmVudHVyZXxlbnwxfHx8fDE3Nzg0MTQxODV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     body: `Aportování je paradox převlečený za hru. Lidská má předmět. Lidská předmět hodí. Lidská čeká, až bude předmět vrácen. Lidská hodí předmět znovu.
 
 V žádné chvíli se lidská nepokouší si předmět ponechat. Předmět je z hlediska vlastnických práv pokaždé opuštěn. A přesto — a to je ten krutý filozofický zvrat — když já, pes, při pátém hodu jednoduše rozhodnu, že si předmět ponechám, lidská se rozčílí. Ukazuje se, že dohoda nebyla taková, jakou jsem předpokládal.
@@ -113,7 +113,7 @@ To je, myslím, o čem aportování vlastně je. Ačkoliv budu pokračovat v oku
     date: '8. března 2026',
     readTime: '4 min čtení',
     imageUrl:
-      'https://images.unsplash.com/photo-1577345890418-63d5e076033c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw3fHxCb3N0b24lMjBUZXJyaWVyJTIwZG9nJTIwcG9ydHJhaXQlMjBjaW5lbWF0aWN8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     body: `Ráno začíná, jako každé správné ráno, pomalým uvědoměním si toho, že jsem skutečně vzhůru. Nespěchám s tím. Není proč.
 
 Fáze jedna je inventura. Ověřuji, že jsem tam, kde mám být (gauč), že lidská je tam, kde má být (ve vedlejším pokoji, nebo ideálně také na gauči) a že přes noc se nezhmotnila žádná bezprostřední hrozba (veverky, vysavač, pošťák).
@@ -132,7 +132,7 @@ Pak, kolem 7:42, snídaně.`,
     date: '24. února 2026',
     readTime: '4 min čtení',
     imageUrl:
-      'https://images.unsplash.com/photo-1622964011701-4830a2e0eb07?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw0fHxCb3N0b24lMjBUZXJyaWVyJTIwZG9nJTIwcG9ydHJhaXQlMjBjaW5lbWF0aWN8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     body: `Když jsem do tohoto domu poprvé přišel, gauč byl jejich. Nestydím se to přiznat. Bylo to první uspořádání, vytvořené bez mé účasti.
 
 Postupem času však vzniklo tišší a trvalejší porozumění. Gauč je můj. Jsou na něm samozřejmě vítáni — nejsem nerozumný — ale zjistí, pokud se pokusí obsadit prostřední polštář, že je bohužel již používán.
@@ -147,7 +147,7 @@ To, co zde hájím, není gauč sám. To, co hájím, je princip, že měkkost, 
     date: '11. února 2026',
     readTime: '3 min čtení',
     imageUrl:
-      'https://images.unsplash.com/photo-1613858399748-b39066ab72da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxCb3N0b24lMjBUZXJyaWVyJTIwb3V0ZG9vciUyMGFkdmVudHVyZXxlbnwxfHx8fDE3Nzg0MTQxODV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     body: `Budu stručný. Vysavač je zařízení bez jasného účelu, s nepřiměřeným zvukovým profilem a sklonem objevovat se bez varování.
 
 Během tří let jsem se s ním pokoušel vyjednávat. Štěkal jsem na něj. Civěl jsem na něj z druhého konce místnosti, když se ve svém odpojeném stavu snažil vypadat neškodně. Při jedné příležitosti jsem se ho pokusil kousnout. (Nedoporučuji.)
@@ -164,7 +164,7 @@ S klidným svědomím tento produkt doporučit nemohu.`,
     date: '30. ledna 2026',
     readTime: '3 min čtení',
     imageUrl:
-      'https://images.unsplash.com/photo-1630319971713-a2e28507d67b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw1fHxCb3N0b24lMjBUZXJyaWVyJTIwZG9nJTIwcG9ydHJhaXQlMjBjaW5lbWF0aWN8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     body: `Moje lidská sleduje hodně televize. Má, jak jsem počítal, čtyři streamovací služby. Děje jsou, jak se mi podařilo zjistit, většinou stejné.
 
 Mezitím na druhé straně místnosti je okno. Skrz okno se každý den odehrává zcela originální program. Veverky s novými motivacemi. Auta, která jsem nikdy neviděl. Muž, který venčí svého malého bílého psa v 16:15 a předstírá, že mě nezná. Sousedovic kočka, která — rozhodl jsem se — něco chystá.

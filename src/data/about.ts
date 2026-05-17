@@ -19,7 +19,7 @@ export interface AboutFeature {
 export const ABOUT = {
   portrait: {
     imageUrl:
-      'https://images.unsplash.com/photo-1630319971713-a2e28507d67b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw1fHxCb3N0b24lMjBUZXJyaWVyJTIwZG9nJTIwcG9ydHJhaXQlMjBjaW5lbWF0aWN8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      '/images/hugo.jpg',
     alt: 'Portrét Huga',
   },
   badge: {
@@ -35,12 +35,12 @@ export const ABOUT = {
     {
       Icon: Star,
       title: 'Nejvýše hodnocený',
-      description: '4,9/5 průměrné hodnocení',
+      description: '1000 kg+',
     },
     {
       Icon: Heart,
       title: 'Komunita',
-      description: '500K+ sledujících',
+      description: '1000 kg+',
     },
     {
       Icon: Zap,

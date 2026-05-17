@@ -101,7 +101,7 @@ export const HOME = {
         description:
           'Poznávám svět, jedno přičichnutí po druhém. Od parků až po pláže — buďte u mých statečných výprav.',
         Icon: Compass,
-        videoCount: '48 videí',
+        videoCount: '1000 kg+',
       },
       {
         slug: 'Všední den',
@@ -109,7 +109,7 @@ export const HOME = {
         description:
           'Všední okamžiky, které dělají život zajímavým. Jak se dívám na polštáře na gauči i na čas večeře.',
         Icon: HomeIcon,
-        videoCount: '72 videí',
+        videoCount: '1000 kg+',
       },
       {
         slug: 'Komentáře',
@@ -117,7 +117,7 @@ export const HOME = {
         description:
           'Postřehy k lidskému chování, podávané s typickým sarkasmem a šarmem.',
         Icon: MessageCircle,
-        videoCount: '56 videí',
+        videoCount: '1000 kg+',
       },
       {
         slug: 'Návody',
@@ -125,7 +125,7 @@ export const HOME = {
         description:
           'Životně důležité dovednosti, které by měl ovládat každý pes (i člověk). Učí odborník: já.',
         Icon: GraduationCap,
-        videoCount: '32 videí',
+        videoCount: '1000 kg+',
       },
     ] satisfies CategoryItem[],
   },
@@ -146,21 +146,21 @@ export const HOME = {
       {
         platform: 'Instagram',
         Icon: Instagram,
-        followers: '285K',
+        followers: '1000 kg+',
         description: 'Denní stories a zákulisí',
         handle: '@hugo.stories',
       },
       {
         platform: 'YouTube',
         Icon: Youtube,
-        followers: '450K',
+        followers: '1000 kg+',
         description: 'Plnohodnotné filmové epizody',
         handle: '@HugoStories',
       },
       {
         platform: 'Facebook',
         Icon: Facebook,
-        followers: '95K',
+        followers: '1000 kg+',
         description: 'Komunita a diskuse',
         handle: 'Hugo Stories',
       },
