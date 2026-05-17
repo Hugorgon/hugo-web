@@ -8,13 +8,15 @@ import { PageHeader } from '../components/PageHeader';
 import { CategoryFilter } from '../components/CategoryFilter';
 import { Button } from '../components/Button';
 import {
-  VIDEOS,
+  VIDEOS as LOCAL_VIDEOS,
   VIDEO_CATEGORIES,
+  type Video,
   type VideoCategory,
 } from '../../data/videos';
 import { PAGES } from '../../data/pages';
 import { UI } from '../../data/ui';
 import { interpolate } from '../../lib/format';
+import { fetchVideos } from '../../lib/queries/videos';
 
 type Filter = typeof UI.archive.videos.filterAll | VideoCategory;
 const FILTERS: readonly Filter[] = [UI.archive.videos.filterAll, ...VIDEO_CATEGORIES];
@@ -26,6 +28,20 @@ const VALID_CATEGORIES: ReadonlySet<string> = new Set(VIDEO_CATEGORIES);
 export function VideosPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [visible, setVisible] = useState(PAGE_SIZE);
+
+  // Initial state z local fallbacku — první render je synchronní a vizuálně
+  // identický s předchozí verzí. Sanity data přepíšou state až po async fetchi.
+  const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchVideos().then((data) => {
+      if (!cancelled && data.length > 0) setVideos(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Filtr je řízený URL parametrem ?category=… — homepage Categories karty
   // tak mohou linkovat přímo na předfiltrovaný archiv, back/forward navigace
@@ -53,9 +69,9 @@ export function VideosPage() {
   }
 
   const filtered = useMemo(() => {
-    if (filter === UI.archive.videos.filterAll) return VIDEOS;
-    return VIDEOS.filter((v) => v.category === filter);
-  }, [filter]);
+    if (filter === UI.archive.videos.filterAll) return videos;
+    return videos.filter((v) => v.category === filter);
+  }, [filter, videos]);
 
   const visibleVideos = filtered.slice(0, visible);
   const hasMore = visible < filtered.length;
