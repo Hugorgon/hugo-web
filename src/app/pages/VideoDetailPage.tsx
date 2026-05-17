@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { ChevronLeft, Clock, Eye, Play, Calendar } from 'lucide-react';
 import { Link, useParams } from 'react-router';
 import { Navbar } from '../components/Navbar';
@@ -7,10 +8,11 @@ import { VideoCardVertical } from '../components/VideoCardVertical';
 import { Button } from '../components/Button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { NotFoundPage } from './NotFoundPage';
-import { getRelatedVideos, getVideoBySlug } from '../../data/videos';
+import { VIDEOS as LOCAL_VIDEOS, type Video } from '../../data/videos';
 import { ROUTES } from '../../data/routes';
 import { UI } from '../../data/ui';
 import { formatDate } from '../../lib/format';
+import { fetchVideoBySlug, fetchRelatedVideos } from '../../lib/queries/videos';
 
 /**
  * Detail videa ve stylu Reels / Shorts / TikTok.
@@ -27,13 +29,47 @@ import { formatDate } from '../../lib/format';
  */
 export function VideoDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const video = slug ? getVideoBySlug(slug) : undefined;
+
+  // Initial state z local fallbacku — pokud slug existuje lokálně, první render
+  // je synchronní a vizuálně identický s předchozí verzí. Sanity data přepíší
+  // state až po async fetchi (pokud existují).
+  const localMatch = slug
+    ? LOCAL_VIDEOS.find((v) => v.slug === slug)
+    : undefined;
+
+  // Local „related" replikuje category-priority logiku z fetchRelatedVideos,
+  // aby initial render měl stejné pořadí karet jako po fetchi z Sanity.
+  const localRelated = (() => {
+    if (!slug) return [];
+    const others = LOCAL_VIDEOS.filter((v) => v.slug !== slug);
+    if (!localMatch) return others.slice(0, 4);
+    return [
+      ...others.filter((v) => v.category === localMatch.category),
+      ...others.filter((v) => v.category !== localMatch.category),
+    ].slice(0, 4);
+  })();
+
+  const [video, setVideo] = useState<Video | undefined>(localMatch);
+  const [related, setRelated] = useState<Video[]>(localRelated);
+
+  useEffect(() => {
+    if (!slug) return;
+    let cancelled = false;
+    fetchVideoBySlug(slug).then((data) => {
+      if (!cancelled && data) setVideo(data);
+    });
+    fetchRelatedVideos(slug, 4).then((data) => {
+      if (!cancelled && data.length > 0) setRelated(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
 
   if (!slug || !video) {
     return <NotFoundPage />;
   }
 
-  const related = getRelatedVideos(slug, 4);
   const paragraphs = video.longDescription.split(/\n\s*\n/);
 
   return (
