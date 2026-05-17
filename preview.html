@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hugo Stories — Updated Homepage Preview</title>
+
+    <!--
+      Self-contained preview. No external CSS or JS frameworks.
+      The <style> below implements every utility class used in the markup,
+      mirroring Tailwind v4 + the project's theme.css. Icons are rendered by
+      a tiny inline script that injects lucide-style SVG paths.
+    -->
+
+    <style>
+      /* ============================================================
+         RESET + BASE
+         ============================================================ */
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      html {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          'Helvetica Neue', Arial, sans-serif;
+        -webkit-text-size-adjust: 100%;
+        scroll-behavior: smooth;
+        scroll-padding-top: 5rem;
+        font-size: 16px;
+      }
+      body {
+        line-height: 1.5;
+        color: #f9fafb;
+        background: #0a0a0b;
+      }
+      img, svg { display: block; max-width: 100%; }
+      img { height: auto; }
+      button {
+        font: inherit; color: inherit; background: none;
+        border: 0; padding: 0; cursor: pointer;
+      }
+      a { color: inherit; text-decoration: none; }
+      ul { list-style: none; padding: 0; margin: 0; }
+      h1, h2, h3, h4, h5, h6, p { margin: 0; }
+      input { font: inherit; color: inherit; }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+      }
+
+      /* ============================================================
+         LAYOUT / DISPLAY
+         ============================================================ */
+      .block { display: block; }
+      .inline-block { display: inline-block; }
+      .flex { display: flex; }
+      .grid { display: grid; }
+      .hidden { display: none; }
+
+      .relative { position: relative; }
+      .absolute { position: absolute; }
+      .fixed { position: fixed; }
+
+      .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+      .top-0 { top: 0; }
+      .right-0 { right: 0; }
+      .bottom-0 { bottom: 0; }
+      .left-0 { left: 0; }
+      .top-3 { top: 0.75rem; }
+      .right-3 { right: 0.75rem; }
+      .bottom-3 { bottom: 0.75rem; }
+      .left-3 { left: 0.75rem; }
+      .bottom-8 { bottom: 2rem; }
+      .left-1\/2 { left: 50%; }
+      .-bottom-6 { bottom: -1.5rem; }
+      .-right-6 { right: -1.5rem; }
+
+      .z-0 { z-index: 0; }
+      .z-10 { z-index: 10; }
+      .z-50 { z-index: 50; }
+
+      .overflow-hidden { overflow: hidden; }
+
+      /* Flex */
+      .flex-col { flex-direction: column; }
+      .flex-wrap { flex-wrap: wrap; }
+      .flex-1 { flex: 1 1 0%; }
+      .flex-shrink-0 { flex-shrink: 0; }
+      .items-start { align-items: flex-start; }
+      .items-center { align-items: center; }
+      .items-end { align-items: flex-end; }
+      .justify-center { justify-content: center; }
+      .justify-between { justify-content: space-between; }
+
+      /* Grid */
+      .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+      .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+      /* ============================================================
+         SIZING
+         ============================================================ */
+      .min-h-screen { min-height: 100vh; }
+
+      .h-3 { height: 0.75rem; }
+      .h-4 { height: 1rem; }
+      .h-5 { height: 1.25rem; }
+      .h-6 { height: 1.5rem; }
+      .h-8 { height: 2rem; }
+      .h-10 { height: 2.5rem; }
+      .h-12 { height: 3rem; }
+      .h-16 { height: 4rem; }
+      .h-20 { height: 5rem; }
+      .h-64 { height: 16rem; }
+      .h-full { height: 100%; }
+      .h-\[18px\] { height: 18px; }
+
+      .w-3 { width: 0.75rem; }
+      .w-4 { width: 1rem; }
+      .w-5 { width: 1.25rem; }
+      .w-6 { width: 1.5rem; }
+      .w-8 { width: 2rem; }
+      .w-10 { width: 2.5rem; }
+      .w-12 { width: 3rem; }
+      .w-16 { width: 4rem; }
+      .w-64 { width: 16rem; }
+      .w-full { width: 100%; }
+      .w-px { width: 1px; }
+      .w-\[18px\] { width: 18px; }
+
+      .max-w-xl { max-width: 36rem; }
+      .max-w-2xl { max-width: 42rem; }
+      .max-w-3xl { max-width: 48rem; }
+      .max-w-\[1290px\] { max-width: 1290px; }
+
+      .mx-auto { margin-left: auto; margin-right: auto; }
+
+      /* Aspect ratios */
+      .aspect-video { aspect-ratio: 16 / 9; }
+      .aspect-\[4\/3\] { aspect-ratio: 4 / 3; }
+      .aspect-\[4\/5\] { aspect-ratio: 4 / 5; }
+
+      /* ============================================================
+         SPACING — padding
+         ============================================================ */
+      .p-6 { padding: 1.5rem; }
+      .p-12 { padding: 3rem; }
+
+      .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+      .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+      .px-4 { padding-left: 1rem; padding-right: 1rem; }
+      .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+
+      .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+      .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+      .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+      .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+      .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+      .py-24 { padding-top: 6rem; padding-bottom: 6rem; }
+      .py-32 { padding-top: 8rem; padding-bottom: 8rem; }
+
+      .pt-2 { padding-top: 0.5rem; }
+      .pt-8 { padding-top: 2rem; }
+
+      /* ============================================================
+         SPACING — margin
+         ============================================================ */
+      .mb-1 { margin-bottom: 0.25rem; }
+      .mb-2 { margin-bottom: 0.5rem; }
+      .mb-3 { margin-bottom: 0.75rem; }
+      .mb-4 { margin-bottom: 1rem; }
+      .mb-6 { margin-bottom: 1.5rem; }
+      .mb-8 { margin-bottom: 2rem; }
+      .mb-12 { margin-bottom: 3rem; }
+      .mb-16 { margin-bottom: 4rem; }
+      .mt-12 { margin-top: 3rem; }
+      .ml-1 { margin-left: 0.25rem; }
+
+      /* Gap */
+      .gap-1 { gap: 0.25rem; }
+      .gap-2 { gap: 0.5rem; }
+      .gap-3 { gap: 0.75rem; }
+      .gap-4 { gap: 1rem; }
+      .gap-6 { gap: 1.5rem; }
+      .gap-8 { gap: 2rem; }
+      .gap-12 { gap: 3rem; }
+      .gap-16 { gap: 4rem; }
+      .gap-x-6 { column-gap: 1.5rem; }
+      .gap-y-2 { row-gap: 0.5rem; }
+      .gap-y-3 { row-gap: 0.75rem; }
+      .gap-y-4 { row-gap: 1rem; }
+
+      /* Space between (vertical) */
+      .space-y-2 > * + * { margin-top: 0.5rem; }
+
+      /* ============================================================
+         BORDERS / RADIUS / SHADOW
+         ============================================================ */
+      .rounded { border-radius: 0.25rem; }
+      .rounded-lg { border-radius: 0.5rem; }
+      .rounded-2xl { border-radius: 1rem; }
+      .rounded-full { border-radius: 9999px; }
+
+      .border { border-width: 1px; border-style: solid; border-color: #2a2b31; }
+      .border-t { border-top-width: 1px; border-top-style: solid; border-top-color: #2a2b31; }
+      .border-b { border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #2a2b31; }
+
+      .border-\[\#2A2B31\] { border-color: #2a2b31; }
+      .border-\[\#F59E0B\] { border-color: #f59e0b; }
+      .border-\[\#F59E0B\]\/30 { border-color: rgba(245, 158, 11, 0.3); }
+      .border-\[\#F59E0B\]\/20 { border-color: rgba(245, 158, 11, 0.2); }
+
+      .shadow-2xl {
+        box-shadow:
+          0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      }
+
+      /* ============================================================
+         BACKGROUND COLORS
+         ============================================================ */
+      .bg-\[\#0A0A0B\] { background-color: #0a0a0b; }
+      .bg-\[\#0A0A0B\]\/80 { background-color: rgba(10, 10, 11, 0.8); }
+      .bg-\[\#111214\] { background-color: #111214; }
+      .bg-\[\#161618\] { background-color: #161618; }
+      .bg-\[\#2A2B31\] { background-color: #2a2b31; }
+      .bg-\[\#F59E0B\] { background-color: #f59e0b; }
+      .bg-\[\#F59E0B\]\/10 { background-color: rgba(245, 158, 11, 0.1); }
+      .bg-\[\#F59E0B\]\/5 { background-color: rgba(245, 158, 11, 0.05); }
+      .bg-black\/80 { background-color: rgba(0, 0, 0, 0.8); }
+
+      /* Gradients — written as compound class selectors so we don't need
+         the Tailwind --tw-gradient-* variable scaffolding. */
+      .bg-gradient-to-t.from-\[\#0A0A0B\].via-\[\#0A0A0B\]\/80.to-\[\#0A0A0B\]\/40 {
+        background-image: linear-gradient(
+          to top,
+          rgba(10, 10, 11, 0.4),
+          rgba(10, 10, 11, 0.8),
+          #0a0a0b
+        );
+      }
+      .bg-gradient-to-r.from-\[\#0A0A0B\]\/60.to-transparent {
+        background-image: linear-gradient(
+          to right,
+          rgba(10, 10, 11, 0.6),
+          transparent
+        );
+      }
+      .bg-gradient-to-t.from-black\/60.to-transparent {
+        background-image: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.6),
+          transparent
+        );
+      }
+      .bg-gradient-to-t.from-black\/80.via-transparent.to-transparent {
+        background-image: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.8),
+          transparent,
+          transparent
+        );
+      }
+      .bg-gradient-to-t.from-\[\#0A0A0B\]\/60.to-transparent {
+        background-image: linear-gradient(
+          to top,
+          rgba(10, 10, 11, 0.6),
+          transparent
+        );
+      }
+      .bg-gradient-to-br.from-\[\#F59E0B\]\/10.to-transparent {
+        background-image: linear-gradient(
+          to bottom right,
+          rgba(245, 158, 11, 0.1),
+          transparent
+        );
+      }
+
+      /* ============================================================
+         TEXT
+         ============================================================ */
+      .text-\[\#F9FAFB\] { color: #f9fafb; }
+      .text-\[\#D1D5DB\] { color: #d1d5db; }
+      .text-\[\#9CA3AF\] { color: #9ca3af; }
+      .text-\[\#F59E0B\] { color: #f59e0b; }
+      .text-\[\#0A0A0B\] { color: #0a0a0b; }
+      .text-\[\#10B981\] { color: #10b981; }
+
+      .fill-\[\#0A0A0B\] { fill: #0a0a0b; }
+
+      .text-xs { font-size: 0.75rem; line-height: 1rem; }
+      .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+      .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+      .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+      .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+      .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+      .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+      .text-5xl { font-size: 3rem; line-height: 1; }
+
+      .font-medium { font-weight: 500; }
+      .font-semibold { font-weight: 600; }
+      .font-bold { font-weight: 700; }
+
+      .leading-tight { line-height: 1.25; }
+      .leading-relaxed { line-height: 1.625; }
+
+      .text-left { text-align: left; }
+      .text-center { text-align: center; }
+      .whitespace-nowrap { white-space: nowrap; }
+
+      /* ============================================================
+         OBJECT / EFFECTS
+         ============================================================ */
+      .object-cover { object-fit: cover; }
+
+      .opacity-0 { opacity: 0; }
+
+      .backdrop-blur-lg {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+      .blur-3xl { filter: blur(64px); }
+
+      /* Transforms — Tailwind composes these via CSS variables; we use a
+         single transform with both translate and scale where needed. */
+      .-translate-x-1\/2 { transform: translateX(-50%); }
+
+      /* Transitions */
+      .transition-all {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+      .transition-colors {
+        transition-property:
+          color, background-color, border-color, fill, stroke;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+      .transition-transform {
+        transition-property: transform;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+      .transition-opacity {
+        transition-property: opacity;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+      .duration-300 { transition-duration: 300ms; }
+      .duration-500 { transition-duration: 500ms; }
+
+      /* Cursor */
+      .cursor-pointer { cursor: pointer; }
+
+      /* ============================================================
+         INTERACTIVE — hover / focus / placeholder
+         ============================================================ */
+      .hover\:text-\[\#F9FAFB\]:hover { color: #f9fafb; }
+      .hover\:text-\[\#F59E0B\]:hover { color: #f59e0b; }
+      .hover\:text-\[\#FFB84D\]:hover { color: #ffb84d; }
+      .hover\:bg-\[\#FFB84D\]:hover { background-color: #ffb84d; }
+      .hover\:bg-\[\#1A1A1C\]:hover { background-color: #1a1a1c; }
+      .hover\:border-\[\#F59E0B\]:hover { border-color: #f59e0b; }
+      .hover\:scale-\[1\.02\]:hover { transform: scale(1.02); }
+      /* hover:transform exists as a no-op in v4 (transform is implicit in
+         scale/translate utilities). Defining it as a marker for clarity. */
+      .hover\:transform { transform: none; }
+
+      .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
+      .focus\:border-\[\#F59E0B\]:focus { border-color: #f59e0b; }
+
+      .placeholder\:text-\[\#9CA3AF\]::placeholder { color: #9ca3af; }
+
+      /* Group hover */
+      .group:hover .group-hover\:scale-110 { transform: scale(1.1); }
+      .group:hover .group-hover\:opacity-100 { opacity: 1; }
+      .group:hover .group-hover\:text-\[\#F59E0B\] { color: #f59e0b; }
+      .group:hover .group-hover\:bg-\[\#F59E0B\]\/20 { background-color: rgba(245, 158, 11, 0.2); }
+
+      /* ============================================================
+         ANIMATIONS
+         ============================================================ */
+      /* The hero scroll-down indicator combines `-translate-x-1/2` with
+         `animate-bounce`. Both target `transform`, so the keyframes have
+         to bake the X translation in. */
+      @keyframes hugo-bounce-x {
+        0%, 100% {
+          transform: translateX(-50%) translateY(-25%);
+          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+        }
+        50% {
+          transform: translateX(-50%) translateY(0);
+          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+        }
+      }
+      .animate-bounce {
+        animation: hugo-bounce-x 1s infinite;
+      }
+
+      /* ============================================================
+         RESPONSIVE — sm (>=640px)
+         ============================================================ */
+      @media (min-width: 640px) {
+        .sm\:flex-row { flex-direction: row; }
+        .sm\:gap-8 { gap: 2rem; }
+        .sm\:block { display: block; }
+        .sm\:text-6xl { font-size: 3.75rem; line-height: 1; }
+      }
+
+      /* ============================================================
+         RESPONSIVE — md (>=768px)
+         ============================================================ */
+      @media (min-width: 768px) {
+        .md\:flex { display: flex; }
+        .md\:hidden { display: none; }
+        .md\:block { display: block; }
+        .md\:flex-row { flex-direction: row; }
+        .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .md\:p-16 { padding: 4rem; }
+        .md\:text-5xl { font-size: 3rem; line-height: 1; }
+        .md\:text-7xl { font-size: 4.5rem; line-height: 1; }
+      }
+
+      /* ============================================================
+         RESPONSIVE — lg (>=1024px)
+         ============================================================ */
+      @media (min-width: 1024px) {
+        .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .lg\:text-8xl { font-size: 6rem; line-height: 1; }
+      }
+
+      /* ============================================================
+         INTER FONT — use system stack as fallback. Real project loads
+         Google Fonts; we keep the system stack here so the file remains
+         offline-capable.
+         ============================================================ */
+      html { font-family: 'Inter', -apple-system, BlinkMacSystemFont,
+        'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+
+      /* ============================================================
+         MOBILE MENU — CSS-only toggle via :checked sibling.
+         The checkbox is positioned at the parent level so #mobile-menu
+         can be a sibling. The original markup keeps that relationship.
+         ============================================================ */
+      #mobile-menu-toggle:checked ~ #mobile-menu { display: block; }
+      #mobile-menu-toggle:checked ~ label .icon-menu { display: none; }
+      #mobile-menu-toggle:not(:checked) ~ label .icon-close { display: none; }
+
+      /* ============================================================
+         ICON SIZING — scale inline SVGs by their wrapper width/height
+         classes. The injection script copies the host element's classes
+         onto the SVG, so width/height utilities apply directly.
+         ============================================================ */
+      svg[data-lucide-rendered] {
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      /* Where fill-[#0A0A0B] is applied, override the SVG default `none`. */
+      svg.fill-\[\#0A0A0B\] { fill: #0a0a0b; stroke: #0a0a0b; }
+    </style>
+  </head>
+
+  <body class="min-h-screen bg-[#0A0A0B]">
+    <!-- ==================== NAVBAR ==================== -->
+    <nav
+      class="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0B]/80 backdrop-blur-lg border-b border-[#2A2B31]"
+    >
+      <div class="max-w-[1290px] mx-auto px-6">
+        <input type="checkbox" id="mobile-menu-toggle" class="hidden peer" />
+
+        <div class="flex items-center justify-between h-20">
+          <div class="flex items-center gap-2">
+            <h1 class="text-2xl font-bold text-[#F9FAFB]">Hugo</h1>
+            <span class="text-[#F59E0B] text-sm">Stories</span>
+          </div>
+
+          <div class="hidden md:flex items-center gap-8">
+            <a href="#videos" class="text-[#D1D5DB] hover:text-[#F59E0B] transition-colors">Videos</a>
+            <a href="#stories" class="text-[#D1D5DB] hover:text-[#F59E0B] transition-colors">Stories</a>
+            <a href="#about" class="text-[#D1D5DB] hover:text-[#F59E0B] transition-colors">About</a>
+            <a href="#newsletter" class="text-[#D1D5DB] hover:text-[#F59E0B] transition-colors">Newsletter</a>
+          </div>
+
+          <div class="hidden md:flex items-center gap-4">
+            <button class="px-6 py-3 text-[#D1D5DB] hover:text-[#F9FAFB] transition-colors">Sign In</button>
+            <button class="px-6 py-3 bg-[#F59E0B] text-[#0A0A0B] rounded-lg hover:bg-[#FFB84D] transition-colors font-medium">Subscribe</button>
+          </div>
+        </div>
+
+        <label
+          for="mobile-menu-toggle"
+          class="md:hidden text-[#F9FAFB] cursor-pointer absolute top-0 right-3 h-20 flex items-center"
+          aria-label="Toggle menu"
+        >
+          <i data-lucide="menu" class="icon-menu w-6 h-6"></i>
+          <i data-lucide="x" class="icon-close w-6 h-6"></i>
+        </label>
+
+        <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-[#2A2B31]">
+          <div class="flex flex-col gap-4">
+            <a href="#videos" class="text-[#D1D5DB] hover:text-[#F59E0B] transition-colors">Videos</a>
+            <a href="#stories" class="text-[#D1D5DB] hover:text-[#F59E0B] transition-colors">Stories</a>
+            <a href="#about" class="text-[#D1D5DB] hover:text-[#F59E0B] transition-colors">About</a>
+            <a href="#newsletter" class="text-[#D1D5DB] hover:text-[#F59E0B] transition-colors">Newsletter</a>
+            <div class="flex flex-col gap-2 pt-2">
+              <button class="px-6 py-3 text-[#D1D5DB] hover:text-[#F9FAFB] transition-colors text-left">Sign In</button>
+              <button class="px-6 py-3 bg-[#F59E0B] text-[#0A0A0B] rounded-lg hover:bg-[#FFB84D] transition-colors font-medium">Subscribe</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div class="absolute inset-0 z-0">
+        <img
+          src="https://images.unsplash.com/photo-1578239825313-ac1f5f550a16?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxCb3N0b24lMjBUZXJyaWVyJTIwb3V0ZG9vciUyMGFkdmVudHVyZXxlbnwxfHx8fDE3Nzg0MTQxODV8MA&ixlib=rb-4.1.0&q=80&w=1080"
+          alt="Hugo the Boston Terrier"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-[#0A0A0B]/80 to-[#0A0A0B]/40"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[#0A0A0B]/60 to-transparent"></div>
+      </div>
+
+      <div class="relative z-10 max-w-[1290px] mx-auto px-6 py-32 w-full">
+        <div class="max-w-3xl">
+          <div class="inline-block px-4 py-2 bg-[#F59E0B]/10 border border-[#F59E0B]/30 rounded-full mb-6">
+            <span class="text-[#F59E0B] text-sm font-medium">New Episode Every Week</span>
+          </div>
+
+          <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-[#F9FAFB] mb-6 leading-tight">
+            Life Through a
+            <span class="text-[#F59E0B]"> Dog's Eyes</span>
+          </h1>
+
+          <p class="text-xl text-[#D1D5DB] mb-8 leading-relaxed max-w-2xl">
+            I'm Hugo, a Boston Terrier with opinions. Join me as I navigate the absurdities of human life, share cinematic adventures, and offer commentary that's slightly more intelligent than your average dog.
+          </p>
+
+          <div class="flex flex-wrap gap-4 mb-12">
+            <button class="px-6 py-3 rounded-lg font-medium transition-colors bg-[#F59E0B] text-[#0A0A0B] hover:bg-[#FFB84D] gap-2 flex items-center">
+              <i data-lucide="play" class="w-5 h-5 fill-[#0A0A0B]"></i>
+              Watch Latest Episode
+            </button>
+            <button class="px-6 py-3 rounded-lg font-medium transition-colors bg-[#161618] text-[#F9FAFB] border border-[#2A2B31] hover:border-[#F59E0B]">
+              Explore Stories
+            </button>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-4 sm:gap-8 text-sm">
+            <div>
+              <div class="text-3xl font-bold text-[#F9FAFB] mb-1">2.5M+</div>
+              <div class="text-[#9CA3AF]">Total Views</div>
+            </div>
+            <div class="hidden sm:block w-px h-12 bg-[#2A2B31]"></div>
+            <div>
+              <div class="text-3xl font-bold text-[#F9FAFB] mb-1">150K+</div>
+              <div class="text-[#9CA3AF]">Subscribers</div>
+            </div>
+            <div class="hidden sm:block w-px h-12 bg-[#2A2B31]"></div>
+            <div>
+              <div class="text-3xl font-bold text-[#F9FAFB] mb-1">200+</div>
+              <div class="text-[#9CA3AF]">Episodes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+        <i data-lucide="chevron-down" class="w-8 h-8 text-[#F59E0B]"></i>
+      </div>
+    </section>
+
+    <!-- ==================== FEATURED VIDEOS ==================== -->
+    <section id="videos" class="bg-[#111214] py-24">
+      <div class="max-w-[1290px] mx-auto px-6">
+        <div class="flex items-end justify-between mb-12">
+          <div>
+            <h2 class="text-4xl md:text-5xl font-bold text-[#F9FAFB] mb-4">
+              Featured <span class="text-[#F59E0B]">Videos</span>
+            </h2>
+            <p class="text-[#D1D5DB] text-lg max-w-2xl">
+              Cinematic stories and sarcastic commentary from yours truly
+            </p>
+          </div>
+          <button class="text-[#F59E0B] hover:text-[#FFB84D] transition-colors font-medium hidden md:block">View All →</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Video card 1 -->
+          <div class="group bg-[#161618] rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-300">
+            <div class="relative aspect-video overflow-hidden bg-[#111214]">
+              <img src="https://images.unsplash.com/photo-1613858399748-b39066ab72da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxCb3N0b24lMjBUZXJyaWVyJTIwb3V0ZG9vciUyMGFkdmVudHVyZXxlbnwxfHx8fDE3Nzg0MTQxODV8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="My First Beach Adventure" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="w-16 h-16 rounded-full bg-[#F59E0B] flex items-center justify-center">
+                  <i data-lucide="play" class="w-6 h-6 text-[#0A0A0B] fill-[#0A0A0B] ml-1"></i>
+                </div>
+              </div>
+              <div class="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-[#F9FAFB] flex items-center gap-1">
+                <i data-lucide="clock" class="w-3 h-3"></i>
+                8:24
+              </div>
+              <div class="absolute top-3 left-3 px-3 py-1 bg-[#F59E0B] rounded text-xs text-[#0A0A0B] font-medium">Adventure</div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-semibold text-[#F9FAFB] mb-2 group-hover:text-[#F59E0B] transition-colors">My First Beach Adventure</h3>
+              <p class="text-[#9CA3AF] text-sm leading-relaxed mb-3">Discovering the ocean for the first time. Spoiler: I'm not a fan of waves, but I pretend to be brave.</p>
+              <div class="text-[#9CA3AF] text-xs">245K views</div>
+            </div>
+          </div>
+
+          <!-- Video card 2 -->
+          <div class="group bg-[#161618] rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-300">
+            <div class="relative aspect-video overflow-hidden bg-[#111214]">
+              <img src="https://images.unsplash.com/photo-1622964011701-4830a2e0eb07?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw0fHxCb3N0b24lMjBUZXJyaWVyJTIwZG9nJTIwcG9ydHJhaXQlMjBjaW5lbWF0aWN8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Why Humans Are Obsessed With Treats" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="w-16 h-16 rounded-full bg-[#F59E0B] flex items-center justify-center">
+                  <i data-lucide="play" class="w-6 h-6 text-[#0A0A0B] fill-[#0A0A0B] ml-1"></i>
+                </div>
+              </div>
+              <div class="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-[#F9FAFB] flex items-center gap-1">
+                <i data-lucide="clock" class="w-3 h-3"></i>
+                6:15
+              </div>
+              <div class="absolute top-3 left-3 px-3 py-1 bg-[#F59E0B] rounded text-xs text-[#0A0A0B] font-medium">Commentary</div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-semibold text-[#F9FAFB] mb-2 group-hover:text-[#F59E0B] transition-colors">Why Humans Are Obsessed With Treats</h3>
+              <p class="text-[#9CA3AF] text-sm leading-relaxed mb-3">A philosophical examination of the human tendency to reward behavior with food. Ironic, isn't it?</p>
+              <div class="text-[#9CA3AF] text-xs">189K views</div>
+            </div>
+          </div>
+
+          <!-- Video card 3 -->
+          <div class="group bg-[#161618] rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-300">
+            <div class="relative aspect-video overflow-hidden bg-[#111214]">
+              <img src="https://images.unsplash.com/photo-1579510768352-0566b89f11e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxkb2clMjBzdG9yeXRlbGxpbmclMjBjaW5lbWF0aWMlMjBsaWZlc3R5bGV8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="The Art of Napping" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div class="w-16 h-16 rounded-full bg-[#F59E0B] flex items-center justify-center">
+                  <i data-lucide="play" class="w-6 h-6 text-[#0A0A0B] fill-[#0A0A0B] ml-1"></i>
+                </div>
+              </div>
+              <div class="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-[#F9FAFB] flex items-center gap-1">
+                <i data-lucide="clock" class="w-3 h-3"></i>
+                12:30
+              </div>
+              <div class="absolute top-3 left-3 px-3 py-1 bg-[#F59E0B] rounded text-xs text-[#0A0A0B] font-medium">Tutorial</div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-semibold text-[#F9FAFB] mb-2 group-hover:text-[#F59E0B] transition-colors">The Art of Napping: A Masterclass</h3>
+              <p class="text-[#9CA3AF] text-sm leading-relaxed mb-3">I've perfected the art of strategic napping. Here's everything you need to know about maximizing rest.</p>
+              <div class="text-[#9CA3AF] text-xs">312K views</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CATEGORIES ==================== -->
+    <section class="bg-[#0A0A0B] py-24">
+      <div class="max-w-[1290px] mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold text-[#F9FAFB] mb-4">
+            Explore <span class="text-[#F59E0B]">Categories</span>
+          </h2>
+          <p class="text-[#D1D5DB] text-lg max-w-2xl mx-auto">Dive into different aspects of my life and wisdom</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="group bg-[#161618] rounded-lg p-6 hover:bg-[#1A1A1C] border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300 cursor-pointer flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center mb-4 group-hover:bg-[#F59E0B]/20 transition-colors">
+              <i data-lucide="compass" class="w-6 h-6 text-[#F59E0B]"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-[#F9FAFB] mb-2">Adventures</h3>
+            <p class="text-[#9CA3AF] text-sm mb-4 leading-relaxed">Exploring the world, one sniff at a time. From parks to beaches, witness my brave expeditions.</p>
+            <div class="text-[#D1D5DB] text-sm font-medium">48 videos</div>
+          </div>
+
+          <div class="group bg-[#161618] rounded-lg p-6 hover:bg-[#1A1A1C] border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300 cursor-pointer flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center mb-4 group-hover:bg-[#F59E0B]/20 transition-colors">
+              <i data-lucide="home" class="w-6 h-6 text-[#F59E0B]"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-[#F9FAFB] mb-2">Daily Life</h3>
+            <p class="text-[#9CA3AF] text-sm mb-4 leading-relaxed">The mundane moments that make life interesting. My take on couch cushions and dinner time.</p>
+            <div class="text-[#D1D5DB] text-sm font-medium">72 videos</div>
+          </div>
+
+          <div class="group bg-[#161618] rounded-lg p-6 hover:bg-[#1A1A1C] border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300 cursor-pointer flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center mb-4 group-hover:bg-[#F59E0B]/20 transition-colors">
+              <i data-lucide="message-circle" class="w-6 h-6 text-[#F59E0B]"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-[#F9FAFB] mb-2">Commentary</h3>
+            <p class="text-[#9CA3AF] text-sm mb-4 leading-relaxed">Observations on human behavior, delivered with signature sarcasm and charm.</p>
+            <div class="text-[#D1D5DB] text-sm font-medium">56 videos</div>
+          </div>
+
+          <div class="group bg-[#161618] rounded-lg p-6 hover:bg-[#1A1A1C] border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300 cursor-pointer flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center mb-4 group-hover:bg-[#F59E0B]/20 transition-colors">
+              <i data-lucide="graduation-cap" class="w-6 h-6 text-[#F59E0B]"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-[#F9FAFB] mb-2">Tutorials</h3>
+            <p class="text-[#9CA3AF] text-sm mb-4 leading-relaxed">Essential life skills every dog (and human) should master. Taught by an expert: me.</p>
+            <div class="text-[#D1D5DB] text-sm font-medium">32 videos</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ABOUT HUGO ==================== -->
+    <section id="about" class="bg-[#111214] py-24">
+      <div class="max-w-[1290px] mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div class="relative">
+            <div class="relative aspect-[4/5] rounded-2xl overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1630319971713-a2e28507d67b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw1fHxCb3N0b24lMjBUZXJyaWVyJTIwZG9nJTIwcG9ydHJhaXQlMjBjaW5lbWF0aWN8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Hugo Portrait" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0B]/60 to-transparent"></div>
+            </div>
+            <div class="absolute -bottom-6 -right-6 bg-[#F59E0B] rounded-2xl p-6 shadow-2xl">
+              <div class="text-[#0A0A0B] text-4xl font-bold mb-1">3+</div>
+              <div class="text-[#0A0A0B] text-sm font-medium">Years Creating</div>
+            </div>
+          </div>
+
+          <div>
+            <h2 class="text-4xl md:text-5xl font-bold text-[#F9FAFB] mb-6">
+              Meet <span class="text-[#F59E0B]">Hugo</span>
+            </h2>
+            <p class="text-[#D1D5DB] text-lg leading-relaxed mb-6">I'm a Boston Terrier with a penchant for storytelling and an eye for the cinematic. Born in Boston (obviously), I've spent the last three years documenting life from a perspective most humans overlook: about 14 inches from the ground.</p>
+            <p class="text-[#D1D5DB] text-lg leading-relaxed mb-8">My content combines breathtaking visuals with sharp, slightly sarcastic commentary on everything from squirrel politics to the existential dread of waiting for dinner. I'm not just a dog with a camera—I'm a storyteller, philosopher, and occasional comedian.</p>
+
+            <div class="grid grid-cols-2 gap-6 mb-8">
+              <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="award" class="w-5 h-5 text-[#F59E0B]"></i>
+                </div>
+                <div>
+                  <div class="text-[#F9FAFB] font-semibold mb-1">Award Winner</div>
+                  <div class="text-[#9CA3AF] text-sm">Best Pet Content 2025</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="star" class="w-5 h-5 text-[#F59E0B]"></i>
+                </div>
+                <div>
+                  <div class="text-[#F9FAFB] font-semibold mb-1">Top Rated</div>
+                  <div class="text-[#9CA3AF] text-sm">4.9/5 Average Rating</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="heart" class="w-5 h-5 text-[#F59E0B]"></i>
+                </div>
+                <div>
+                  <div class="text-[#F9FAFB] font-semibold mb-1">Community</div>
+                  <div class="text-[#9CA3AF] text-sm">500K+ Followers</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="zap" class="w-5 h-5 text-[#F59E0B]"></i>
+                </div>
+                <div>
+                  <div class="text-[#F9FAFB] font-semibold mb-1">Consistent</div>
+                  <div class="text-[#9CA3AF] text-sm">Weekly Episodes</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="px-6 py-3 rounded-lg font-medium transition-colors bg-[#F59E0B] text-[#0A0A0B] hover:bg-[#FFB84D]">Learn More About Me</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== STORIES GRID ==================== -->
+    <section id="stories" class="bg-[#0A0A0B] py-24">
+      <div class="max-w-[1290px] mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold text-[#F9FAFB] mb-4">Written <span class="text-[#F59E0B]">Stories</span></h2>
+          <p class="text-[#D1D5DB] text-lg max-w-2xl mx-auto">Thoughts, observations, and occasional rants from my perspective</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <article class="group bg-[#161618] rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-300">
+            <div class="relative aspect-[4/3] overflow-hidden bg-[#111214]">
+              <img src="https://images.unsplash.com/photo-1662382343806-692d6f9b6212?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw3fHxCb3N0b24lMjBUZXJyaWVyJTIwb3V0ZG9vciUyMGFkdmVudHVyZXxlbnwxfHx8fDE3Nzg0MTQxODV8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="The Great Squirrel Conspiracy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 text-xs text-[#9CA3AF] mb-3"><span>May 3, 2026</span><span>•</span><span>5 min read</span></div>
+              <h3 class="text-lg font-semibold text-[#F9FAFB] mb-2 group-hover:text-[#F59E0B] transition-colors">The Great Squirrel Conspiracy</h3>
+              <p class="text-[#9CA3AF] text-sm leading-relaxed">After months of observation, I've uncovered the truth about squirrels and their elaborate network.</p>
+            </div>
+          </article>
+
+          <article class="group bg-[#161618] rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-300">
+            <div class="relative aspect-[4/3] overflow-hidden bg-[#111214]">
+              <img src="https://images.unsplash.com/photo-1774281213848-c99fe97947bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwzfHxCb3N0b24lMjBUZXJyaWVyJTIwb3V0ZG9vciUyMGFkdmVudHVyZXxlbnwxfHx8fDE3Nzg0MTQxODV8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Reflections on Park Etiquette" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 text-xs text-[#9CA3AF] mb-3"><span>April 28, 2026</span><span>•</span><span>4 min read</span></div>
+              <h3 class="text-lg font-semibold text-[#F9FAFB] mb-2 group-hover:text-[#F59E0B] transition-colors">Reflections on Park Etiquette</h3>
+              <p class="text-[#9CA3AF] text-sm leading-relaxed">Some thoughts on the unwritten rules of dog park society and why humans don't understand them.</p>
+            </div>
+          </article>
+
+          <article class="group bg-[#161618] rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-300">
+            <div class="relative aspect-[4/3] overflow-hidden bg-[#111214]">
+              <img src="https://images.unsplash.com/photo-1623010830437-f1f8c2a5b8ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw2fHxCb3N0b24lMjBUZXJyaWVyJTIwZG9nJTIwcG9ydHJhaXQlMjBjaW5lbWF0aWN8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Why I Refuse to Wear Costumes" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 text-xs text-[#9CA3AF] mb-3"><span>April 15, 2026</span><span>•</span><span>6 min read</span></div>
+              <h3 class="text-lg font-semibold text-[#F9FAFB] mb-2 group-hover:text-[#F59E0B] transition-colors">Why I Refuse to Wear Costumes</h3>
+              <p class="text-[#9CA3AF] text-sm leading-relaxed">A manifesto on dignity, self-respect, and the absurdity of holiday-themed dog clothing.</p>
+            </div>
+          </article>
+
+          <article class="group bg-[#161618] rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-300">
+            <div class="relative aspect-[4/3] overflow-hidden bg-[#111214]">
+              <img src="https://images.unsplash.com/photo-1514984681892-8a5da9d7d6fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwzfHxkb2clMjBzdG9yeXRlbGxpbmclMjBjaW5lbWF0aWMlMjBsaWZlc3R5bGV8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="An Ode to the Perfect Napping Spot" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 text-xs text-[#9CA3AF] mb-3"><span>April 2, 2026</span><span>•</span><span>3 min read</span></div>
+              <h3 class="text-lg font-semibold text-[#F9FAFB] mb-2 group-hover:text-[#F59E0B] transition-colors">An Ode to the Perfect Napping Spot</h3>
+              <p class="text-[#9CA3AF] text-sm leading-relaxed">Poetry, prose, and practical advice on finding ideal resting locations throughout your home.</p>
+            </div>
+          </article>
+
+          <article class="group bg-[#161618] rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-300">
+            <div class="relative aspect-[4/3] overflow-hidden bg-[#111214]">
+              <img src="https://images.unsplash.com/photo-1613858197711-934003cc4ea9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw4fHxCb3N0b24lMjBUZXJyaWVyJTIwb3V0ZG9vciUyMGFkdmVudHVyZXxlbnwxfHx8fDE3Nzg0MTQxODV8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="The Philosophy of Fetch" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 text-xs text-[#9CA3AF] mb-3"><span>March 20, 2026</span><span>•</span><span>5 min read</span></div>
+              <h3 class="text-lg font-semibold text-[#F9FAFB] mb-2 group-hover:text-[#F59E0B] transition-colors">The Philosophy of Fetch</h3>
+              <p class="text-[#9CA3AF] text-sm leading-relaxed">Why humans throw things they want back. An exploration of circular logic and exercise.</p>
+            </div>
+          </article>
+
+          <article class="group bg-[#161618] rounded-lg overflow-hidden hover:scale-[1.02] transition-all duration-300">
+            <div class="relative aspect-[4/3] overflow-hidden bg-[#111214]">
+              <img src="https://images.unsplash.com/photo-1577345890418-63d5e076033c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw3fHxCb3N0b24lMjBUZXJyaWVyJTIwZG9nJTIwcG9ydHJhaXQlMjBjaW5lbWF0aWN8ZW58MXx8fHwxNzc4NDE0MTg1fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="My Morning Routine Explained" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 text-xs text-[#9CA3AF] mb-3"><span>March 8, 2026</span><span>•</span><span>4 min read</span></div>
+              <h3 class="text-lg font-semibold text-[#F9FAFB] mb-2 group-hover:text-[#F59E0B] transition-colors">My Morning Routine Explained</h3>
+              <p class="text-[#9CA3AF] text-sm leading-relaxed">A detailed breakdown of the first two hours of my day, from sunrise to second breakfast.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="text-center mt-12">
+          <button class="text-[#F59E0B] hover:text-[#FFB84D] transition-colors font-medium">Load More Stories →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SOCIAL CONTENT ==================== -->
+    <section class="bg-[#111214] py-24">
+      <div class="max-w-[1290px] mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold text-[#F9FAFB] mb-4">Follow My <span class="text-[#F59E0B]">Journey</span></h2>
+          <p class="text-[#D1D5DB] text-lg max-w-2xl mx-auto">Connect with me across social platforms for daily updates and exclusive content</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-[#161618] rounded-lg p-6 border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center">
+                <i data-lucide="instagram" class="w-6 h-6 text-[#F59E0B]"></i>
+              </div>
+              <span class="text-[#9CA3AF] text-sm">Instagram</span>
+            </div>
+            <h3 class="text-2xl font-bold text-[#F9FAFB] mb-1">285K</h3>
+            <p class="text-[#D1D5DB] text-sm mb-3">Daily stories &amp; behind-the-scenes</p>
+            <a href="#" class="text-[#F59E0B] text-sm font-medium hover:text-[#FFB84D] transition-colors">@hugo.stories</a>
+          </div>
+
+          <div class="bg-[#161618] rounded-lg p-6 border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center">
+                <i data-lucide="youtube" class="w-6 h-6 text-[#F59E0B]"></i>
+              </div>
+              <span class="text-[#9CA3AF] text-sm">YouTube</span>
+            </div>
+            <h3 class="text-2xl font-bold text-[#F9FAFB] mb-1">450K</h3>
+            <p class="text-[#D1D5DB] text-sm mb-3">Full cinematic episodes</p>
+            <a href="#" class="text-[#F59E0B] text-sm font-medium hover:text-[#FFB84D] transition-colors">@HugoStories</a>
+          </div>
+
+          <div class="bg-[#161618] rounded-lg p-6 border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center">
+                <i data-lucide="twitter" class="w-6 h-6 text-[#F59E0B]"></i>
+              </div>
+              <span class="text-[#9CA3AF] text-sm">Twitter</span>
+            </div>
+            <h3 class="text-2xl font-bold text-[#F9FAFB] mb-1">125K</h3>
+            <p class="text-[#D1D5DB] text-sm mb-3">Quick thoughts &amp; commentary</p>
+            <a href="#" class="text-[#F59E0B] text-sm font-medium hover:text-[#FFB84D] transition-colors">@HugoTheDog</a>
+          </div>
+
+          <div class="bg-[#161618] rounded-lg p-6 border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center">
+                <i data-lucide="facebook" class="w-6 h-6 text-[#F59E0B]"></i>
+              </div>
+              <span class="text-[#9CA3AF] text-sm">Facebook</span>
+            </div>
+            <h3 class="text-2xl font-bold text-[#F9FAFB] mb-1">95K</h3>
+            <p class="text-[#D1D5DB] text-sm mb-3">Community &amp; discussions</p>
+            <a href="#" class="text-[#F59E0B] text-sm font-medium hover:text-[#FFB84D] transition-colors">Hugo Stories</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== NEWSLETTER ==================== -->
+    <section id="newsletter" class="bg-[#0A0A0B] py-24">
+      <div class="max-w-[1290px] mx-auto px-6">
+        <div class="bg-gradient-to-br from-[#F59E0B]/10 to-transparent border border-[#F59E0B]/20 rounded-2xl p-12 md:p-16 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-64 h-64 bg-[#F59E0B]/5 rounded-full blur-3xl"></div>
+          <div class="absolute bottom-0 left-0 w-64 h-64 bg-[#F59E0B]/5 rounded-full blur-3xl"></div>
+
+          <div class="relative z-10 max-w-3xl mx-auto text-center">
+            <div class="w-16 h-16 rounded-full bg-[#F59E0B]/10 flex items-center justify-center mx-auto mb-6">
+              <i data-lucide="mail" class="w-8 h-8 text-[#F59E0B]"></i>
+            </div>
+
+            <h2 class="text-4xl md:text-5xl font-bold text-[#F9FAFB] mb-4">Join My Pack</h2>
+            <p class="text-[#D1D5DB] text-lg mb-8 leading-relaxed">Get weekly stories, exclusive behind-the-scenes content, and the occasional philosophical musing delivered straight to your inbox. No spam, just quality content from a dog with opinions.</p>
+
+            <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto mb-6">
+              <input type="email" placeholder="Enter your email address" class="flex-1 px-6 py-4 bg-[#161618] border border-[#2A2B31] rounded-lg text-[#F9FAFB] placeholder:text-[#9CA3AF] focus:outline-none focus:border-[#F59E0B] transition-colors" />
+              <button class="px-6 py-3 rounded-lg font-medium transition-colors bg-[#F59E0B] text-[#0A0A0B] hover:bg-[#FFB84D] whitespace-nowrap">Subscribe Now</button>
+            </form>
+
+            <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-[#9CA3AF]">
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-4 h-4 text-[#10B981]"></i>
+                <span>Weekly updates</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-4 h-4 text-[#10B981]"></i>
+                <span>Exclusive content</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-4 h-4 text-[#10B981]"></i>
+                <span>Unsubscribe anytime</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-[#111214] border-t border-[#2A2B31]">
+      <div class="max-w-[1290px] mx-auto px-6 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <h2 class="text-2xl font-bold text-[#F9FAFB]">Hugo</h2>
+              <span class="text-[#F59E0B] text-sm">Stories</span>
+            </div>
+            <p class="text-[#9CA3AF] text-sm leading-relaxed">A charismatic Boston Terrier sharing stories, opinions, and cinematic short videos from a dog's perspective.</p>
+          </div>
+
+          <div>
+            <h3 class="text-[#F9FAFB] font-semibold mb-4">Explore</h3>
+            <ul class="space-y-2">
+              <li><a href="#videos" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Videos</a></li>
+              <li><a href="#stories" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Stories</a></li>
+              <li><a href="#about" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">About Hugo</a></li>
+              <li><a href="#newsletter" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Newsletter</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-[#F9FAFB] font-semibold mb-4">Categories</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Adventures</a></li>
+              <li><a href="#" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Daily Life</a></li>
+              <li><a href="#" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Commentary</a></li>
+              <li><a href="#" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Tutorials</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-[#F9FAFB] font-semibold mb-4">Follow Hugo</h3>
+            <div class="flex gap-4">
+              <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-lg bg-[#161618] border border-[#2A2B31] flex items-center justify-center text-[#9CA3AF] hover:text-[#F59E0B] hover:border-[#F59E0B] transition-all">
+                <i data-lucide="instagram" class="w-[18px] h-[18px]"></i>
+              </a>
+              <a href="#" aria-label="Twitter" class="w-10 h-10 rounded-lg bg-[#161618] border border-[#2A2B31] flex items-center justify-center text-[#9CA3AF] hover:text-[#F59E0B] hover:border-[#F59E0B] transition-all">
+                <i data-lucide="twitter" class="w-[18px] h-[18px]"></i>
+              </a>
+              <a href="#" aria-label="YouTube" class="w-10 h-10 rounded-lg bg-[#161618] border border-[#2A2B31] flex items-center justify-center text-[#9CA3AF] hover:text-[#F59E0B] hover:border-[#F59E0B] transition-all">
+                <i data-lucide="youtube" class="w-[18px] h-[18px]"></i>
+              </a>
+              <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-lg bg-[#161618] border border-[#2A2B31] flex items-center justify-center text-[#9CA3AF] hover:text-[#F59E0B] hover:border-[#F59E0B] transition-all">
+                <i data-lucide="facebook" class="w-[18px] h-[18px]"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-8 border-t border-[#2A2B31] flex flex-col md:flex-row justify-between items-center gap-4">
+          <p class="text-[#9CA3AF] text-sm">© 2026 Hugo Stories. All rights reserved.</p>
+          <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            <a href="#" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Privacy Policy</a>
+            <a href="#" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Terms of Service</a>
+            <a href="#" class="text-[#9CA3AF] hover:text-[#F59E0B] transition-colors text-sm">Contact</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ==================== INLINE ICON LIBRARY ==================== -->
+    <script>
+      // Minimal lucide-style SVG icon library, rendered inline so the file
+      // works with no network access. Each entry is the inner SVG markup
+      // for a 24x24 viewBox icon. Stroke styling is applied globally via
+      // the [data-lucide-rendered] CSS rule.
+      const ICONS = {
+        'menu': '<line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/>',
+        'x': '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+        'play': '<polygon points="6 3 20 12 6 21 6 3"/>',
+        'chevron-down': '<polyline points="6 9 12 15 18 9"/>',
+        'clock': '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+        'compass': '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88"/>',
+        'home': '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+        'message-circle': '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/>',
+        'graduation-cap': '<path d="M22 10v6"/><path d="M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.66 3.582 3 8 3s8-1.34 8-3v-5"/>',
+        'award': '<circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/>',
+        'star': '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+        'heart': '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+        'zap': '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+        'mail': '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+        'check-circle': '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+        'instagram': '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>',
+        'twitter': '<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2"/>',
+        'youtube': '<path d="M2.5 17a24 24 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24 24 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',
+        'facebook': '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+      };
+
+      function renderIcons() {
+        const SVG_NS = 'http://www.w3.org/2000/svg';
+        document.querySelectorAll('[data-lucide]').forEach((el) => {
+          const name = el.getAttribute('data-lucide');
+          const inner = ICONS[name];
+          if (!inner) return;
+          const svg = document.createElementNS(SVG_NS, 'svg');
+          svg.setAttribute('viewBox', '0 0 24 24');
+          svg.setAttribute('data-lucide-rendered', name);
+          // Copy the host element's class names so size/color utilities apply.
+          if (el.className) svg.setAttribute('class', el.className);
+          if (el.getAttribute('aria-label'))
+            svg.setAttribute('aria-label', el.getAttribute('aria-label'));
+          svg.innerHTML = inner;
+          el.replaceWith(svg);
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', renderIcons);
+      } else {
+        renderIcons();
+      }
+    </script>
+  </body>
+</html>

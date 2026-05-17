@@ -1,0 +1,308 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+
+  /* Motion tokens — durations and easings used by transitions and the
+     mobile-menu enter animation. The ease curves are also exposed below
+     in @theme inline as ease-soft / ease-smooth Tailwind utilities. */
+  --motion-duration-base: 200ms;
+  --motion-ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Hugo Color System */
+  --background-main: #0A0A0B;
+  --background-surface: #111214;
+  --background-card: #161618;
+  --background-overlay: rgba(0, 0, 0, 0.45);
+  --primary-accent: #F59E0B;
+  --secondary-accent: #FFB84D;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-muted: #9CA3AF;
+  --border-subtle: #2A2B31;
+  --success-color: #10B981;
+
+  /* Legacy compatibility */
+  --background: #0A0A0B;
+  --foreground: #F9FAFB;
+  --card: #161618;
+  --card-foreground: #F9FAFB;
+  --popover: #111214;
+  --popover-foreground: #F9FAFB;
+  --primary: #F59E0B;
+  --primary-foreground: #0A0A0B;
+  --secondary: #FFB84D;
+  --secondary-foreground: #0A0A0B;
+  --muted: #9CA3AF;
+  --muted-foreground: #D1D5DB;
+  --accent: #F59E0B;
+  --accent-foreground: #0A0A0B;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: #2A2B31;
+  --input: transparent;
+  --input-background: #161618;
+  --switch-background: #2A2B31;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #F59E0B;
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.5rem;
+  --sidebar: #111214;
+  --sidebar-foreground: #F9FAFB;
+  --sidebar-primary: #F59E0B;
+  --sidebar-primary-foreground: #0A0A0B;
+  --sidebar-accent: #161618;
+  --sidebar-accent-foreground: #F9FAFB;
+  --sidebar-border: #2A2B31;
+  --sidebar-ring: #F59E0B;
+}
+
+.dark {
+  /* Hugo colors are already dark, using same values */
+  --background-main: #0A0A0B;
+  --background-surface: #111214;
+  --background-card: #161618;
+  --background-overlay: rgba(0, 0, 0, 0.45);
+  --primary-accent: #F59E0B;
+  --secondary-accent: #FFB84D;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-muted: #9CA3AF;
+  --border-subtle: #2A2B31;
+  --success-color: #10B981;
+
+  --background: #0A0A0B;
+  --foreground: #F9FAFB;
+  --card: #161618;
+  --card-foreground: #F9FAFB;
+  --popover: #111214;
+  --popover-foreground: #F9FAFB;
+  --primary: #F59E0B;
+  --primary-foreground: #0A0A0B;
+  --secondary: #FFB84D;
+  --secondary-foreground: #0A0A0B;
+  --muted: #9CA3AF;
+  --muted-foreground: #D1D5DB;
+  --accent: #F59E0B;
+  --accent-foreground: #0A0A0B;
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: #2A2B31;
+  --input: #161618;
+  --ring: #F59E0B;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: #111214;
+  --sidebar-foreground: #F9FAFB;
+  --sidebar-primary: #F59E0B;
+  --sidebar-primary-foreground: #0A0A0B;
+  --sidebar-accent: #161618;
+  --sidebar-accent-foreground: #F9FAFB;
+  --sidebar-border: #2A2B31;
+  --sidebar-ring: #F59E0B;
+}
+
+@theme inline {
+  /* Hugo Color System */
+  --color-background-main: var(--background-main);
+  --color-background-surface: var(--background-surface);
+  --color-background-card: var(--background-card);
+  --color-background-overlay: var(--background-overlay);
+  --color-primary-accent: var(--primary-accent);
+  --color-secondary-accent: var(--secondary-accent);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border-subtle: var(--border-subtle);
+  --color-success: var(--success-color);
+
+  /* Legacy compatibility */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Motion easings — exposed as Tailwind ease-* utilities so component
+     class lists can stay consistent with the reveal CSS instead of using
+     Tailwind's built-in ease-out (which is a different curve). */
+  --ease-soft: var(--motion-ease-soft);
+  --ease-smooth: var(--motion-ease-smooth);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /**
+  * Hugo Typography System
+  * Typography styles following the Hugo design specifications
+  */
+
+  html {
+    font-size: var(--font-size);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    scroll-behavior: smooth;
+    /* Offset anchor scrolling for the fixed h-20 navbar */
+    scroll-padding-top: 5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  h1 {
+    font-size: 4.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  h5 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  p {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  label {
+    font-size: 1rem;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  button {
+    font-size: 1rem;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  input {
+    font-size: 1rem;
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+
+  /**
+   * Keyboard-only focus ring.
+   * Targets links and buttons only — inputs already have a border-colour
+   * focus pattern of their own. The amber outline follows the element's
+   * own border-radius in modern browsers, so no extra shape work is needed.
+   */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  [role="tab"]:focus-visible {
+    outline: 2px solid var(--primary-accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /**
+   * Mobile nav menu enter — soft slide-down on first paint.
+   */
+  @keyframes mobile-menu-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-mobile-menu-enter {
+    animation: mobile-menu-enter var(--motion-duration-base)
+      var(--motion-ease-soft);
+  }
+}
+
+/**
+ * Respect users who prefer reduced motion.
+ * All transitions and animations collapse to near-instant.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

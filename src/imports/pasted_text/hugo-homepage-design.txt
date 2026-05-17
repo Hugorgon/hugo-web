@@ -1,0 +1,319 @@
+ROLE:
+Act as a senior UI/UX designer, frontend-aware design system architect, responsive web structure specialist and React/Tailwind-oriented interface designer.
+
+TASK:
+Create a high-fidelity, production-ready responsive homepage in Figma Make for “Hugo” — a charismatic, intelligent and slightly sarcastic Boston Terrier sharing stories, opinions and cinematic short videos from a dog’s perspective.
+
+The design must be optimized for:
+
+* future HTML/CSS/Tailwind export
+* AI-assisted frontend workflows
+* developer handoff
+* clean scalable Auto Layout structure
+* React/Tailwind component-style architecture
+
+PRIORITY:
+Prioritize clean scalable structure, responsive behavior and frontend-friendly hierarchy over decorative complexity.
+
+FRAME & LAYOUT:
+
+* Desktop frame width: 1920px
+* Main centered content container: 1290px width
+* Use modern 12-column responsive grid
+* Use clean 8px spacing system
+* Hero section: full browser width (1920px)
+* All content sections: full-width backgrounds with internal 1290px centered content container
+* Maintain balanced whitespace and modern visual hierarchy
+* Desktop-first responsive layout
+* Create scalable section-based architecture
+
+AUTO LAYOUT & FRONTEND LOGIC (STRICT):
+
+* Apply Auto Layout to EVERYTHING
+* No floating layers
+* Every element must have a clear Fill or Hug behavior
+* Use "Fill container" for responsive scalable elements
+* Use "Hug contents" for buttons and adaptive wrappers
+* Use the shallowest possible hierarchy
+* Avoid unnecessary nested containers and wrappers
+* Avoid Frame-in-Frame-in-Frame structure unless structurally necessary
+* Avoid decorative-only wrapper frames
+* Prefer functional scalable structure over visual grouping
+* Use consistent gap-based spacing instead of manual positioning
+* Maintain clean parent-child layout logic
+* Create reusable section-based structure
+* Keep responsive resizing predictable and scalable
+
+STRUCTURE OPTIMIZATION:
+
+* Use as few containers as possible while maintaining responsiveness
+* Avoid redundant groups and duplicate wrappers
+* Keep layout export-friendly and developer-friendly
+* Ensure sections are easy to isolate and reuse
+* Maintain simple readable hierarchy
+* Structure the file as if it were a React/Tailwind component tree
+* Optimize layout for future frontend conversion workflows
+* Create production-ready scalable structure
+
+NAMING CONVENTION (STRICT):
+Use clean frontend-friendly naming convention with underscores.
+
+Examples:
+
+* Hero_Section
+* Featured_Videos
+* About_Hugo
+* Video_Card
+* Social_Content
+* Newsletter_Form
+* Footer_Links
+* Primary_Button
+
+DO NOT use:
+
+* Frame 1
+* Group 2
+* unnamed layers
+* random wrapper naming
+
+DESIGN STYLE:
+
+* Modern cinematic premium UI
+* Dark elegant interface
+* Warm emotional accent colors
+* Streaming-platform inspired aesthetics (Netflix / Apple TV style)
+* Minimal but visually rich
+* Premium storytelling atmosphere
+* Soft rounded corners
+* Subtle glassmorphism where appropriate
+* Elegant spacing rhythm
+* Clean typography hierarchy
+* Smooth modern cards
+* Minimalist icons
+* Emotional but professional visual direction
+* Premium responsive web experience
+
+STRICT COLOR REUSE:
+Use ONLY these HEX colors consistently throughout the design so they can easily be converted into Local Styles later.
+
+COLOR SYSTEM:
+
+* Background_Main: #0A0A0B
+
+* Background_Surface: #111214
+
+* Background_Card: #161618
+
+* Background_Overlay: rgba(0,0,0,0.45)
+
+* Primary_Accent: #F59E0B
+
+* Secondary_Accent: #FFB84D
+
+* Text_Primary: #F9FAFB
+
+* Text_Secondary: #D1D5DB
+
+* Text_Muted: #9CA3AF
+
+* Border_Subtle: #2A2B31
+
+* Success_Color: #10B981
+
+Create reusable LOCAL COLOR STYLES using these exact names:
+
+* Background_Main
+* Background_Surface
+* Background_Card
+* Background_Overlay
+* Primary_Accent
+* Secondary_Accent
+* Text_Primary
+* Text_Secondary
+* Text_Muted
+* Border_Subtle
+* Success_Color
+
+TYPOGRAPHY SYSTEM:
+Use modern clean sans-serif typography (Inter or Geist).
+
+Create reusable TEXT STYLES and apply them consistently.
+
+Required styles:
+
+* Hero_H1
+* Heading_H2
+* Heading_H3
+* Heading_H4
+* Heading_H5
+* Body_Large
+* Body_Default
+* Body_Bold
+* Body_Small
+* Body_Link
+* Button_Text
+* Caption_Text
+
+TYPOGRAPHY RULES:
+
+* Hero_H1: 72px Bold
+* Heading_H2: 48px Bold
+* Heading_H3: 32px Semibold
+* Heading_H4: 24px Semibold
+* Heading_H5: 20px Medium
+* Body_Default: 16px Regular with 1.5 line-height
+* Maintain semantic heading hierarchy
+* Use consistent line-height system
+* Maintain strong readability
+* Create frontend-friendly scalable typography
+* Use responsive-friendly typography structure
+* Maintain visual rhythm and hierarchy
+
+COMPONENT SYSTEM:
+Create reusable Auto Layout COMPONENTS with scalable frontend-friendly structure.
+
+Required components:
+
+* Navbar
+* Primary_Button
+* Secondary_Button
+* Video_Card
+* Category_Card
+* Story_Card
+* Social_Card
+* Section_Header
+* Newsletter_Form
+* Input_Field
+* Social_Icon
+* CTA_Block
+* Footer
+
+COMPONENT RULES:
+
+* Use reusable variants where appropriate
+* Maintain consistent spacing
+* Use consistent corner radius system
+* Use responsive scalable component structure
+* Keep component hierarchy simple and export-friendly
+* Avoid over-complicated nesting
+* Create reusable production-friendly UI patterns
+
+BUTTON SYSTEM:
+
+* Vertical padding: 12px
+* Horizontal padding: 24px
+* Border radius: 8px
+* Use Auto Layout
+* Create hover-ready structure
+* Use scalable responsive behavior
+* Use consistent text alignment
+
+CARD SYSTEM:
+
+* Use Auto Layout
+* Internal padding: 24px
+* Consistent spacing between elements
+* Maintain scalable responsive structure
+* Modern premium appearance
+* Use reusable card architecture
+
+RESPONSIVE BEHAVIOR:
+
+* Ensure scalable responsive resizing
+* Maintain responsive spacing
+* Use proper nested layout logic
+* Optimize structure for frontend export workflows
+* Structure should be compatible with HTML/CSS/Tailwind conversion
+* Maintain clean responsive hierarchy
+* Use modern responsive web design principles
+
+VISUAL ASSETS & MEDIA:
+
+* Generate high-quality cinematic AI-generated visuals suitable for production-ready web mockups
+* Use visually consistent imagery throughout the website
+* Images should feel premium, modern and emotionally engaging
+* Avoid generic low-quality placeholder imagery
+* Generate realistic modern visuals matching the cinematic storytelling aesthetic
+* Use cohesive visual direction across all sections
+* Maintain consistent color grading and atmosphere across all imagery
+
+HUGO VISUAL DIRECTION:
+
+* Use visually appealing Boston Terrier imagery
+* Hugo should appear expressive, intelligent and charismatic
+* Use warm cinematic lighting and modern composition
+* Maintain consistent visual identity across hero images, cards and story thumbnails
+* Create emotionally engaging storytelling visuals
+* Use realistic modern photography style mixed with premium streaming-platform aesthetics
+
+ICONS:
+
+* Generate clean modern minimalist icons
+* Use consistent icon style throughout the website
+* Prefer outline icons with modern frontend-friendly appearance
+* Icons should feel premium and subtle
+* Maintain consistent stroke weight and visual language
+* Avoid random mixed icon styles
+
+MEDIA & VIDEO CARDS:
+
+* Generate realistic modern video thumbnails for Video_Card components
+* Maintain consistent aspect ratios
+* Use visually cohesive card imagery
+* Ensure cards feel similar to modern streaming platforms
+* Use modern cinematic thumbnail composition
+* Avoid repetitive placeholder thumbnails
+
+IMAGE QUALITY:
+
+* High-quality visuals only
+* Clean modern composition
+* No distorted AI artifacts
+* No low-detail placeholder graphics
+* Maintain professional commercial-ready presentation quality
+* Use premium modern web-quality imagery suitable for client presentations
+
+WEBSITE STRUCTURE:
+
+* Navbar
+* Hero_Section
+* Featured_Videos
+* Categories
+* About_Hugo
+* Stories_Grid
+* Social_Content
+* Newsletter
+* Footer
+
+HERO SECTION:
+
+* Full-width cinematic hero section
+* Large storytelling image/video of Hugo
+* Strong Hero_H1 headline
+* Supporting text with slightly witty/sarcastic tone
+* CTA buttons
+* Emotional premium atmosphere
+* Content centered inside 1290px container
+* Responsive scalable hero structure
+
+HUGO PERSONALITY:
+Hugo should feel:
+
+* intelligent
+* expressive
+* experienced
+* slightly sarcastic
+* emotionally engaging
+* playful but premium
+
+COPYWRITING TONE:
+
+* witty
+* cinematic
+* emotionally engaging
+* slightly sarcastic
+* modern storytelling style
+* from a dog’s perspective
+
+VISUAL KEYWORDS:
+cinematic, premium, modern, storytelling, elegant, responsive, frontend-friendly, scalable, production-ready UI, dark warm tones, streaming-platform-inspired, emotionally engaging, modern product design, clean architecture
