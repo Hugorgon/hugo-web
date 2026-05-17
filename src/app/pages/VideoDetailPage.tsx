@@ -59,7 +59,7 @@ export function VideoDetailPage() {
       if (!cancelled && data) setVideo(data);
     });
     fetchRelatedVideos(slug, 4).then((data) => {
-      if (!cancelled && data.length > 0) setRelated(data);
+      if (!cancelled) setRelated(data);
     });
     return () => {
       cancelled = true;

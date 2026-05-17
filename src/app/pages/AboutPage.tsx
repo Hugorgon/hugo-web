@@ -7,13 +7,12 @@ import { PageHeader } from '../components/PageHeader';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { VideoCardVertical } from '../components/VideoCardVertical';
 import { StoryCard } from '../components/StoryCard';
-import { VIDEOS } from '../../data/videos';
+import { VIDEOS as LOCAL_VIDEOS, type Video } from '../../data/videos';
 import { STORIES as LOCAL_STORIES, type Story } from '../../data/stories';
 import { ABOUT } from '../../data/about';
 import { PAGES } from '../../data/pages';
 import { fetchStories } from '../../lib/queries/stories';
-
-const LATEST_VIDEOS = VIDEOS.slice(0, 4);
+import { fetchVideos } from '../../lib/queries/videos';
 
 /**
  * Plnohodnotná „O mně" stránka.
@@ -40,6 +39,21 @@ export function AboutPage() {
     };
   }, []);
   const latestStories = stories.slice(0, 3);
+
+  // Videos: stejný pattern jako stories — initial z local fallbacku, Sanity fetch
+  // přepíše state pokud má data. Visual identický s předchozí verzí
+  // (LATEST_VIDEOS = VIDEOS.slice(0, 4)).
+  const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
+  useEffect(() => {
+    let cancelled = false;
+    fetchVideos().then((data) => {
+      if (!cancelled && data.length > 0) setVideos(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const latestVideos = videos.slice(0, 4);
 
   return (
     <div className="min-h-screen bg-[#0A0A0B]">
@@ -147,7 +161,7 @@ export function AboutPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {LATEST_VIDEOS.map((video) => (
+              {latestVideos.map((video) => (
                 <VideoCardVertical key={video.slug} {...video} />
               ))}
             </div>
