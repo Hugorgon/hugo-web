@@ -3,10 +3,10 @@ import type { StructureBuilder } from 'sanity/structure';
 /**
  * Custom desk structure pro Sanity Studio.
  *
- * Singletons (`siteSettings`, `navigation`) jsou tu vytvořené jako jediné
- * editovatelné dokumenty s pevným `_id`. V content view se neobjeví jako
- * collection (kde by šly vytvořit duplicity), ale jako přímý odkaz na
- * jediný dokument.
+ * Singletons (`siteSettings`, `navigation`, `homePage`) jsou tu vytvořené
+ * jako jediné editovatelné dokumenty s pevným `_id`. V content view se
+ * neobjeví jako collection (kde by šly vytvořit duplicity), ale jako přímý
+ * odkaz na jediný dokument.
  *
  * Sanity samotná singleton chování out-of-the-box neomezuje — proto navíc
  * v `sanity.config.ts` zakážeme „Create new" a „Duplicate" / „Delete"
@@ -15,6 +15,7 @@ import type { StructureBuilder } from 'sanity/structure';
 export const SINGLETON_TYPES: ReadonlySet<string> = new Set([
   'siteSettings',
   'navigation',
+  'homePage',
 ]);
 
 export const deskStructure = (S: StructureBuilder) =>
@@ -37,6 +38,14 @@ export const deskStructure = (S: StructureBuilder) =>
           S.document()
             .schemaType('navigation')
             .documentId('navigation'),
+        ),
+      S.listItem()
+        .title('Homepage')
+        .id('homePage')
+        .child(
+          S.document()
+            .schemaType('homePage')
+            .documentId('homePage'),
         ),
       S.divider(),
       // Ostatní collection-style document types (story, video, ...)

@@ -3,19 +3,27 @@ import { Link } from 'react-router';
 import { StoryCardFeatured } from './StoryCardFeatured';
 import { Container } from './Container';
 import { STORIES as LOCAL_STORIES, type Story } from '../../data/stories';
-import { HOME } from '../../data/home';
 import { ROUTES } from '../../data/routes';
 import { fetchStories } from '../../lib/queries/stories';
+import {
+  fetchHomePage,
+  LOCAL_HOME,
+  type HomePageData,
+} from '../../lib/queries/homePage';
 
 export function StoriesGrid() {
   // Initial state z local fallbacku — první render je synchronní a vizuálně
   // identický s předchozí verzí. Sanity data přepíšou state až po async fetchi.
   const [stories, setStories] = useState<Story[]>(LOCAL_STORIES);
+  const [home, setHome] = useState<HomePageData>(LOCAL_HOME);
 
   useEffect(() => {
     let cancelled = false;
     fetchStories().then((data) => {
       if (!cancelled && data.length > 0) setStories(data);
+    });
+    fetchHomePage().then((data) => {
+      if (!cancelled && data) setHome(data);
     });
     return () => {
       cancelled = true;
@@ -23,17 +31,18 @@ export function StoriesGrid() {
   }, []);
 
   const featured = stories.slice(0, 2);
+  const section = home.storiesGrid;
 
   return (
     <section id="stories" className="bg-[#0A0A0B] py-24">
       <Container>
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-[#F9FAFB] mb-4">
-            {HOME.storiesGrid.title}{' '}
-            <span className="text-[#F59E0B]">{HOME.storiesGrid.titleHighlight}</span>
+            {section.title}{' '}
+            <span className="text-[#F59E0B]">{section.titleHighlight}</span>
           </h2>
           <p className="text-[#D1D5DB] text-lg max-w-2xl mx-auto">
-            {HOME.storiesGrid.subtitle}
+            {section.subtitle}
           </p>
         </div>
 
@@ -48,7 +57,7 @@ export function StoriesGrid() {
             to={ROUTES.stories}
             className="text-[#F59E0B] hover:text-[#FFB84D] transition-colors font-medium"
           >
-            {HOME.storiesGrid.loadMoreLabel}
+            {section.loadMoreLabel}
           </Link>
         </div>
       </Container>
