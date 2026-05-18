@@ -1,14 +1,19 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 import { Container } from './Container';
-import { SITE } from '../../data/site';
-import {
-  FOOTER_COLUMNS,
-  FOOTER_LEGAL_LINKS,
-  type FooterLink,
-} from '../../data/navigation';
+import { type FooterLink } from '../../data/navigation';
 import { ROUTES } from '../../data/routes';
 import { UI } from '../../data/ui';
+import {
+  fetchSiteSettings,
+  LOCAL_SITE_SETTINGS,
+  type SiteSettings,
+} from '../../lib/queries/siteSettings';
+import {
+  fetchNavigation,
+  LOCAL_NAVIGATION,
+  type NavigationData,
+} from '../../lib/queries/navigation';
 
 function LinkColumn({
   heading,
@@ -37,6 +42,24 @@ function LinkColumn({
 }
 
 export function Footer() {
+  // Initial state z local fallbacku — Footer je v každé stránce, první
+  // render musí být sync (žádný flash prázdného footeru).
+  const [site, setSite] = useState<SiteSettings>(LOCAL_SITE_SETTINGS);
+  const [navigation, setNavigation] = useState<NavigationData>(LOCAL_NAVIGATION);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchSiteSettings().then((data) => {
+      if (!cancelled && data) setSite(data);
+    });
+    fetchNavigation().then((data) => {
+      if (!cancelled && data) setNavigation(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <footer className="bg-[#111214] border-t border-[#2A2B31]">
       <Container className="py-16">
@@ -45,31 +68,31 @@ export function Footer() {
             <Link
               to={ROUTES.home}
               className="flex items-center gap-2 mb-4"
-              aria-label={`${SITE.brand.name} ${SITE.brand.suffix} ${UI.nav.homeAriaSuffix}`}
+              aria-label={`${site.brand.name} ${site.brand.suffix} ${UI.nav.homeAriaSuffix}`}
             >
-              <h2 className="text-2xl font-bold text-[#F9FAFB]">{SITE.brand.name}</h2>
-              <span className="text-[#F59E0B] text-sm">{SITE.brand.suffix}</span>
+              <h2 className="text-2xl font-bold text-[#F9FAFB]">{site.brand.name}</h2>
+              <span className="text-[#F59E0B] text-sm">{site.brand.suffix}</span>
             </Link>
             <p className="text-[#9CA3AF] text-sm leading-relaxed">
-              {SITE.description}
+              {site.description}
             </p>
           </div>
 
           <LinkColumn
-            heading={FOOTER_COLUMNS.explore.heading}
-            links={FOOTER_COLUMNS.explore.links}
+            heading={navigation.footerColumns.explore.heading}
+            links={navigation.footerColumns.explore.links}
           />
           <LinkColumn
-            heading={FOOTER_COLUMNS.categories.heading}
-            links={FOOTER_COLUMNS.categories.links}
+            heading={navigation.footerColumns.categories.heading}
+            links={navigation.footerColumns.categories.links}
           />
 
           <div>
             <h3 className="text-[#F9FAFB] font-semibold mb-4">
-              {FOOTER_COLUMNS.social.heading}
+              {navigation.footerColumns.social.heading}
             </h3>
             <div className="flex gap-4">
-              {FOOTER_COLUMNS.social.links.map(({ href, label, Icon }) => (
+              {navigation.footerColumns.social.links.map(({ href, label, Icon }) => (
                 <a
                   key={label}
                   href={href}
@@ -85,9 +108,9 @@ export function Footer() {
         </div>
 
         <div className="pt-8 border-t border-[#2A2B31] flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[#9CA3AF] text-sm">{SITE.copyright}</p>
+          <p className="text-[#9CA3AF] text-sm">{site.copyright}</p>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-            {FOOTER_LEGAL_LINKS.map((link) => (
+            {navigation.footerLegalLinks.map((link) => (
               <Link
                 key={link.label}
                 to={link.to}
