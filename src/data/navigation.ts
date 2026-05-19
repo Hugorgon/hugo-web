@@ -61,8 +61,8 @@ export const FOOTER_COLUMNS = {
   social: {
     heading: 'Sledujte Huga',
     links: [
-      { href: '#', label: 'Instagram', Icon: Instagram },
-      { href: '#', label: 'YouTube', Icon: Youtube },
+      { href: 'https://instagram.com/hugorgon', label: 'Instagram', Icon: Instagram },
+      { href: 'https://youtube.com/@Hugorgon', label: 'YouTube', Icon: Youtube },
       { href: '#', label: 'Facebook', Icon: Facebook },
     ] satisfies FooterSocialLink[],
   },

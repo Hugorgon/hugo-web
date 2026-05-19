@@ -26,20 +26,20 @@ export const CONTACT = {
     {
       Icon: Instagram,
       label: 'Instagram',
-      handle: '@hugo.stories',
-      url: 'https://instagram.com/hugo.stories',
+      handle: '@hugorgon',
+      url: 'https://instagram.com/hugorgon',
     },
     {
       Icon: Youtube,
       label: 'YouTube',
-      handle: '@HugoStories',
-      url: 'https://youtube.com/@HugoStories',
+      handle: '@Hugorgon',
+      url: 'https://youtube.com/@Hugorgon',
     },
   ] satisfies ContactSocialItem[],
   email: {
     label: 'E-mail',
     /** ZÁMĚRNĚ obfuskovaný text — anti-spam. Žádný `mailto:`, žádný anchor. */
-    obfuscated: 'hugo [zavináč] example [tečka] cz',
+    obfuscated: 'hugo [zavináč] hugorgon [tečka] cz',
     notice: 'Zapsáno schválně — proti spamovým robotům. Sestavte si adresu sami.',
   },
   closing:

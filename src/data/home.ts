@@ -148,14 +148,14 @@ export const HOME = {
         Icon: Instagram,
         followers: '1000 kg+',
         description: 'Denní stories a zákulisí',
-        handle: '@hugo.stories',
+        handle: '@hugorgon',
       },
       {
         platform: 'YouTube',
         Icon: Youtube,
         followers: '1000 kg+',
         description: 'Plnohodnotné filmové epizody',
-        handle: '@HugoStories',
+        handle: '@Hugorgon',
       },
       {
         platform: 'Facebook',
