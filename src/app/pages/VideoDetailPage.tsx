@@ -13,6 +13,7 @@ import { ROUTES } from '../../data/routes';
 import { UI } from '../../data/ui';
 import { formatDate } from '../../lib/format';
 import { fetchVideoBySlug, fetchRelatedVideos } from '../../lib/queries/videos';
+import { getYouTubeEmbedUrl } from '../../lib/youtube';
 
 /**
  * Detail videa ve stylu Reels / Shorts / TikTok.
@@ -71,6 +72,7 @@ export function VideoDetailPage() {
   }
 
   const paragraphs = video.longDescription.split(/\n\s*\n/);
+  const embedUrl = getYouTubeEmbedUrl(video.youtubeUrl);
 
   return (
     <div className="min-h-screen bg-[#0A0A0B]">
@@ -89,29 +91,47 @@ export function VideoDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-8 lg:gap-12">
             {/* Player column */}
             <div className="w-full max-w-[400px] mx-auto lg:max-w-none lg:mx-0 lg:sticky lg:top-28 lg:self-start">
-              <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-[#111214] group cursor-pointer">
-                <ImageWithFallback
-                  src={video.imageUrl}
-                  alt={video.title}
-                  className="w-full h-full object-cover group-hover:scale-[1.02]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 rounded-full bg-[#F59E0B] flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-300 ease-soft">
-                    <Play
-                      className="text-[#0A0A0B] fill-[#0A0A0B] ml-1"
-                      size={32}
-                    />
+              {embedUrl ? (
+                // Real YouTube embed. Same 9:16 shell, same rounded corners,
+                // same dark surface — only the inner content changes.
+                <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-[#111214]">
+                  <iframe
+                    src={embedUrl}
+                    title={video.title}
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full"
+                  />
+                </div>
+              ) : (
+                // Fallback: keeps the original static preview unchanged when
+                // a video has no youtubeUrl yet.
+                <div className="relative aspect-[9/16] rounded-2xl overflow-hidden bg-[#111214] group cursor-pointer">
+                  <ImageWithFallback
+                    src={video.imageUrl}
+                    alt={video.title}
+                    className="w-full h-full object-cover group-hover:scale-[1.02]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-[#F59E0B] flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform duration-300 ease-soft">
+                      <Play
+                        className="text-[#0A0A0B] fill-[#0A0A0B] ml-1"
+                        size={32}
+                      />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-4 right-4 px-3 py-2 bg-black/80 rounded text-sm text-[#F9FAFB] flex items-center gap-2">
+                    <Clock size={14} />
+                    {video.duration}
+                  </div>
+                  <div className="absolute top-4 left-4 px-3 py-1.5 bg-[#F59E0B] rounded text-xs text-[#0A0A0B] font-medium">
+                    {video.category}
                   </div>
                 </div>
-                <div className="absolute bottom-4 right-4 px-3 py-2 bg-black/80 rounded text-sm text-[#F9FAFB] flex items-center gap-2">
-                  <Clock size={14} />
-                  {video.duration}
-                </div>
-                <div className="absolute top-4 left-4 px-3 py-1.5 bg-[#F59E0B] rounded text-xs text-[#0A0A0B] font-medium">
-                  {video.category}
-                </div>
-              </div>
+              )}
             </div>
 
             {/* Info column */}

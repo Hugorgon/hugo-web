@@ -16,6 +16,12 @@ export interface Video {
   imageUrl: string;
   category: VideoCategory;
   publishedAt: string; // ISO datum
+  /**
+   * Volitelná YouTube URL — watch, youtu.be, /embed, nebo /shorts.
+   * Když je vyplněná, detail stránky renderuje skutečný YouTube iframe;
+   * když chybí, padá zpět na statický náhled s play tlačítkem.
+   */
+  youtubeUrl?: string;
 }
 
 export const VIDEO_CATEGORIES: readonly VideoCategory[] = [
@@ -44,6 +50,7 @@ Při západu slunce jsem nepostavil žádný hrad z písku, snědl malé množst
       '/images/hugo.jpg',
     category: 'Dobrodružství',
     publishedAt: '2026-05-02',
+    youtubeUrl: 'https://youtube.com/shorts/Av8D1mnVDjA',
   },
   {
     slug: 'proc-jsou-lide-posedli-pamlsky',

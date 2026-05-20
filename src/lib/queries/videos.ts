@@ -19,13 +19,9 @@ import {
  * `getRelatedVideos` v `src/data/videos.ts` — stejná kategorie napřed,
  * zbytek doplní mezeru do `limit`.
  *
- * GROQ projekce zatím NEČTE pole `youtubeUrl` a `platform` ze Sanity schema —
- * frontend `Video` interface je o tyhle pole nevyžaduje a Phase B je čistá
- * infrastruktura bez consumer touch. Když Phase C+ začne renderovat embed,
- * projekce + adapter se rozšíří v jednom kroku s úpravou interface.
- *
- * Žádný consumer tenhle soubor zatím neimportuje — záměrné. Infrastruktura
- * existuje, frontend ji připojí v navazujícím Phase C.
+ * GROQ projekce čte `youtubeUrl` ze Sanity schema (Phase C). Frontend `Video`
+ * interface ho má jako volitelný; když chybí, detail stránky padá zpět na
+ * statický náhled. `platform` zůstává pro Phase D+ (více providerů).
  */
 
 interface RawVideo {
@@ -38,6 +34,7 @@ interface RawVideo {
   imageUrl?: string;
   category: VideoCategory;
   publishedAt: string;
+  youtubeUrl?: string;
 }
 
 const VIDEO_FIELDS = `
@@ -49,7 +46,8 @@ const VIDEO_FIELDS = `
   views,
   "imageUrl": coverImage.asset->url,
   category,
-  publishedAt
+  publishedAt,
+  youtubeUrl
 `;
 
 const LIST_QUERY = `*[_type == "video" && defined(slug.current)] | order(publishedAt desc) {${VIDEO_FIELDS}}`;
@@ -67,6 +65,7 @@ function mapToVideo(raw: RawVideo): Video {
     imageUrl: raw.imageUrl ?? '',
     category: raw.category,
     publishedAt: raw.publishedAt,
+    youtubeUrl: raw.youtubeUrl,
   };
 }
 
