@@ -215,9 +215,12 @@ export const homePage = defineType({
     // ── SOCIAL CONTENT ────────────────────────────────────────────────────
     defineField({
       name: 'socialContent',
-      title: 'Sekce „Sledujte mou cestu" (titulky)',
+      title: 'Sekce „Sledujte mou cestu"',
       type: 'object',
-      description: '3 platforem cards zatím zůstávají v lokálních datech — přijdou s `socialPlatform` collection v další phase.',
+      description:
+        'Titulky sekce + karty jednotlivých platforem. Karty se renderují ' +
+        'v pořadí podle `displayOrder` (nižší napřed). Skryté karty zůstávají ' +
+        'v Sanity ale nejdou na web.',
       fields: [
         defineField({
           name: 'title',
@@ -237,6 +240,117 @@ export const homePage = defineType({
           type: 'text',
           rows: 2,
           validation: (Rule) => Rule.required().max(200),
+        }),
+        defineField({
+          name: 'platforms',
+          title: 'Karty platforem',
+          type: 'array',
+          description:
+            'Karty zobrazené v gridu. Doporučené 3 (vizuální layout je laděný ' +
+            'na 3 sloupce na desktopu). Vyšší počet bude grid wrapovat na další řádek.',
+          of: [
+            defineArrayMember({
+              type: 'object',
+              name: 'socialPlatform',
+              fields: [
+                defineField({
+                  name: 'platform',
+                  title: 'Název platformy',
+                  type: 'string',
+                  description: 'Štítek vpravo nahoře na kartě, např. „Instagram".',
+                  validation: (Rule) => Rule.required().max(40),
+                }),
+                defineField({
+                  name: 'iconKey',
+                  title: 'Ikona',
+                  type: 'string',
+                  description:
+                    'Která lucide ikona se zobrazí v oranžovém čtverečku. ' +
+                    'Hodnoty drží shape s `ICON_MAP` ve `src/lib/queries/homePage.ts`.',
+                  options: {
+                    list: [
+                      { title: 'Instagram', value: 'instagram' },
+                      { title: 'YouTube', value: 'youtube' },
+                      { title: 'Facebook', value: 'facebook' },
+                    ],
+                    layout: 'dropdown',
+                  },
+                  validation: (Rule) => Rule.required(),
+                }),
+                defineField({
+                  name: 'value',
+                  title: 'Hlavní číslo / hodnota',
+                  type: 'string',
+                  description:
+                    'Plain text, např. „285K", „1000 kg+", „—". Manuální zadávání; ' +
+                    'automatické dotahování přes API zatím není implementované.',
+                  validation: (Rule) => Rule.required().max(20),
+                }),
+                defineField({
+                  name: 'description',
+                  title: 'Krátký popisek',
+                  type: 'string',
+                  description: 'Jedna věta pod hlavním číslem, např. „Denní stories a zákulisí".',
+                  validation: (Rule) => Rule.required().max(120),
+                }),
+                defineField({
+                  name: 'handle',
+                  title: 'Display text (handle)',
+                  type: 'string',
+                  description:
+                    'Klikatelný text na konci karty, např. „@hugorgon". ' +
+                    'Pokud je vyplněná `URL`, handle se prokliká na ni v novém tabu.',
+                  validation: (Rule) => Rule.required().max(60),
+                }),
+                defineField({
+                  name: 'url',
+                  title: 'URL',
+                  type: 'url',
+                  description:
+                    'Plná URL profilu (https://…). Pokud chybí, handle se vykreslí ' +
+                    'jako neklikatelný text — žádná dead anchor s href="#".',
+                  validation: (Rule) => Rule.uri({ scheme: ['https', 'http'] }),
+                }),
+                defineField({
+                  name: 'enabled',
+                  title: 'Zobrazit na webu',
+                  type: 'boolean',
+                  description: 'Pokud false, karta zůstane v Sanity, ale na webu se nezobrazí.',
+                  initialValue: true,
+                }),
+                defineField({
+                  name: 'displayOrder',
+                  title: 'Pořadí',
+                  type: 'number',
+                  description: 'Nižší číslo = dřív v gridu. Karty bez čísla padají na konec.',
+                }),
+                defineField({
+                  name: 'metricSource',
+                  title: 'Zdroj hodnoty',
+                  type: 'string',
+                  description:
+                    'Future-proofing flag. „manual" = hodnotu píše editor (default). ' +
+                    '„auto" = budoucí napojení na platformovou API (zatím není implementované; ' +
+                    'při „auto" se na webu i tak vykreslí ručně zadaná `value`).',
+                  options: {
+                    list: [
+                      { title: 'Ručně (manual)', value: 'manual' },
+                      { title: 'Automaticky (auto, zatím neaktivní)', value: 'auto' },
+                    ],
+                    layout: 'radio',
+                  },
+                  initialValue: 'manual',
+                  validation: (Rule) => Rule.required(),
+                }),
+              ],
+              preview: {
+                select: {
+                  title: 'platform',
+                  subtitle: 'handle',
+                },
+              },
+            }),
+          ],
         }),
       ],
     }),

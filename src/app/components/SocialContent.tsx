@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { SocialCard } from './SocialCard';
 import { Container } from './Container';
-import { HOME } from '../../data/home';
 import {
   fetchHomePage,
   LOCAL_HOME,
@@ -9,9 +8,10 @@ import {
 } from '../../lib/queries/homePage';
 
 export function SocialContent() {
-  // Initial state z local fallbacku — Sanity přepíše SECTION COPY (title +
-  // titleHighlight + subtitle), platforms[] zatím zůstávají v local datech
-  // (přijdou s `socialPlatform` collection v další phase).
+  // Initial state z local fallbacku — Sanity přepíše jak section copy
+  // (title + highlight + subtitle), tak `platforms[]`. Local fallback
+  // tvar je identický s tvarem z adapteru, takže první render je sync
+  // a vizuálně shodný s tím, co přijde po fetchi.
   const [home, setHome] = useState<HomePageData>(LOCAL_HOME);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export function SocialContent() {
   }, []);
 
   const section = home.socialContent;
-  const platforms = HOME.socialContent.platforms;
+  const platforms = section.platforms;
 
   return (
     <section className="bg-[#111214] py-24">
@@ -41,7 +41,7 @@ export function SocialContent() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {platforms.map(({ platform, Icon, followers, description, handle }) => (
+          {platforms.map(({ platform, Icon, followers, description, handle, url }) => (
             <SocialCard
               key={platform}
               platform={platform}
@@ -49,6 +49,7 @@ export function SocialContent() {
               followers={followers}
               description={description}
               handle={handle}
+              url={url}
             />
           ))}
         </div>

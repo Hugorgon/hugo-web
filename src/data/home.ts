@@ -48,6 +48,18 @@ export interface SocialPlatformItem {
   followers: string;
   description: string;
   handle: string;
+  /** Plná URL profilu. Když chybí, handle se vykreslí jako neklikatelný text. */
+  url?: string;
+  /** False = karta zůstane v datech, ale na webu se nezobrazí. Default true. */
+  enabled?: boolean;
+  /** Nižší = dřív v gridu. Default end-of-list. */
+  displayOrder?: number;
+  /**
+   * 'manual' = hodnotu píše editor (default).
+   * 'auto' = budoucí napojení na API (zatím neimplementované; frontend i tak
+   * čte ručně zadanou `followers` hodnotu).
+   */
+  metricSource?: 'manual' | 'auto';
 }
 
 export const HOME = {
@@ -149,6 +161,10 @@ export const HOME = {
         followers: '1000 kg+',
         description: 'Denní stories a zákulisí',
         handle: '@hugorgon',
+        url: 'https://instagram.com/hugorgon',
+        enabled: true,
+        displayOrder: 1,
+        metricSource: 'manual',
       },
       {
         platform: 'YouTube',
@@ -156,6 +172,10 @@ export const HOME = {
         followers: '1000 kg+',
         description: 'Plnohodnotné filmové epizody',
         handle: '@Hugorgon',
+        url: 'https://youtube.com/@Hugorgon',
+        enabled: true,
+        displayOrder: 2,
+        metricSource: 'manual',
       },
       {
         platform: 'Facebook',
@@ -163,6 +183,9 @@ export const HOME = {
         followers: '1000 kg+',
         description: 'Komunita a diskuse',
         handle: 'Hugo Stories',
+        enabled: true,
+        displayOrder: 3,
+        metricSource: 'manual',
       },
     ] satisfies SocialPlatformItem[],
   },

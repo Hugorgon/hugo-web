@@ -1,5 +1,30 @@
+import type { LucideIcon } from 'lucide-react';
+import { Facebook, Instagram, Youtube } from 'lucide-react';
 import { sanityClient } from '../sanity';
 import { HOME as LEGACY_HOME } from '../../data/home';
+
+/**
+ * Sanity `iconKey` → lucide-react component. Mirror patternu z
+ * `lib/queries/navigation.ts`. Pokud editor zadá neznámý klíč, karta
+ * v adapteru padne ven (defensive filter).
+ */
+const ICON_MAP: Record<string, LucideIcon> = {
+  instagram: Instagram,
+  youtube: Youtube,
+  facebook: Facebook,
+};
+
+export type SocialPlatformMetricSource = 'manual' | 'auto';
+
+export interface HomePageSocialPlatform {
+  platform: string;
+  Icon: LucideIcon;
+  followers: string;
+  description: string;
+  handle: string;
+  url?: string;
+  metricSource: SocialPlatformMetricSource;
+}
 
 /**
  * Fetcher pro `homePage` singleton — preferuje Sanity, fallback na
@@ -51,7 +76,9 @@ export interface HomePageData {
   hero: HomePageHero;
   featuredVideos: HomePageSectionCopy & { viewAllLabel: string };
   storiesGrid: HomePageSectionCopy & { loadMoreLabel: string };
-  socialContent: HomePageSectionCopy;
+  socialContent: HomePageSectionCopy & {
+    platforms: HomePageSocialPlatform[];
+  };
   newsletter: {
     heading: string;
     lead: string;
@@ -60,6 +87,16 @@ export interface HomePageData {
     submitLabel: string;
     checks: string[];
   };
+}
+
+interface RawSocialPlatform {
+  platform: string;
+  iconKey: string;
+  value: string;
+  description: string;
+  handle: string;
+  url?: string;
+  metricSource?: SocialPlatformMetricSource;
 }
 
 interface RawHomePage {
@@ -75,7 +112,9 @@ interface RawHomePage {
   };
   featuredVideos: HomePageData['featuredVideos'];
   storiesGrid: HomePageData['storiesGrid'];
-  socialContent: HomePageSectionCopy;
+  socialContent: HomePageSectionCopy & {
+    platforms?: RawSocialPlatform[];
+  };
   newsletter: HomePageData['newsletter'];
 }
 
@@ -114,7 +153,16 @@ const QUERY = `*[_id == "homePage"][0] {
   socialContent {
     title,
     titleHighlight,
-    subtitle
+    subtitle,
+    "platforms": platforms[enabled != false] | order(coalesce(displayOrder, 9999) asc) {
+      platform,
+      iconKey,
+      value,
+      description,
+      handle,
+      url,
+      metricSource
+    }
   },
   newsletter {
     heading,
@@ -153,6 +201,21 @@ export const LOCAL_HOME: HomePageData = {
     title: LEGACY_HOME.socialContent.title,
     titleHighlight: LEGACY_HOME.socialContent.titleHighlight,
     subtitle: LEGACY_HOME.socialContent.subtitle,
+    platforms: LEGACY_HOME.socialContent.platforms
+      // Filter `enabled !== false` (undefined counts as enabled).
+      .filter((p) => p.enabled !== false)
+      // Stable order by displayOrder; missing values fall to end.
+      .slice()
+      .sort((a, b) => (a.displayOrder ?? 9999) - (b.displayOrder ?? 9999))
+      .map((p) => ({
+        platform: p.platform,
+        Icon: p.Icon,
+        followers: p.followers,
+        description: p.description,
+        handle: p.handle,
+        url: p.url,
+        metricSource: p.metricSource ?? 'manual',
+      })),
   },
   newsletter: {
     heading: LEGACY_HOME.newsletter.heading,
@@ -187,7 +250,33 @@ function mapHomePage(raw: RawHomePage): HomePageData {
     },
     featuredVideos: { ...raw.featuredVideos },
     storiesGrid: { ...raw.storiesGrid },
-    socialContent: { ...raw.socialContent },
+    socialContent: (() => {
+      // Map raw platforms to frontend shape. Drop entries whose `iconKey` is
+      // unknown — defensive against Studio dropdown drift.
+      const mapped = (raw.socialContent.platforms ?? [])
+        .map((p): HomePageSocialPlatform | null => {
+          const Icon = ICON_MAP[p.iconKey];
+          if (!Icon) return null;
+          return {
+            platform: p.platform,
+            Icon,
+            followers: p.value,
+            description: p.description,
+            handle: p.handle,
+            url: p.url,
+            metricSource: p.metricSource ?? 'manual',
+          };
+        })
+        .filter((p): p is HomePageSocialPlatform => p !== null);
+      return {
+        title: raw.socialContent.title,
+        titleHighlight: raw.socialContent.titleHighlight,
+        subtitle: raw.socialContent.subtitle,
+        // If Studio document exists but `platforms` is empty/unset, keep the
+        // local fallback set instead of rendering zero cards.
+        platforms: mapped.length > 0 ? mapped : LOCAL_HOME.socialContent.platforms,
+      };
+    })(),
     newsletter: {
       ...raw.newsletter,
       checks: raw.newsletter.checks ?? [],
