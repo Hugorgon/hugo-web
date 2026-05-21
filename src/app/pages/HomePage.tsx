@@ -5,7 +5,11 @@ import { Categories } from '../components/Categories';
 import { AboutHugo } from '../components/AboutHugo';
 import { StoriesGrid } from '../components/StoriesGrid';
 import { SocialContent } from '../components/SocialContent';
-import { Newsletter } from '../components/Newsletter';
+// Newsletter section is intentionally not rendered on the public site right
+// now. The component, its CMS field, and the `/#newsletter` anchor route
+// constant are kept in code so the section can be re-enabled by restoring
+// this import and the <Newsletter /> render below in a single commit.
+// import { Newsletter } from '../components/Newsletter';
 import { Footer } from '../components/Footer';
 
 /**
@@ -23,7 +27,7 @@ export function HomePage() {
       <AboutHugo />
       <StoriesGrid />
       <SocialContent />
-      <Newsletter />
+      {/* <Newsletter /> — intentionally hidden; see import comment above. */}
       <Footer />
     </div>
   );

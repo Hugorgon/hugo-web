@@ -175,7 +175,7 @@ export function VideoDetailPage() {
                   Nová videa každý pátek. Přidejte se ke smečce a dostaňte je do schránky hned, jak vyjdou.
                 </p>
                 <Link
-                  to="/#newsletter"
+                  to={ROUTES.contact}
                   className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition duration-200 ease-soft active:scale-[0.98] select-none bg-[#F59E0B] text-[#0A0A0B] hover:bg-[#FFB84D]"
                 >
                   Sleduj Huga

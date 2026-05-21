@@ -23,17 +23,21 @@ export interface FooterSocialLink {
 }
 
 /** Hlavní položky v navbar — pořadí drží jeho vizuální layout. */
+// Newsletter entry intentionally omitted while the Newsletter section is
+// hidden from the public site (see HomePage). Add it back here when the
+// section is re-enabled.
 export const NAV_LINKS: readonly NavLink[] = [
   { kind: 'route', to: ROUTES.videos, label: 'Videa' },
   { kind: 'route', to: ROUTES.stories, label: 'Příběhy' },
   { kind: 'route', to: ROUTES.gallery, label: 'Fotky' },
   { kind: 'route', to: ROUTES.about, label: 'O mně' },
-  { kind: 'hash', to: ROUTES.newsletterAnchor, label: 'Newsletter' },
 ] as const;
 
 /** CTA tlačítko v pravé části navbaru a v mobilním menu. */
+// Repointed from `newsletterAnchor` to `contact` while Newsletter is hidden.
+// Semantically „Sleduj Huga" = „Follow Hugo" → Contact lists the channels.
 export const NAVBAR_CTA = {
-  to: ROUTES.newsletterAnchor,
+  to: ROUTES.contact,
   label: 'Sleduj Huga',
 } as const;
 
@@ -41,12 +45,12 @@ export const NAVBAR_CTA = {
 export const FOOTER_COLUMNS = {
   explore: {
     heading: 'Procházet',
+    // Newsletter entry omitted while the Newsletter section is hidden.
     links: [
       { to: ROUTES.videos, label: 'Videa' },
       { to: ROUTES.stories, label: 'Příběhy' },
       { to: ROUTES.gallery, label: 'Fotky' },
       { to: ROUTES.about, label: 'O Hugovi' },
-      { to: ROUTES.newsletterAnchor, label: 'Newsletter' },
     ] satisfies FooterLink[],
   },
   categories: {
