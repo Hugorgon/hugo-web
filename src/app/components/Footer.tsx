@@ -96,7 +96,8 @@ export function Footer() {
                 <a
                   key={label}
                   href={href}
-                  onClick={(event) => event.preventDefault()}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="w-10 h-10 rounded-lg bg-[#161618] border border-[#2A2B31] flex items-center justify-center text-[#9CA3AF] hover:text-[#F59E0B] hover:border-[#F59E0B] transition-all"
                 >
