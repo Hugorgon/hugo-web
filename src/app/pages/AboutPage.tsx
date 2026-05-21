@@ -7,23 +7,42 @@ import { PageHeader } from '../components/PageHeader';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { VideoCardVertical } from '../components/VideoCardVertical';
 import { StoryCard } from '../components/StoryCard';
+import { ROUTES } from '../../data/routes';
 import { VIDEOS as LOCAL_VIDEOS, type Video } from '../../data/videos';
 import { STORIES as LOCAL_STORIES, type Story } from '../../data/stories';
-import { ABOUT } from '../../data/about';
-import { PAGES } from '../../data/pages';
 import { fetchStories } from '../../lib/queries/stories';
 import { fetchVideos } from '../../lib/queries/videos';
+import {
+  fetchAboutPage,
+  LOCAL_ABOUT,
+  type AboutPageData,
+} from '../../lib/queries/aboutPage';
 
 /**
  * Plnohodnotná „O mně" stránka.
  * Vizuálně staví na sekci AboutHugo z homepage a doplňuje řádek
- * nejnovějších videí a nejnovějších příběhů. Texty čerpá z data/about.ts;
- * page-header copy je v data/pages.ts.
+ * nejnovějších videí a nejnovějších příběhů.
+ *
+ * About copy (portrét, badge, bio, features, headlines) tahá z `aboutPage`
+ * Sanity singletonu s lokálním fallbackem (`LOCAL_ABOUT`). Latest videos /
+ * latest stories tahají z `video` / `story` collections jako předtím.
  */
 export function AboutPage() {
+  // About content: initial z local fallbacku → Sanity fetch.
+  const [about, setAbout] = useState<AboutPageData>(LOCAL_ABOUT);
+  useEffect(() => {
+    let cancelled = false;
+    fetchAboutPage().then((data) => {
+      if (!cancelled && data) setAbout(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const allParagraphs = [
-    ...ABOUT.bioParagraphs,
-    ABOUT.pageSection.extraParagraph,
+    ...about.bioParagraphs,
+    about.pageSection.extraParagraph,
   ];
 
   // Stories: initial z local fallbacku → Sanity fetch → top 3 slice.
@@ -61,16 +80,16 @@ export function AboutPage() {
       <main className="pt-32">
         <Container>
           <PageHeader
-            eyebrow={PAGES.about.header.eyebrow}
+            eyebrow={about.pageHeader.eyebrow}
             title={
               <>
-                {PAGES.about.header.titleLead}{' '}
+                {about.pageHeader.titleLead}{' '}
                 <span className="text-[#F59E0B]">
-                  {PAGES.about.header.titleHighlight}
+                  {about.pageHeader.titleHighlight}
                 </span>
               </>
             }
-            subtitle={PAGES.about.header.subtitle}
+            subtitle={about.pageHeader.subtitle}
           />
         </Container>
 
@@ -81,27 +100,27 @@ export function AboutPage() {
               <div className="relative">
                 <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
                   <ImageWithFallback
-                    src={ABOUT.portrait.imageUrl}
-                    alt={ABOUT.portrait.alt}
+                    src={about.portrait.imageUrl}
+                    alt={about.portrait.alt}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B]/60 to-transparent" />
                 </div>
                 <div className="absolute -bottom-6 -right-6 bg-[#F59E0B] rounded-2xl p-6 shadow-2xl">
                   <div className="text-[#0A0A0B] text-4xl font-bold mb-1">
-                    {ABOUT.badge.number}
+                    {about.badge.number}
                   </div>
                   <div className="text-[#0A0A0B] text-sm font-medium">
-                    {ABOUT.badge.label}
+                    {about.badge.label}
                   </div>
                 </div>
               </div>
 
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-[#F9FAFB] mb-6">
-                  {ABOUT.pageSection.title}{' '}
+                  {about.pageSection.title}{' '}
                   <span className="text-[#F59E0B]">
-                    {ABOUT.pageSection.titleHighlight}
+                    {about.pageSection.titleHighlight}
                   </span>
                 </h2>
 
@@ -118,7 +137,7 @@ export function AboutPage() {
                 })}
 
                 <div className="grid grid-cols-2 gap-6">
-                  {ABOUT.features.map(({ Icon, title, description }) => (
+                  {about.features.map(({ Icon, title, description }) => (
                     <div key={title} className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center flex-shrink-0">
                         <Icon className="text-[#F59E0B]" size={20} />
@@ -143,20 +162,20 @@ export function AboutPage() {
             <div className="flex items-end justify-between mb-12">
               <div>
                 <h2 className="text-4xl md:text-5xl font-bold text-[#F9FAFB] mb-4">
-                  {ABOUT.latestVideos.title}{' '}
+                  {about.latestVideos.title}{' '}
                   <span className="text-[#F59E0B]">
-                    {ABOUT.latestVideos.titleHighlight}
+                    {about.latestVideos.titleHighlight}
                   </span>
                 </h2>
                 <p className="text-[#D1D5DB] text-lg max-w-2xl">
-                  {ABOUT.latestVideos.subtitle}
+                  {about.latestVideos.subtitle}
                 </p>
               </div>
               <Link
-                to={ABOUT.latestVideos.viewAllTo}
+                to={ROUTES.videos}
                 className="text-[#F59E0B] hover:text-[#FFB84D] transition-colors font-medium hidden md:block"
               >
-                {ABOUT.latestVideos.viewAllLabel}
+                {about.latestVideos.viewAllLabel}
               </Link>
             </div>
 
@@ -174,20 +193,20 @@ export function AboutPage() {
             <div className="flex items-end justify-between mb-12">
               <div>
                 <h2 className="text-4xl md:text-5xl font-bold text-[#F9FAFB] mb-4">
-                  {ABOUT.latestStories.title}{' '}
+                  {about.latestStories.title}{' '}
                   <span className="text-[#F59E0B]">
-                    {ABOUT.latestStories.titleHighlight}
+                    {about.latestStories.titleHighlight}
                   </span>
                 </h2>
                 <p className="text-[#D1D5DB] text-lg max-w-2xl">
-                  {ABOUT.latestStories.subtitle}
+                  {about.latestStories.subtitle}
                 </p>
               </div>
               <Link
-                to={ABOUT.latestStories.viewAllTo}
+                to={ROUTES.stories}
                 className="text-[#F59E0B] hover:text-[#FFB84D] transition-colors font-medium hidden md:block"
               >
-                {ABOUT.latestStories.viewAllLabel}
+                {about.latestStories.viewAllLabel}
               </Link>
             </div>
 
