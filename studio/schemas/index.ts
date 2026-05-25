@@ -5,15 +5,14 @@ import { siteSettings } from './siteSettings';
 import { navigation } from './navigation';
 import { homePage } from './homePage';
 import { aboutPage } from './aboutPage';
+import { contactPage } from './contactPage';
 
 /**
  * Centrální registr všech schemat zahrnutých do studia.
- * Další typy (contactPage, ...) sem přidávat postupně, vždy s odpovídajícím
- * seedovým plánem a verifikací editor workflow.
  *
- * Singletons (siteSettings, navigation, homePage, aboutPage) mají speciální
- * chování — viz `studio/structure.ts`. `photo`, `story`, `video` jsou
- * standardní collections.
+ * Singletons (siteSettings, navigation, homePage, aboutPage, contactPage)
+ * mají speciální chování — viz `studio/structure.ts`. `photo`, `story`,
+ * `video` jsou standardní collections.
  */
 export const schemaTypes = [
   story,
@@ -23,4 +22,5 @@ export const schemaTypes = [
   navigation,
   homePage,
   aboutPage,
+  contactPage,
 ];
