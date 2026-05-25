@@ -1,9 +1,12 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Play, ChevronDown } from 'lucide-react';
 import CountUp from 'react-countup';
-import { Button } from './Button';
+import { LinkButton } from './LinkButton';
 import { Container } from './Container';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ROUTES } from '../../data/routes';
+import { VIDEOS as LOCAL_VIDEOS, type Video } from '../../data/videos';
+import { fetchVideos } from '../../lib/queries/videos';
 import {
   fetchHomePage,
   LOCAL_HOME,
@@ -25,7 +28,30 @@ export function HeroSection() {
     };
   }, []);
 
+  // Videos pro primární CTA — mirror existujícího patternu z FeaturedVideos.
+  // Initial state z local fallbacku (LOCAL_VIDEOS je už řazený publishedAt
+  // desc, takže videos[0] je nejnovější i před fetchem). Sanity přepíše po
+  // async fetchi se zachovaným pořadím (GROQ projection: order(publishedAt desc)).
+  const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchVideos().then((data) => {
+      if (!cancelled && data.length > 0) setVideos(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const hero = home.hero;
+  const newestVideo = videos[0];
+  // Defensive: pokud by se z nějakého důvodu nedostal žádný video, CTA padá
+  // na archiv `/videos` místo broken detail URL. V praxi nenastane —
+  // LOCAL_VIDEOS má 9 entries a fetchVideos vrací local při jakémkoliv selhání.
+  const primaryHref = newestVideo
+    ? ROUTES.videoDetail(newestVideo.slug)
+    : ROUTES.videos;
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -55,13 +81,13 @@ export function HeroSection() {
           </p>
 
           <div className="flex flex-wrap gap-4 mb-12">
-            <Button className="gap-2 flex items-center">
+            <LinkButton to={primaryHref} className="gap-2">
               <Play size={20} className="fill-[#0A0A0B]" />
               {hero.primaryCta}
-            </Button>
-            <Button variant="secondary">
+            </LinkButton>
+            <LinkButton variant="secondary" to={ROUTES.stories}>
               {hero.secondaryCta}
-            </Button>
+            </LinkButton>
           </div>
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-6 sm:gap-8 text-sm">
