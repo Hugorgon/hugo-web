@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
+import { CookieBanner } from './components/CookieBanner';
 import { ScrollToHash } from './components/ScrollToHash';
 import { HomePage } from './pages/HomePage';
 import { VideosPage } from './pages/VideosPage';
@@ -30,6 +31,8 @@ export default function App() {
         <Route path={ROUTES.gallery} element={<GalleryPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      {/* Renderuje se nad rámec Routes — drží se na všech stránkách. */}
+      <CookieBanner />
     </BrowserRouter>
   );
 }
