@@ -189,17 +189,25 @@ export function VideoDetailPage() {
               {/* Inline CTA na konci textu — žádný sticky sidebar */}
               <div className="mt-12 bg-[#161618] border border-[#2A2B31] rounded-lg p-6">
                 <h2 className="text-xl font-semibold text-[#F9FAFB] mb-3">
-                  Nezmeškejte žádnou epizodu
+                  Neodcházej po jedné epizodě. 🐾
                 </h2>
                 <p className="text-[#9CA3AF] text-sm leading-relaxed mb-6">
-                  Nová videa každý pátek. Přidejte se ke smečce a dostaňte je do schránky hned, jak vyjdou.
+                  Nová videa přibývají průběžně. Mrkni do archivu nebo sleduj Huga na sociálních sítích.
                 </p>
-                <Link
-                  to={ROUTES.contact}
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition duration-200 ease-soft active:scale-[0.98] select-none bg-[#F59E0B] text-[#0A0A0B] hover:bg-[#FFB84D]"
-                >
-                  Sleduj Huga
-                </Link>
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    to={ROUTES.videos}
+                    className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition duration-200 ease-soft active:scale-[0.98] select-none bg-[#F59E0B] text-[#0A0A0B] hover:bg-[#FFB84D]"
+                  >
+                    Prozkoumat archiv
+                  </Link>
+                  <Link
+                    to={ROUTES.contact}
+                    className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition duration-200 ease-soft active:scale-[0.98] select-none bg-[#0A0A0B] text-[#F9FAFB] border border-[#2A2B31] hover:border-[#F59E0B]"
+                  >
+                    Sleduj Huga
+                  </Link>
+                </div>
               </div>
             </article>
           </div>
