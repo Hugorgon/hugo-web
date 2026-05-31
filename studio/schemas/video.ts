@@ -147,18 +147,13 @@ export const video = defineType({
     defineField({
       name: 'category',
       title: 'Kategorie',
-      type: 'string',
+      type: 'reference',
       description:
-        'Jedna ze čtyř pevně daných kategorií. Hodnoty drží shape s `VideoCategory` union typem ve frontendu — žádné nové kategorie bez frontend update.',
-      options: {
-        list: [
-          { title: 'Dobrodružství', value: 'Dobrodružství' },
-          { title: 'Komentáře', value: 'Komentáře' },
-          { title: 'Návody', value: 'Návody' },
-          { title: 'Všední den', value: 'Všední den' },
-        ],
-        layout: 'dropdown',
-      },
+        'Reference na `videoCategory` dokument. Přidání další kategorie = ' +
+        'vytvořit nový `videoCategory` dokument; žádná změna kódu nepotřeba. ' +
+        'Existující videa s legacy string hodnotou (Dobrodružství / Komentáře / ' +
+        'Návody / Všední den) je nutné manuálně překlinknout na novou kategorii.',
+      to: [{ type: 'videoCategory' }],
       validation: (Rule) => Rule.required(),
     }),
 

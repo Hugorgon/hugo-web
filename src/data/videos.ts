@@ -2,9 +2,19 @@
  * Jediný zdroj pravdy pro videoobsah.
  * FeaturedVideos na domovské stránce tahá první tři položky, archiv /videos
  * zobrazuje vše, /videos/:slug vyhledává podle slugu.
+ *
+ * Kategorie jsou nyní CMS-řízené (Sanity `videoCategory` collection). Frontend
+ * `VideoCategory` typ je čistý string — žádný TS union nad obsahem, protože
+ * kategorie přidává editor v Studiu bez code change.
+ *
+ * `VIDEO_CATEGORY_FALLBACK` níže slouží jako local fallback dat pro filter
+ * pilly a homepage karty před tím, než async fetch z Sanity doběhne (nebo
+ * pokud Sanity není nakonfigurovaná). Hodnoty `value` v tomto poli MUSÍ
+ * odpovídat slugům `videoCategory.value` v Sanity, jinak filtering nebude
+ * fungovat.
  */
 
-export type VideoCategory = 'Dobrodružství' | 'Komentáře' | 'Návody' | 'Všední den';
+export type VideoCategory = string;
 
 export interface Video {
   slug: string;
@@ -14,6 +24,11 @@ export interface Video {
   duration: string;
   views: string;
   imageUrl: string;
+  /**
+   * Slug kategorie. Odpovídá `videoCategory.value` v Sanity. Lokální VIDEOS
+   * položky používají nové slugy; legacy stringy ('Dobrodružství' atd.) byly
+   * zahozeny při category resetu.
+   */
   category: VideoCategory;
   publishedAt: string; // ISO datum
   /**
@@ -24,12 +39,64 @@ export interface Video {
   youtubeUrl?: string;
 }
 
-export const VIDEO_CATEGORIES: readonly VideoCategory[] = [
-  'Dobrodružství',
-  'Komentáře',
-  'Návody',
-  'Všední den',
+/**
+ * Local fallback pro video kategorie — mirror Sanity `videoCategory` collection
+ * shape. Slouží VideosPage a Categories.tsx pro sync první render před fetchem.
+ * Pořadí drží `displayOrder` asc.
+ */
+export interface VideoCategoryItem {
+  /** Stabilní slug, URL klíč. Odpovídá `videoCategory.value` v Sanity. */
+  value: string;
+  title: string;
+  description: string;
+  /** Klíč v `ICON_MAP` v `src/lib/queries/videoCategories.ts`. */
+  iconKey: string;
+  displayOrder: number;
+  enabled: boolean;
+}
+
+export const VIDEO_CATEGORY_FALLBACK: readonly VideoCategoryItem[] = [
+  {
+    value: 'muj-pohled',
+    title: 'Můj pohled',
+    description: 'Nikdo se neptal. Stejně ho dostaneš.',
+    iconKey: 'eye',
+    displayOrder: 1,
+    enabled: true,
+  },
+  {
+    value: 'pristizen-pri-cinu',
+    title: 'Přistižen při činu',
+    description: 'Bez právníka nic neřeknu!',
+    iconKey: 'camera',
+    displayOrder: 2,
+    enabled: true,
+  },
+  {
+    value: 'humanoidi',
+    title: 'Humanoidi',
+    description: 'Výzkum stále probíhá.',
+    iconKey: 'users',
+    displayOrder: 3,
+    enabled: true,
+  },
+  {
+    value: 'vyjimecne-situace',
+    title: 'Výjimečné situace',
+    description: 'Nevím kam s tím, tak čuč.',
+    iconKey: 'sparkles',
+    displayOrder: 4,
+    enabled: true,
+  },
 ] as const;
+
+/**
+ * Pouze slugy nových kategorií. Zachováno pro místa, kde stačí seznam value
+ * stringů (např. VideosPage `VALID_CATEGORIES` guard pro URL params).
+ */
+export const VIDEO_CATEGORIES: readonly string[] = VIDEO_CATEGORY_FALLBACK.map(
+  (c) => c.value,
+);
 
 export const VIDEOS: Video[] = [
   {
@@ -48,7 +115,7 @@ Při západu slunce jsem nepostavil žádný hrad z písku, snědl malé množst
     views: '1000 kg+',
     imageUrl:
       '/images/hugo.jpg',
-    category: 'Dobrodružství',
+    category: 'vyjimecne-situace',
     publishedAt: '2026-05-02',
     youtubeUrl: 'https://youtube.com/shorts/Av8D1mnVDjA',
   },
@@ -66,7 +133,7 @@ V této epizodě se pokouším — s omezeným úspěchem — obrátit dynamiku 
     views: '1000 kg+',
     imageUrl:
       '/images/hugo.jpg',
-    category: 'Komentáře',
+    category: 'humanoidi',
     publishedAt: '2026-04-24',
   },
   {
@@ -83,7 +150,7 @@ Na konci této epizody pochopíte rozdíl mezi taktickým zdřímnutím (dvanác
     views: '1000 kg+',
     imageUrl:
       '/images/hugo.jpg',
-    category: 'Návody',
+    category: 'muj-pohled',
     publishedAt: '2026-04-15',
   },
   {
@@ -98,7 +165,7 @@ Tohle není video o honbě. Honba je odpověď nepříliš sofistikovaného psa.
     views: '1000 kg+',
     imageUrl:
       '/images/hugo.jpg',
-    category: 'Dobrodružství',
+    category: 'pristizen-pri-cinu',
     publishedAt: '2026-04-08',
   },
   {
@@ -113,7 +180,7 @@ V této epizodě rozebírám sedm mikropohybů, které by se měl naučit číst
     views: '1000 kg+',
     imageUrl:
       '/images/hugo.jpg',
-    category: 'Komentáře',
+    category: 'humanoidi',
     publishedAt: '2026-03-30',
   },
   {
@@ -128,7 +195,7 @@ Krátká pasáž je věnována i bočnímu protažení, které osobně nepodporu
     views: '1000 kg+',
     imageUrl:
       '/images/hugo.jpg',
-    category: 'Návody',
+    category: 'muj-pohled',
     publishedAt: '2026-03-22',
   },
   {
@@ -143,7 +210,7 @@ Tato epizoda je natočená v reálném čase. Bez střihů. Bez triků. Jen jede
     views: '1000 kg+',
     imageUrl:
       '/images/hugo.jpg',
-    category: 'Všední den',
+    category: 'muj-pohled',
     publishedAt: '2026-03-14',
   },
   {
@@ -158,7 +225,7 @@ Tato epizoda je výsledkem šestitýdenní sledovací operace. Mám záznamy. M�
     views: '1000 kg+',
     imageUrl:
       '/images/hugo.jpg',
-    category: 'Komentáře',
+    category: 'pristizen-pri-cinu',
     publishedAt: '2026-03-05',
   },
   {
@@ -173,7 +240,7 @@ Pravda však je, že běsnění po koupeli bylo profesionální úrovně. Oceně
     views: '1000 kg+',
     imageUrl:
       '/images/hugo.jpg',
-    category: 'Všední den',
+    category: 'vyjimecne-situace',
     publishedAt: '2026-02-26',
   },
 ];

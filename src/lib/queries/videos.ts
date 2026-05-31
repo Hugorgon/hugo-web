@@ -32,11 +32,20 @@ interface RawVideo {
   duration: string;
   views?: string;
   imageUrl?: string;
-  category: VideoCategory;
+  /**
+   * GROQ deref `category->value.current`. Pro legacy videa, která mají
+   * `category` stále jako string (před reference migrací), Sanity vrátí
+   * null — taková videa pak vypadnou ze všech filter pillů a editor je
+   * musí v Studiu manuálně překlinknout.
+   */
+  category: VideoCategory | null;
   publishedAt: string;
   youtubeUrl?: string;
 }
 
+// `category` je nyní reference na `videoCategory` dokument; derefujeme přímo
+// na slug string, aby frontend mohl pokračovat ve stringovém srovnání
+// `video.category === categoryEntry.value`.
 const VIDEO_FIELDS = `
   "slug": slug.current,
   title,
@@ -45,7 +54,7 @@ const VIDEO_FIELDS = `
   duration,
   views,
   "imageUrl": coverImage.asset->url,
-  category,
+  "category": category->value.current,
   publishedAt,
   youtubeUrl
 `;
@@ -63,7 +72,7 @@ function mapToVideo(raw: RawVideo): Video {
     duration: raw.duration,
     views: raw.views ?? '',
     imageUrl: raw.imageUrl ?? '',
-    category: raw.category,
+    category: raw.category ?? '',
     publishedAt: raw.publishedAt,
     youtubeUrl: raw.youtubeUrl,
   };

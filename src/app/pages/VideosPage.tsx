@@ -9,48 +9,78 @@ import { CategoryFilter } from '../components/CategoryFilter';
 import { Button } from '../components/Button';
 import {
   VIDEOS as LOCAL_VIDEOS,
-  VIDEO_CATEGORIES,
   type Video,
-  type VideoCategory,
 } from '../../data/videos';
-import { PAGES } from '../../data/pages';
 import { UI } from '../../data/ui';
 import { interpolate } from '../../lib/format';
 import { fetchVideos } from '../../lib/queries/videos';
+import {
+  fetchVideoCategories,
+  LOCAL_VIDEO_CATEGORIES,
+  type VideoCategoryEntry,
+} from '../../lib/queries/videoCategories';
+import {
+  fetchVideosArchive,
+  LOCAL_VIDEOS_ARCHIVE,
+  type VideosArchiveData,
+} from '../../lib/queries/videosArchive';
 
-type Filter = typeof UI.archive.videos.filterAll | VideoCategory;
-const FILTERS: readonly Filter[] = [UI.archive.videos.filterAll, ...VIDEO_CATEGORIES];
-const PAGE_SIZE = 6;
-
-// Guard: only accept query values that match a real VideoCategory.
-const VALID_CATEGORIES: ReadonlySet<string> = new Set(VIDEO_CATEGORIES);
+const ALL_FILTER = UI.archive.videos.filterAll;
+const PAGE_SIZE = 12;
 
 export function VideosPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [visible, setVisible] = useState(PAGE_SIZE);
 
-  // Initial state z local fallbacku — první render je synchronní a vizuálně
+  // Initial state z local fallbacků — první render je synchronní a vizuálně
   // identický s předchozí verzí. Sanity data přepíšou state až po async fetchi.
   const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
+  const [categories, setCategories] = useState<VideoCategoryEntry[]>(
+    LOCAL_VIDEO_CATEGORIES,
+  );
+  const [archive, setArchive] = useState<VideosArchiveData>(LOCAL_VIDEOS_ARCHIVE);
 
   useEffect(() => {
     let cancelled = false;
     fetchVideos().then((data) => {
       if (!cancelled && data.length > 0) setVideos(data);
     });
+    fetchVideoCategories().then((data) => {
+      if (!cancelled && data.length > 0) setCategories(data);
+    });
+    fetchVideosArchive().then((data) => {
+      if (!cancelled && data) setArchive(data);
+    });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  // Filtr je řízený URL parametrem ?category=… — homepage Categories karty
+  // Filter pill labels = { ALL_FILTER } + { kategorie z CMS v jejich pořadí }.
+  // Pillky používají `title` jako vizuální label, ale filtrujeme podle `value`
+  // (stabilní slug, který odpovídá `video.category` po dereferenci).
+  // Mapování label ↔ value drží `categoryByTitle` lookup.
+  const filters = useMemo(
+    () => [ALL_FILTER, ...categories.map((c) => c.title)],
+    [categories],
+  );
+
+  const categoryByTitle = useMemo(() => {
+    const map = new Map<string, VideoCategoryEntry>();
+    for (const c of categories) map.set(c.title, c);
+    return map;
+  }, [categories]);
+
+  // Filtr je řízený URL parametrem ?category=<value> — homepage Categories karty
   // tak mohou linkovat přímo na předfiltrovaný archiv, back/forward navigace
   // funguje přirozeně a URL je sdílitelná.
   const urlCategory = searchParams.get('category');
-  const filter: Filter =
-    urlCategory && VALID_CATEGORIES.has(urlCategory)
-      ? (urlCategory as VideoCategory)
-      : UI.archive.videos.filterAll;
+  const activeCategory = useMemo(() => {
+    if (!urlCategory) return null;
+    return categories.find((c) => c.value === urlCategory) ?? null;
+  }, [urlCategory, categories]);
+
+  const activeFilter = activeCategory ? activeCategory.title : ALL_FILTER;
 
   // Reset stránkování při změně kategorie (ať už přes filter pill nebo
   // přímý odkaz z Categories sekce).
@@ -58,20 +88,25 @@ export function VideosPage() {
     setVisible(PAGE_SIZE);
   }, [urlCategory]);
 
-  function handleFilterChange(next: Filter) {
+  function handleFilterChange(next: string) {
     const params = new URLSearchParams(searchParams);
-    if (next === UI.archive.videos.filterAll) {
+    if (next === ALL_FILTER) {
       params.delete('category');
     } else {
-      params.set('category', next);
+      const category = categoryByTitle.get(next);
+      if (category) {
+        params.set('category', category.value);
+      } else {
+        params.delete('category');
+      }
     }
     setSearchParams(params);
   }
 
   const filtered = useMemo(() => {
-    if (filter === UI.archive.videos.filterAll) return videos;
-    return videos.filter((v) => v.category === filter);
-  }, [filter, videos]);
+    if (!activeCategory) return videos;
+    return videos.filter((v) => v.category === activeCategory.value);
+  }, [activeCategory, videos]);
 
   const visibleVideos = filtered.slice(0, visible);
   const hasMore = visible < filtered.length;
@@ -82,21 +117,23 @@ export function VideosPage() {
       <main className="pt-32 pb-24">
         <Container>
           <PageHeader
-            eyebrow={PAGES.videos.header.eyebrow}
+            eyebrow={archive.pageHeader.eyebrow}
             title={
               <>
-                {PAGES.videos.header.titleLead}{' '}
+                {archive.pageHeader.titleLead && (
+                  <>{archive.pageHeader.titleLead}{' '}</>
+                )}
                 <span className="text-[#F59E0B]">
-                  {PAGES.videos.header.titleHighlight}
+                  {archive.pageHeader.titleHighlight}
                 </span>
               </>
             }
-            subtitle={PAGES.videos.header.subtitle}
+            subtitle={archive.pageHeader.subtitle}
           />
 
           <CategoryFilter
-            options={FILTERS}
-            active={filter}
+            options={filters}
+            active={activeFilter}
             onChange={handleFilterChange}
           />
 

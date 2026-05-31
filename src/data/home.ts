@@ -1,11 +1,7 @@
 import type { LucideIcon } from 'lucide-react';
 import {
-  Compass,
   Facebook,
-  GraduationCap,
-  Home as HomeIcon,
   Instagram,
-  MessageCircle,
   Youtube,
 } from 'lucide-react';
 
@@ -31,15 +27,6 @@ export interface HeroStat {
   subtext: string;
   /** Zpoždění startu animace v sekundách. */
   delay: number;
-}
-
-export interface CategoryItem {
-  /** Slug = název kategorie tak, jak ji posíláme do URL `?category=...`. */
-  slug: string;
-  title: string;
-  description: string;
-  Icon: LucideIcon;
-  videoCount: string;
 }
 
 export interface SocialPlatformItem {
@@ -106,40 +93,13 @@ export const HOME = {
     title: 'Prozkoumat',
     titleHighlight: 'kategorie',
     subtitle: 'Ponořte se do různých stránek mého života a moudrosti',
-    items: [
-      {
-        slug: 'Dobrodružství',
-        title: 'Dobrodružství',
-        description:
-          'Poznávám svět, jedno přičichnutí po druhém. Od parků až po pláže — buďte u mých statečných výprav.',
-        Icon: Compass,
-        videoCount: '1000 kg+',
-      },
-      {
-        slug: 'Všední den',
-        title: 'Všední den',
-        description:
-          'Všední okamžiky, které dělají život zajímavým. Jak se dívám na polštáře na gauči i na čas večeře.',
-        Icon: HomeIcon,
-        videoCount: '1000 kg+',
-      },
-      {
-        slug: 'Komentáře',
-        title: 'Komentáře',
-        description:
-          'Postřehy k lidskému chování, podávané s typickým sarkasmem a šarmem.',
-        Icon: MessageCircle,
-        videoCount: '1000 kg+',
-      },
-      {
-        slug: 'Návody',
-        title: 'Návody',
-        description:
-          'Životně důležité dovednosti, které by měl ovládat každý pes (i člověk). Učí odborník: já.',
-        Icon: GraduationCap,
-        videoCount: '1000 kg+',
-      },
-    ] satisfies CategoryItem[],
+    // Karty jsou CMS-řízené (Sanity `videoCategory` collection). Local fallback
+    // shape je v `src/data/videos.ts` jako `VIDEO_CATEGORY_FALLBACK`.
+    /**
+     * Template pro počet videí na kartě. `{count}` se interpoluje na živé
+     * číslo (`videos.filter(v => v.category === category.value).length`).
+     */
+    videoCountTemplate: '{count} videí',
   },
 
   storiesGrid: {
