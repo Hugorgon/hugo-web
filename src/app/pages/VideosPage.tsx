@@ -16,6 +16,7 @@ import { interpolate } from '../../lib/format';
 import { fetchVideos } from '../../lib/queries/videos';
 import {
   fetchVideoCategories,
+  getCategoryTitle,
   LOCAL_VIDEO_CATEGORIES,
   type VideoCategoryEntry,
 } from '../../lib/queries/videoCategories';
@@ -144,8 +145,12 @@ export function VideosPage() {
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {visibleVideos.map((video) => (
-                  <VideoCardVertical key={video.slug} {...video} />
+                {visibleVideos.map(({ category, ...rest }) => (
+                  <VideoCardVertical
+                    key={rest.slug}
+                    {...rest}
+                    category={getCategoryTitle(category, categories)}
+                  />
                 ))}
               </div>
 

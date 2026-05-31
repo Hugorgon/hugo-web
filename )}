@@ -1,0 +1,230 @@
+warning: in the working copy of 'src/app/components/FeaturedVideos.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/pages/AboutPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/pages/VideoDetailPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/pages/VideosPage.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/queries/videoCategories.ts', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/src/app/components/FeaturedVideos.tsx b/src/app/components/FeaturedVideos.tsx[m
+[1mindex 98fe931..f161c84 100644[m
+[1m--- a/src/app/components/FeaturedVideos.tsx[m
+[1m+++ b/src/app/components/FeaturedVideos.tsx[m
+[36m@@ -10,12 +10,21 @@[m [mimport {[m
+   LOCAL_HOME,[m
+   type HomePageData,[m
+ } from '../../lib/queries/homePage';[m
+[32m+[m[32mimport {[m
+[32m+[m[32m  fetchVideoCategories,[m
+[32m+[m[32m  getCategoryTitle,[m
+[32m+[m[32m  LOCAL_VIDEO_CATEGORIES,[m
+[32m+[m[32m  type VideoCategoryEntry,[m
+[32m+[m[32m} from '../../lib/queries/videoCategories';[m
+ [m
+ export function FeaturedVideos() {[m
+   // Initial state z local fallbacku — první render je synchronní a vizuálně[m
+   // identický s předchozí verzí. Sanity data přepíšou state až po async fetchi.[m
+   const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);[m
+   const [home, setHome] = useState<HomePageData>(LOCAL_HOME);[m
+[32m+[m[32m  const [categories, setCategories] = useState<VideoCategoryEntry[]>([m
+[32m+[m[32m    LOCAL_VIDEO_CATEGORIES,[m
+[32m+[m[32m  );[m
+ [m
+   useEffect(() => {[m
+     let cancelled = false;[m
+[36m@@ -25,6 +34,9 @@[m [mexport function FeaturedVideos() {[m
+     fetchHomePage().then((data) => {[m
+       if (!cancelled && data) setHome(data);[m
+     });[m
+[32m+[m[32m    fetchVideoCategories().then((data) => {[m
+[32m+[m[32m      if (!cancelled && data.length > 0) setCategories(data);[m
+[32m+[m[32m    });[m
+     return () => {[m
+       cancelled = true;[m
+     };[m
+[36m@@ -55,8 +67,12 @@[m [mexport function FeaturedVideos() {[m
+         </div>[m
+ [m
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">[m
+[31m-          {featured.map((video) => ([m
+[31m-            <VideoCardVertical key={video.slug} {...video} />[m
+[32m+[m[32m          {featured.map(({ category, ...rest }) => ([m
+[32m+[m[32m            <VideoCardVertical[m
+[32m+[m[32m              key={rest.slug}[m
+[32m+[m[32m              {...rest}[m
+[32m+[m[32m              category={getCategoryTitle(category, categories)}[m
+[32m+[m[32m            />[m
+           ))}[m
+         </div>[m
+       </Container>[m
+[1mdiff --git a/src/app/pages/AboutPage.tsx b/src/app/pages/AboutPage.tsx[m
+[1mindex 14f717d..789e0cb 100644[m
+[1m--- a/src/app/pages/AboutPage.tsx[m
+[1m+++ b/src/app/pages/AboutPage.tsx[m
+[36m@@ -17,6 +17,12 @@[m [mimport {[m
+   LOCAL_ABOUT,[m
+   type AboutPageData,[m
+ } from '../../lib/queries/aboutPage';[m
+[32m+[m[32mimport {[m
+[32m+[m[32m  fetchVideoCategories,[m
+[32m+[m[32m  getCategoryTitle,[m
+[32m+[m[32m  LOCAL_VIDEO_CATEGORIES,[m
+[32m+[m[32m  type VideoCategoryEntry,[m
+[32m+[m[32m} from '../../lib/queries/videoCategories';[m
+ [m
+ /**[m
+  * Plnohodnotná „O mně" stránka.[m
+[36m@@ -63,11 +69,17 @@[m [mexport function AboutPage() {[m
+   // přepíše state pokud má data. Visual identický s předchozí verzí[m
+   // (LATEST_VIDEOS = VIDEOS.slice(0, 4)).[m
+   const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);[m
+[32m+[m[32m  const [categories, setCategories] = useState<VideoCategoryEntry[]>([m
+[32m+[m[32m    LOCAL_VIDEO_CATEGORIES,[m
+[32m+[m[32m  );[m
+   useEffect(() => {[m
+     let cancelled = false;[m
+     fetchVideos().then((data) => {[m
+       if (!cancelled && data.length > 0) setVideos(data);[m
+     });[m
+[32m+[m[32m    fetchVideoCategories().then((data) => {[m
+[32m+[m[32m      if (!cancelled && data.length > 0) setCategories(data);[m
+[32m+[m[32m    });[m
+     return () => {[m
+       cancelled = true;[m
+     };[m
+[36m@@ -180,8 +192,12 @@[m [mexport function AboutPage() {[m
+             </div>[m
+ [m
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">[m
+[31m-              {latestVideos.map((video) => ([m
+[31m-                <VideoCardVertical key={video.slug} {...video} />[m
+[32m+[m[32m              {latestVideos.map(({ category, ...rest }) => ([m
+[32m+[m[32m                <VideoCardVertical[m
+[32m+[m[32m                  key={rest.slug}[m
+[32m+[m[32m                  {...rest}[m
+[32m+[m[32m                  category={getCategoryTitle(category, categories)}[m
+[32m+[m[32m                />[m
+               ))}[m
+             </div>[m
+           </Container>[m
+[1mdiff --git a/src/app/pages/VideoDetailPage.tsx b/src/app/pages/VideoDetailPage.tsx[m
+[1mindex a3723c8..d134ff2 100644[m
+[1m--- a/src/app/pages/VideoDetailPage.tsx[m
+[1m+++ b/src/app/pages/VideoDetailPage.tsx[m
+[36m@@ -13,6 +13,12 @@[m [mimport { ROUTES } from '../../data/routes';[m
+ import { UI } from '../../data/ui';[m
+ import { formatDate } from '../../lib/format';[m
+ import { fetchVideoBySlug, fetchRelatedVideos } from '../../lib/queries/videos';[m
+[32m+[m[32mimport {[m
+[32m+[m[32m  fetchVideoCategories,[m
+[32m+[m[32m  getCategoryTitle,[m
+[32m+[m[32m  LOCAL_VIDEO_CATEGORIES,[m
+[32m+[m[32m  type VideoCategoryEntry,[m
+[32m+[m[32m} from '../../lib/queries/videoCategories';[m
+ import { getYouTubeEmbedUrl } from '../../lib/youtube';[m
+ [m
+ /**[m
+[36m@@ -52,6 +58,9 @@[m [mexport function VideoDetailPage() {[m
+ [m
+   const [video, setVideo] = useState<Video | undefined>(localMatch);[m
+   const [related, setRelated] = useState<Video[]>(localRelated);[m
+[32m+[m[32m  const [categories, setCategories] = useState<VideoCategoryEntry[]>([m
+[32m+[m[32m    LOCAL_VIDEO_CATEGORIES,[m
+[32m+[m[32m  );[m
+ [m
+   useEffect(() => {[m
+     if (!slug) return;[m
+[36m@@ -67,12 +76,23 @@[m [mexport function VideoDetailPage() {[m
+     };[m
+   }, [slug]);[m
+ [m
+[32m+[m[32m  useEffect(() => {[m
+[32m+[m[32m    let cancelled = false;[m
+[32m+[m[32m    fetchVideoCategories().then((data) => {[m
+[32m+[m[32m      if (!cancelled && data.length > 0) setCategories(data);[m
+[32m+[m[32m    });[m
+[32m+[m[32m    return () => {[m
+[32m+[m[32m      cancelled = true;[m
+[32m+[m[32m    };[m
+[32m+[m[32m  }, []);[m
+[32m+[m
+   if (!slug || !video) {[m
+     return <NotFoundPage />;[m
+   }[m
+ [m
+   const paragraphs = video.longDescription.split(/\n\s*\n/);[m
+   const embedUrl = getYouTubeEmbedUrl(video.youtubeUrl);[m
+[32m+[m[32m  const categoryLabel = getCategoryTitle(video.category, categories);[m
+ [m
+   return ([m
+     <div className="min-h-screen bg-[#0A0A0B]">[m
+[36m@@ -128,7 +148,7 @@[m [mexport function VideoDetailPage() {[m
+                     {video.duration}[m
+                   </div>[m
+                   <div className="absolute top-4 left-4 px-3 py-1.5 bg-[#F59E0B] rounded text-xs text-[#0A0A0B] font-medium">[m
+[31m-                    {video.category}[m
+[32m+[m[32m                    {categoryLabel}[m
+                   </div>[m
+                 </div>[m
+               )}[m
+[36m@@ -200,8 +220,12 @@[m [mexport function VideoDetailPage() {[m
+               </div>[m
+ [m
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">[m
+[31m-                {related.map((v) => ([m
+[31m-                  <VideoCardVertical key={v.slug} {...v} />[m
+[32m+[m[32m                {related.map(({ category, ...rest }) => ([m
+[32m+[m[32m                  <VideoCardVertical[m
+[32m+[m[32m                    key={rest.slug}[m
+[32m+[m[32m                    {...rest}[m
+[32m+[m[32m                    category={getCategoryTitle(category, categories)}[m
+[32m+[m[32m                  />[m
+                 ))}[m
+               </div>[m
+             </div>[m
+[1mdiff --git a/src/app/pages/VideosPage.tsx b/src/app/pages/VideosPage.tsx[m
+[1mindex 94b84e2..b4cdb78 100644[m
+[1m--- a/src/app/pages/VideosPage.tsx[m
+[1m+++ b/src/app/pages/VideosPage.tsx[m
+[36m@@ -16,6 +16,7 @@[m [mimport { interpolate } from '../../lib/format';[m
+ import { fetchVideos } from '../../lib/queries/videos';[m
+ import {[m
+   fetchVideoCategories,[m
+[32m+[m[32m  getCategoryTitle,[m
+   LOCAL_VIDEO_CATEGORIES,[m
+   type VideoCategoryEntry,[m
+ } from '../../lib/queries/videoCategories';[m
+[36m@@ -144,8 +145,12 @@[m [mexport function VideosPage() {[m
+           ) : ([m
+             <>[m
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">[m
+[31m-                {visibleVideos.map((video) => ([m
+[31m-                  <VideoCardVertical key={video.slug} {...video} />[m
+[32m+[m[32m                {visibleVideos.map(({ category, ...rest }) => ([m
+[32m+[m[32m                  <VideoCardVertical[m
+[32m+[m[32m                    key={rest.slug}[m
+[32m+[m[32m                    {...rest}[m
+[32m+[m[32m                    category={getCategoryTitle(category, categories)}[m
+[32m+[m[32m                  />[m
+                 ))}[m
+               </div>[m
+ [m
+[1mdiff --git a/src/lib/queries/videoCategories.ts b/src/lib/queries/videoCategories.ts[m
+[1mindex a652c14..9c8f5f3 100644[m
+[1m--- a/src/lib/queries/videoCategories.ts[m
+[1m+++ b/src/lib/queries/videoCategories.ts[m
+[36m@@ -104,3 +104,17 @@[m [mexport async function fetchVideoCategories(): Promise<VideoCategoryEntry[]> {[m
+     return LOCAL_VIDEO_CATEGORIES;[m
+   }[m
+ }[m
+[32m+[m
+[32m+[m[32m/**[m
+[32m+[m[32m * Najde lidsky čitelný název kategorie pro daný slug v dodaném seznamu.[m
+[32m+[m[32m * Když slug žádné kategorii neodpovídá (např. disabled / smazaná kategorie,[m
+[32m+[m[32m * nebo legacy video se starým string hodnotou), vrátí slug zpátky — badge[m
+[32m+[m[32m * tak nikdy není prázdný, ale ukáže přinejhorším původní hodnotu místo titulku.[m
+[32m+[m[32m */[m
+[32m+[m[32mexport function getCategoryTitle([m
+[32m+[m[32m  value: string | undefined | null,[m
+[32m+[m[32m  categories: readonly VideoCategoryEntry[],[m
+[32m+[m[32m): string {[m
+[32m+[m[32m  if (!value) return '';[m
+[32m+[m[32m  return categories.find((c) => c.value === value)?.title ?? value;[m
+[32m+[m[32m}[m

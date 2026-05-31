@@ -10,12 +10,21 @@ import {
   LOCAL_HOME,
   type HomePageData,
 } from '../../lib/queries/homePage';
+import {
+  fetchVideoCategories,
+  getCategoryTitle,
+  LOCAL_VIDEO_CATEGORIES,
+  type VideoCategoryEntry,
+} from '../../lib/queries/videoCategories';
 
 export function FeaturedVideos() {
   // Initial state z local fallbacku — první render je synchronní a vizuálně
   // identický s předchozí verzí. Sanity data přepíšou state až po async fetchi.
   const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
   const [home, setHome] = useState<HomePageData>(LOCAL_HOME);
+  const [categories, setCategories] = useState<VideoCategoryEntry[]>(
+    LOCAL_VIDEO_CATEGORIES,
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -24,6 +33,9 @@ export function FeaturedVideos() {
     });
     fetchHomePage().then((data) => {
       if (!cancelled && data) setHome(data);
+    });
+    fetchVideoCategories().then((data) => {
+      if (!cancelled && data.length > 0) setCategories(data);
     });
     return () => {
       cancelled = true;
@@ -55,8 +67,12 @@ export function FeaturedVideos() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {featured.map((video) => (
-            <VideoCardVertical key={video.slug} {...video} />
+          {featured.map(({ category, ...rest }) => (
+            <VideoCardVertical
+              key={rest.slug}
+              {...rest}
+              category={getCategoryTitle(category, categories)}
+            />
           ))}
         </div>
       </Container>

@@ -17,6 +17,12 @@ import {
   LOCAL_ABOUT,
   type AboutPageData,
 } from '../../lib/queries/aboutPage';
+import {
+  fetchVideoCategories,
+  getCategoryTitle,
+  LOCAL_VIDEO_CATEGORIES,
+  type VideoCategoryEntry,
+} from '../../lib/queries/videoCategories';
 
 /**
  * Plnohodnotná „O mně" stránka.
@@ -63,10 +69,16 @@ export function AboutPage() {
   // přepíše state pokud má data. Visual identický s předchozí verzí
   // (LATEST_VIDEOS = VIDEOS.slice(0, 4)).
   const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
+  const [categories, setCategories] = useState<VideoCategoryEntry[]>(
+    LOCAL_VIDEO_CATEGORIES,
+  );
   useEffect(() => {
     let cancelled = false;
     fetchVideos().then((data) => {
       if (!cancelled && data.length > 0) setVideos(data);
+    });
+    fetchVideoCategories().then((data) => {
+      if (!cancelled && data.length > 0) setCategories(data);
     });
     return () => {
       cancelled = true;
@@ -180,8 +192,12 @@ export function AboutPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {latestVideos.map((video) => (
-                <VideoCardVertical key={video.slug} {...video} />
+              {latestVideos.map(({ category, ...rest }) => (
+                <VideoCardVertical
+                  key={rest.slug}
+                  {...rest}
+                  category={getCategoryTitle(category, categories)}
+                />
               ))}
             </div>
           </Container>

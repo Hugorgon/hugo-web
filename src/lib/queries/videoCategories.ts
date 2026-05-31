@@ -104,3 +104,17 @@ export async function fetchVideoCategories(): Promise<VideoCategoryEntry[]> {
     return LOCAL_VIDEO_CATEGORIES;
   }
 }
+
+/**
+ * Najde lidsky čitelný název kategorie pro daný slug v dodaném seznamu.
+ * Když slug žádné kategorii neodpovídá (např. disabled / smazaná kategorie,
+ * nebo legacy video se starým string hodnotou), vrátí slug zpátky — badge
+ * tak nikdy není prázdný, ale ukáže přinejhorším původní hodnotu místo titulku.
+ */
+export function getCategoryTitle(
+  value: string | undefined | null,
+  categories: readonly VideoCategoryEntry[],
+): string {
+  if (!value) return '';
+  return categories.find((c) => c.value === value)?.title ?? value;
+}

@@ -13,6 +13,12 @@ import { ROUTES } from '../../data/routes';
 import { UI } from '../../data/ui';
 import { formatDate } from '../../lib/format';
 import { fetchVideoBySlug, fetchRelatedVideos } from '../../lib/queries/videos';
+import {
+  fetchVideoCategories,
+  getCategoryTitle,
+  LOCAL_VIDEO_CATEGORIES,
+  type VideoCategoryEntry,
+} from '../../lib/queries/videoCategories';
 import { getYouTubeEmbedUrl } from '../../lib/youtube';
 
 /**
@@ -52,6 +58,9 @@ export function VideoDetailPage() {
 
   const [video, setVideo] = useState<Video | undefined>(localMatch);
   const [related, setRelated] = useState<Video[]>(localRelated);
+  const [categories, setCategories] = useState<VideoCategoryEntry[]>(
+    LOCAL_VIDEO_CATEGORIES,
+  );
 
   useEffect(() => {
     if (!slug) return;
@@ -67,12 +76,23 @@ export function VideoDetailPage() {
     };
   }, [slug]);
 
+  useEffect(() => {
+    let cancelled = false;
+    fetchVideoCategories().then((data) => {
+      if (!cancelled && data.length > 0) setCategories(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   if (!slug || !video) {
     return <NotFoundPage />;
   }
 
   const paragraphs = video.longDescription.split(/\n\s*\n/);
   const embedUrl = getYouTubeEmbedUrl(video.youtubeUrl);
+  const categoryLabel = getCategoryTitle(video.category, categories);
 
   return (
     <div className="min-h-screen bg-[#0A0A0B]">
@@ -128,7 +148,7 @@ export function VideoDetailPage() {
                     {video.duration}
                   </div>
                   <div className="absolute top-4 left-4 px-3 py-1.5 bg-[#F59E0B] rounded text-xs text-[#0A0A0B] font-medium">
-                    {video.category}
+                    {categoryLabel}
                   </div>
                 </div>
               )}
@@ -200,8 +220,12 @@ export function VideoDetailPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {related.map((v) => (
-                  <VideoCardVertical key={v.slug} {...v} />
+                {related.map(({ category, ...rest }) => (
+                  <VideoCardVertical
+                    key={rest.slug}
+                    {...rest}
+                    category={getCategoryTitle(category, categories)}
+                  />
                 ))}
               </div>
             </div>
