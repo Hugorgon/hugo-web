@@ -2,13 +2,18 @@ import { Play, Clock } from 'lucide-react';
 import { Link } from 'react-router';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { ROUTES } from '../../data/routes';
+import {
+  VIDEO_TYPE_LABELS,
+  type VideoLanguage,
+  type VideoTypeSlug,
+} from '../../data/videos';
 
 interface VideoCardProps {
   slug: string;
   title: string;
   description: string;
-  duration: string;
-  views: string;
+  language: VideoLanguage;
+  videoType: VideoTypeSlug;
   imageUrl: string;
   category?: string;
 }
@@ -22,8 +27,8 @@ export function VideoCard({
   slug,
   title,
   description,
-  duration,
-  views,
+  language,
+  videoType,
   imageUrl,
   category,
 }: VideoCardProps) {
@@ -51,7 +56,7 @@ export function VideoCard({
         </div>
         <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-[#F9FAFB] flex items-center gap-1">
           <Clock size={12} />
-          {duration}
+          {VIDEO_TYPE_LABELS[videoType]}
         </div>
         {category && (
           <div className="absolute top-3 left-3 px-3 py-1 bg-[#F59E0B] rounded text-xs text-[#0A0A0B] font-medium">
@@ -66,7 +71,7 @@ export function VideoCard({
         <p className="text-[#9CA3AF] text-sm leading-relaxed mb-3">
           {description}
         </p>
-        <div className="text-[#9CA3AF] text-xs">{views}</div>
+        <div className="text-[#9CA3AF] text-xs">{language}</div>
       </div>
     </Link>
   );

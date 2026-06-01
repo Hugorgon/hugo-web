@@ -3,6 +3,8 @@ import {
   VIDEOS as LOCAL_VIDEOS,
   type Video,
   type VideoCategory,
+  type VideoLanguage,
+  type VideoTypeSlug,
 } from '../../data/videos';
 
 /**
@@ -29,8 +31,8 @@ interface RawVideo {
   title: string;
   description: string;
   longDescription: string;
-  duration: string;
-  views?: string;
+  language?: string;
+  videoType?: string;
   imageUrl?: string;
   /**
    * GROQ deref `category->value.current`. Pro legacy videa, která mají
@@ -51,8 +53,8 @@ const VIDEO_FIELDS = `
   title,
   description,
   longDescription,
-  duration,
-  views,
+  language,
+  videoType,
   "imageUrl": coverImage.asset->url,
   "category": category->value.current,
   publishedAt,
@@ -63,14 +65,25 @@ const LIST_QUERY = `*[_type == "video" && defined(slug.current)] | order(publish
 
 const BY_SLUG_QUERY = `*[_type == "video" && slug.current == $slug][0] {${VIDEO_FIELDS}}`;
 
+// Defensive parsers — Sanity může vrátit neznámou hodnotu nebo null pro
+// staré dokumenty před touto migrací. Padáme na default (CZ / short).
+function parseLanguage(raw: string | undefined | null): VideoLanguage {
+  return raw === 'EN' ? 'EN' : 'CZ';
+}
+
+function parseVideoType(raw: string | undefined | null): VideoTypeSlug {
+  if (raw === 'video' || raw === 'long-video') return raw;
+  return 'short';
+}
+
 function mapToVideo(raw: RawVideo): Video {
   return {
     slug: raw.slug,
     title: raw.title,
     description: raw.description,
     longDescription: raw.longDescription,
-    duration: raw.duration,
-    views: raw.views ?? '',
+    language: parseLanguage(raw.language),
+    videoType: parseVideoType(raw.videoType),
     imageUrl: raw.imageUrl ?? '',
     category: raw.category ?? '',
     publishedAt: raw.publishedAt,

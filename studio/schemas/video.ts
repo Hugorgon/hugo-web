@@ -13,13 +13,15 @@ import { defineField, defineType } from 'sanity';
  *  - longDescription → plain text, odstavce oddělené prázdným řádkem; renderuje se
  *                      jako sekvence `<p>` bloků na detail page. Portable Text
  *                      záměrně NEpoužitý — drží shape s aktuálním `Video.longDescription`.
- *  - duration        → string, povinné (formát „MM:SS" nebo „HH:MM:SS")
- *  - views           → string, VOLITELNÉ (např. „245K zhlédnutí" nebo „1000 kg+");
- *                      některá videa metriku ukazovat nemusí
+ *  - language        → string enum „CZ" / „EN" (default „CZ"). Zobrazuje se
+ *                      v metadatech karty i detailu.
+ *  - videoType       → string enum „short" / „video" / „long-video"
+ *                      (default „short"). Zobrazuje se v metadatech karty
+ *                      i detailu místo zhlédnutí / délky.
  *  - coverImage      → image asset s povinným alt textem (thumbnail)
- *  - category        → string enum z 4 fixních hodnot, ne reference type (mirror
- *                      současného `VideoCategory` union typu ve frontendu)
- *  - publishedAt     → datetime, povinné (formátuje se na frontendu přes formatDate)
+ *  - category        → reference na `videoCategory` dokument
+ *  - publishedAt     → datetime, povinné. Nový dokument se přednastaví na
+ *                      aktuální okamžik; editor může ručně přepsat.
  *
  * Workflow je outbound-embed: video soubor sám se nikam neuploaduje, Sanity
  * drží jen URL + cover thumbnail. Žádné Mux/Vimeo/TikTok integrace zatím.
@@ -106,23 +108,39 @@ export const video = defineType({
     }),
 
     defineField({
-      name: 'duration',
-      title: 'Délka',
+      name: 'language',
+      title: 'Jazyk',
       type: 'string',
-      description: 'Formát „MM:SS" nebo „HH:MM:SS", např. „8:24".',
-      validation: (Rule) =>
-        Rule.required().regex(/^(\d{1,2}:)?\d{1,2}:\d{2}$/, {
-          name: 'duration-format',
-          invert: false,
-        }),
+      description:
+        'Hlavní jazyk videa. Zobrazí se v metadatech karty i detailu.',
+      options: {
+        list: [
+          { title: 'Čeština (CZ)', value: 'CZ' },
+          { title: 'English (EN)', value: 'EN' },
+        ],
+        layout: 'dropdown',
+      },
+      initialValue: 'CZ',
+      validation: (Rule) => Rule.required(),
     }),
 
     defineField({
-      name: 'views',
-      title: 'Metrika zhlédnutí',
+      name: 'videoType',
+      title: 'Typ videa',
       type: 'string',
       description:
-        'Volitelné. Volný text jako „245K zhlédnutí" nebo „1000 kg+". Pokud chybí, na frontendu se prostě nezobrazí.',
+        'Formát videa — krátký Short, standardní YouTube video, nebo dlouhá epizoda. ' +
+        'Zobrazí se v metadatech karty i detailu.',
+      options: {
+        list: [
+          { title: 'Short', value: 'short' },
+          { title: 'Video', value: 'video' },
+          { title: 'Dlouhé video', value: 'long-video' },
+        ],
+        layout: 'dropdown',
+      },
+      initialValue: 'short',
+      validation: (Rule) => Rule.required(),
     }),
 
     defineField({
@@ -162,7 +180,9 @@ export const video = defineType({
       title: 'Datum publikace',
       type: 'datetime',
       description:
-        'Formátuje se na frontendu přes formatDate(iso). Neukládat formátovaný řetězec.',
+        'Formátuje se na frontendu přes formatDate(iso). Neukládat formátovaný řetězec. ' +
+        'Nový dokument se přednastaví na aktuální okamžik; editor může ručně přepsat.',
+      initialValue: () => new Date().toISOString(),
       validation: (Rule) => Rule.required(),
     }),
   ],

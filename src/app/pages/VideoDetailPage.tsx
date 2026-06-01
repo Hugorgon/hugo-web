@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ChevronLeft, Clock, Eye, Play, Calendar } from 'lucide-react';
+import { ChevronLeft, Clock, Languages, Play, Calendar } from 'lucide-react';
 import { Link, useParams } from 'react-router';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
@@ -8,7 +8,11 @@ import { VideoCardVertical } from '../components/VideoCardVertical';
 import { Button } from '../components/Button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { NotFoundPage } from './NotFoundPage';
-import { VIDEOS as LOCAL_VIDEOS, type Video } from '../../data/videos';
+import {
+  VIDEOS as LOCAL_VIDEOS,
+  VIDEO_TYPE_LABELS,
+  type Video,
+} from '../../data/videos';
 import { ROUTES } from '../../data/routes';
 import { UI } from '../../data/ui';
 import { formatDate } from '../../lib/format';
@@ -145,7 +149,7 @@ export function VideoDetailPage() {
                   </div>
                   <div className="absolute bottom-4 right-4 px-3 py-2 bg-black/80 rounded text-sm text-[#F9FAFB] flex items-center gap-2">
                     <Clock size={14} />
-                    {video.duration}
+                    {VIDEO_TYPE_LABELS[video.videoType]}
                   </div>
                   <div className="absolute top-4 left-4 px-3 py-1.5 bg-[#F59E0B] rounded text-xs text-[#0A0A0B] font-medium">
                     {categoryLabel}
@@ -166,12 +170,12 @@ export function VideoDetailPage() {
                   {formatDate(video.publishedAt)}
                 </span>
                 <span className="flex items-center gap-2">
-                  <Eye size={14} />
-                  {video.views}
+                  <Languages size={14} />
+                  {video.language}
                 </span>
                 <span className="flex items-center gap-2">
                   <Clock size={14} />
-                  {video.duration}
+                  {VIDEO_TYPE_LABELS[video.videoType]}
                 </span>
               </div>
 

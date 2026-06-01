@@ -15,14 +15,32 @@
  */
 
 export type VideoCategory = string;
+export type VideoLanguage = 'CZ' | 'EN';
+export type VideoTypeSlug = 'short' | 'video' | 'long-video';
+
+/**
+ * Lidsky čitelné labely pro hodnoty `videoType`. Sanity ukládá slug;
+ * frontend renderuje label. Mapování drží shape s dropdownem v
+ * `studio/schemas/video.ts`.
+ */
+export const VIDEO_TYPE_LABELS: Record<VideoTypeSlug, string> = {
+  short: 'Short',
+  video: 'Video',
+  'long-video': 'Dlouhé video',
+};
 
 export interface Video {
   slug: string;
   title: string;
   description: string;
   longDescription: string;
-  duration: string;
-  views: string;
+  /** Hlavní jazyk videa — zobrazí se v metadatech karty i detailu. */
+  language: VideoLanguage;
+  /**
+   * Formát videa (Short / Video / Dlouhé video). Display label se resolvuje
+   * přes `VIDEO_TYPE_LABELS`.
+   */
+  videoType: VideoTypeSlug;
   imageUrl: string;
   /**
    * Slug kategorie. Odpovídá `videoCategory.value` v Sanity. Lokální VIDEOS
@@ -111,8 +129,8 @@ Když jsme dorazili, nejdřív mě udeřila vůně. Sůl, mokrý písek a něco 
 Před kamerou se přiznám k momentu váhání na okraji vody. Ne strach — strach nikdy — ale pečlivé filozofické zvažování, zda je zapojení s entitou tak velkou strategicky rozumné. První vlna, když přišla, byla drzá. Druhá vlna o něco méně. U sedmé vlny jsme se vzájemně pochopili.
 
 Při západu slunce jsem nepostavil žádný hrad z písku, snědl malé množství chaluh (nedoporučuji) a naučil se, že krabi jsou v podstatě hodně malí psi, kteří nenávidí všechny. Vrátil jsem se k autu jako proměněný teriér.`,
-    duration: '8:24',
-    views: '1000 kg+',
+    language: 'CZ',
+    videoType: 'short',
     imageUrl:
       '/images/hugo.jpg',
     category: 'vyjimecne-situace',
@@ -129,8 +147,8 @@ Při západu slunce jsem nepostavil žádný hrad z písku, snědl malé množst
 Nefascinují mě samotné pamlsky, ale propracovaný rituál, který si kolem nich lidé budují. Šuplík. Sáček. Třesení. Pomalý příchod. Pauza. Oční kontakt. Je to divadlo a oba jsme v něm herci.
 
 V této epizodě se pokouším — s omezeným úspěchem — obrátit dynamiku a odměnit svoji lidskou za dobré chování. Spoiler: na zvoneček nereagovala.`,
-    duration: '6:15',
-    views: '1000 kg+',
+    language: 'CZ',
+    videoType: 'video',
     imageUrl:
       '/images/hugo.jpg',
     category: 'humanoidi',
@@ -146,8 +164,8 @@ V této epizodě se pokouším — s omezeným úspěchem — obrátit dynamiku 
 Základy jsou jednoduché. Volba podkladu. Orientace těla. Hospodaření se světlem. Blízkost oblíbenému křeslu vaší lidské (tak akorát, aby se nemohla pohnout, aniž by si vás všimla). Většina amatérů dělá chybu, když volí pohodlí místo strategie. Pohodlí je vedlejší produkt strategie. Neplést.
 
 Na konci této epizody pochopíte rozdíl mezi taktickým zdřímnutím (dvanáct minut, částečná bdělost, u průduchu) a hlubokým regeneračním spánkem (čtyřicet minut, úplné odevzdání, na něčem, co technicky vzato není vaše).`,
-    duration: '12:30',
-    views: '1000 kg+',
+    language: 'CZ',
+    videoType: 'video',
     imageUrl:
       '/images/hugo.jpg',
     category: 'muj-pohled',
@@ -161,8 +179,8 @@ Na konci této epizody pochopíte rozdíl mezi taktickým zdřímnutím (dvanác
     longDescription: `Vítejte v terénu. Devadesát dva dní dokumentuji chování, pohybové vzorce a znepokojivou inteligenci populace veverek na zahradě. To, co jsem se naučil, podle mě změní všechno.
 
 Tohle není video o honbě. Honba je odpověď nepříliš sofistikovaného psa. Tohle je video o pozorování — trpělivém, metodickém, s chladným odstupem skutečného badatele. Je v tom rozdíl. Chtěl bych, aby si toho rozdílu někdo všiml.`,
-    duration: '5:48',
-    views: '1000 kg+',
+    language: 'CZ',
+    videoType: 'video',
     imageUrl:
       '/images/hugo.jpg',
     category: 'pristizen-pri-cinu',
@@ -176,8 +194,8 @@ Tohle není video o honbě. Honba je odpověď nepříliš sofistikovaného psa.
     longDescription: `Lidé jsou přesvědčeni, že jsou nenápadní. Nejsou. Po třech letech důkladného studia mohu s jistotou prohlásit, že každá procházka, každé jídlo a každá jízda autem je oznámena tělem dávno před slovy.
 
 V této epizodě rozebírám sedm mikropohybů, které by se měl naučit číst každý pes. Pohled na boty. Odložení telefonu. Sáhnutí po klíčích. Zaváhání u kabátu. Zastavení u dveří. Předstíraný strečink. A ten, o kterém lidé sami nevědí — letmý pohled k vodítku.`,
-    duration: '9:12',
-    views: '1000 kg+',
+    language: 'CZ',
+    videoType: 'video',
     imageUrl:
       '/images/hugo.jpg',
     category: 'humanoidi',
@@ -191,8 +209,8 @@ V této epizodě rozebírám sedm mikropohybů, které by se měl naučit číst
     longDescription: `Pozice psa hlavou dolů (ano, pojmenovaná po nás, není zač) není jógová pozice. Je to prohlášení. V tomto krátkém návodu probírám správné postavení tlapek, ideální oblouk páteře a přesnou délku povzdechu po protažení, který vaší lidské signalizuje, že jste teď ochotni začít zvažovat snídani.
 
 Krátká pasáž je věnována i bočnímu protažení, které osobně nepodporuji, ale uvádím ho pro úplnost.`,
-    duration: '4:30',
-    views: '1000 kg+',
+    language: 'CZ',
+    videoType: 'video',
     imageUrl:
       '/images/hugo.jpg',
     category: 'muj-pohled',
@@ -206,8 +224,8 @@ Krátká pasáž je věnována i bočnímu protažení, které osobně nepodporu
     longDescription: `Ráno je posvátné. Způsob, jakým začnete den, určuje, jak ho strávíte, a pokud ho trávíte spánkem na gauči (a já ano), musí být vaše ráno pečlivě nakalibrované.
 
 Tato epizoda je natočená v reálném čase. Bez střihů. Bez triků. Jen jeden bostonský teriér prochází svým ránem s rozvahou tvora, který přesně ví, kde se schovává druhá snídaně.`,
-    duration: '7:55',
-    views: '1000 kg+',
+    language: 'CZ',
+    videoType: 'video',
     imageUrl:
       '/images/hugo.jpg',
     category: 'muj-pohled',
@@ -221,8 +239,8 @@ Tato epizoda je natočená v reálném čase. Bez střihů. Bez triků. Jen jede
     longDescription: `Každý den přibližně v 11:42 přichází muž v uniformě k našemu domu, vkládá předměty štěrbinou ve dveřích a odchází. Tři roky na něj štěkám. Tři roky stále chodí.
 
 Tato epizoda je výsledkem šestitýdenní sledovací operace. Mám záznamy. Mám fotografie. Mám — navzdory svému lepšímu úsudku — teorii.`,
-    duration: '6:42',
-    views: '1000 kg+',
+    language: 'CZ',
+    videoType: 'video',
     imageUrl:
       '/images/hugo.jpg',
     category: 'pristizen-pri-cinu',
@@ -236,8 +254,8 @@ Tato epizoda je výsledkem šestitýdenní sledovací operace. Mám záznamy. M�
     longDescription: `Podívejte. Nebudu předstírat, že to byl pozitivní zážitek. Nebyl. Šampon agresivně voněl. Hluk z kohoutku byl nepřijatelný. Moje lidská použila slova „hodný kluk" přibližně sedmadvacetkrát, což jsem se naučil rozpoznávat jako moment, kdy se chystá udělat něco, co se mi nebude líbit.
 
 Pravda však je, že běsnění po koupeli bylo profesionální úrovně. Ocenění přijímám v komentářích.`,
-    duration: '5:20',
-    views: '1000 kg+',
+    language: 'CZ',
+    videoType: 'video',
     imageUrl:
       '/images/hugo.jpg',
     category: 'vyjimecne-situace',
