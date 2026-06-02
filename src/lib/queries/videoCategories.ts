@@ -75,7 +75,11 @@ export const LOCAL_VIDEO_CATEGORIES: VideoCategoryEntry[] =
   }));
 
 function mapToCategories(raw: RawVideoCategory[]): VideoCategoryEntry[] {
-  const mapped = (raw ?? [])
+  // Empty input is editor intent (no categories published). Drop entries with
+  // unknown iconKey defensively, but do NOT substitute the local seed —
+  // returning the literal mapped result lets the consumer render its
+  // empty-state copy.
+  return (raw ?? [])
     .map((c): VideoCategoryEntry | null => {
       const Icon = ICON_MAP[c.iconKey];
       if (!Icon || !c.value) return null;
@@ -87,15 +91,13 @@ function mapToCategories(raw: RawVideoCategory[]): VideoCategoryEntry[] {
       };
     })
     .filter((c): c is VideoCategoryEntry => c !== null);
-  return mapped.length > 0 ? mapped : LOCAL_VIDEO_CATEGORIES;
 }
 
 export async function fetchVideoCategories(): Promise<VideoCategoryEntry[]> {
   if (!sanityClient) return LOCAL_VIDEO_CATEGORIES;
   try {
     const raw = await sanityClient.fetch<RawVideoCategory[]>(QUERY);
-    if (!raw || raw.length === 0) return LOCAL_VIDEO_CATEGORIES;
-    return mapToCategories(raw);
+    return mapToCategories(raw ?? []);
   } catch (error) {
     console.error(
       '[videoCategories] fetch failed, falling back to local data:',

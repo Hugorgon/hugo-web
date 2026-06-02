@@ -11,9 +11,10 @@ import { STORIES as LOCAL_STORIES, type Story } from '../../data/stories';
  *
  * Pravidlo fallbacku:
  *  - Sanity client nenakonfigurován → vrátí local
- *  - Sanity vrátí prázdné pole / 0 záznamů → vrátí local
  *  - Sanity throw / network error → vrátí local + console.error
- *  - Sanity vrátí data → adapter → frontend Story
+ *  - Sanity vrátí data (i prázdné pole) → adapter → frontend Story.
+ *    Prázdné pole je validní editor intent („žádné stories publikované")
+ *    a frontend zobrazí existující empty-state copy.
  *
  * Visual continuity: konzumenti drží initial state z local fallbacku
  * a teprve po async fetchi přepíšou stav na Sanity data.
@@ -59,8 +60,7 @@ export async function fetchStories(): Promise<Story[]> {
   if (!sanityClient) return LOCAL_STORIES;
   try {
     const raw = await sanityClient.fetch<RawStory[]>(LIST_QUERY);
-    if (!raw || raw.length === 0) return LOCAL_STORIES;
-    return raw.map(mapToStory);
+    return (raw ?? []).map(mapToStory);
   } catch (error) {
     console.error('[stories] fetch failed, falling back to local data:', error);
     return LOCAL_STORIES;

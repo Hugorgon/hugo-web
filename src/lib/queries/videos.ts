@@ -95,8 +95,9 @@ export async function fetchVideos(): Promise<Video[]> {
   if (!sanityClient) return LOCAL_VIDEOS;
   try {
     const raw = await sanityClient.fetch<RawVideo[]>(LIST_QUERY);
-    if (!raw || raw.length === 0) return LOCAL_VIDEOS;
-    return raw.map(mapToVideo);
+    // Successful empty response = editor intent ("no videos published").
+    // Only fall back to local seed on missing client / thrown error.
+    return (raw ?? []).map(mapToVideo);
   } catch (error) {
     console.error('[videos] fetch failed, falling back to local data:', error);
     return LOCAL_VIDEOS;

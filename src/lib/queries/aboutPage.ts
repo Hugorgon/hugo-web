@@ -162,16 +162,15 @@ export const LOCAL_ABOUT: AboutPageData = {
 };
 
 function mapFeatures(raw: RawAboutFeature[] | undefined): AboutFeature[] {
-  const mapped = (raw ?? [])
+  // Empty array is editor intent ("no feature cards"). Drop entries with
+  // unknown iconKey defensively but do NOT substitute the local seed.
+  return (raw ?? [])
     .map((f): AboutFeature | null => {
       const Icon = ICON_MAP[f.iconKey];
       if (!Icon) return null;
       return { Icon, title: f.title, description: f.description };
     })
     .filter((f): f is AboutFeature => f !== null);
-  // If Studio document exists but features array is empty/unset, keep the
-  // local fallback so the page never renders zero cards.
-  return mapped.length > 0 ? mapped : LOCAL_ABOUT.features;
 }
 
 function mapToAboutPage(raw: RawAboutPage): AboutPageData {
@@ -184,10 +183,9 @@ function mapToAboutPage(raw: RawAboutPage): AboutPageData {
       number: raw.badge?.number ?? LOCAL_ABOUT.badge.number,
       label: raw.badge?.label ?? LOCAL_ABOUT.badge.label,
     },
-    bioParagraphs:
-      raw.bioParagraphs && raw.bioParagraphs.length > 0
-        ? raw.bioParagraphs
-        : LOCAL_ABOUT.bioParagraphs,
+    // Respect editor intent: an empty array means "no paragraphs". Only
+    // fall back to local when the field is missing entirely (undefined/null).
+    bioParagraphs: raw.bioParagraphs ?? LOCAL_ABOUT.bioParagraphs,
     features: mapFeatures(raw.features),
     homeSection: {
       title: raw.homeSection?.title ?? LOCAL_ABOUT.homeSection.title,

@@ -20,7 +20,7 @@ export function StoriesGrid() {
   useEffect(() => {
     let cancelled = false;
     fetchStories().then((data) => {
-      if (!cancelled && data.length > 0) setStories(data);
+      if (!cancelled) setStories(data);
     });
     fetchHomePage().then((data) => {
       if (!cancelled && data) setHome(data);

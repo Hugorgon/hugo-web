@@ -22,7 +22,7 @@ export function StoriesPage() {
   useEffect(() => {
     let cancelled = false;
     fetchStories().then((data) => {
-      if (!cancelled && data.length > 0) setStories(data);
+      if (!cancelled) setStories(data);
     });
     return () => {
       cancelled = true;

@@ -44,10 +44,10 @@ export function VideosPage() {
   useEffect(() => {
     let cancelled = false;
     fetchVideos().then((data) => {
-      if (!cancelled && data.length > 0) setVideos(data);
+      if (!cancelled) setVideos(data);
     });
     fetchVideoCategories().then((data) => {
-      if (!cancelled && data.length > 0) setCategories(data);
+      if (!cancelled) setCategories(data);
     });
     fetchVideosArchive().then((data) => {
       if (!cancelled && data) setArchive(data);

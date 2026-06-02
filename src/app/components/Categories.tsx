@@ -34,10 +34,10 @@ export function Categories() {
   useEffect(() => {
     let cancelled = false;
     fetchVideoCategories().then((data) => {
-      if (!cancelled && data.length > 0) setCategories(data);
+      if (!cancelled) setCategories(data);
     });
     fetchVideos().then((data) => {
-      if (!cancelled && data.length > 0) setVideos(data);
+      if (!cancelled) setVideos(data);
     });
     return () => {
       cancelled = true;

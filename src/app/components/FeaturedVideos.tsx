@@ -29,13 +29,13 @@ export function FeaturedVideos() {
   useEffect(() => {
     let cancelled = false;
     fetchVideos().then((data) => {
-      if (!cancelled && data.length > 0) setVideos(data);
+      if (!cancelled) setVideos(data);
     });
     fetchHomePage().then((data) => {
       if (!cancelled && data) setHome(data);
     });
     fetchVideoCategories().then((data) => {
-      if (!cancelled && data.length > 0) setCategories(data);
+      if (!cancelled) setCategories(data);
     });
     return () => {
       cancelled = true;

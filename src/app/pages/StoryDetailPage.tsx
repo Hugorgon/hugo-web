@@ -34,7 +34,7 @@ export function StoryDetailPage() {
       if (!cancelled && data) setStory(data);
     });
     fetchRelatedStories(slug, 3).then((data) => {
-      if (!cancelled && data.length > 0) setRelated(data);
+      if (!cancelled) setRelated(data);
     });
     return () => {
       cancelled = true;

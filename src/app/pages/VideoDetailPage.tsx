@@ -83,7 +83,7 @@ export function VideoDetailPage() {
   useEffect(() => {
     let cancelled = false;
     fetchVideoCategories().then((data) => {
-      if (!cancelled && data.length > 0) setCategories(data);
+      if (!cancelled) setCategories(data);
     });
     return () => {
       cancelled = true;

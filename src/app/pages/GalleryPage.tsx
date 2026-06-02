@@ -34,7 +34,7 @@ export function GalleryPage() {
   useEffect(() => {
     let cancelled = false;
     fetchPhotos().then((data) => {
-      if (!cancelled && data.length > 0) setPhotos(data);
+      if (!cancelled) setPhotos(data);
     });
     return () => {
       cancelled = true;

@@ -268,13 +268,19 @@ function mapHomePage(raw: RawHomePage): HomePageData {
           };
         })
         .filter((p): p is HomePageSocialPlatform => p !== null);
+      // Respect editor intent: empty `platforms` array means "no platforms
+      // to show". Only fall back to local when the field is missing entirely
+      // (undefined / null), which keeps backwards-compat with Studio docs
+      // published before the platforms array was added to the schema.
+      const platforms =
+        raw.socialContent.platforms == null
+          ? LOCAL_HOME.socialContent.platforms
+          : mapped;
       return {
         title: raw.socialContent.title,
         titleHighlight: raw.socialContent.titleHighlight,
         subtitle: raw.socialContent.subtitle,
-        // If Studio document exists but `platforms` is empty/unset, keep the
-        // local fallback set instead of rendering zero cards.
-        platforms: mapped.length > 0 ? mapped : LOCAL_HOME.socialContent.platforms,
+        platforms,
       };
     })(),
     newsletter: {

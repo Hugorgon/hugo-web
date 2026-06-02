@@ -37,7 +37,7 @@ export function HeroSection() {
   useEffect(() => {
     let cancelled = false;
     fetchVideos().then((data) => {
-      if (!cancelled && data.length > 0) setVideos(data);
+      if (!cancelled) setVideos(data);
     });
     return () => {
       cancelled = true;

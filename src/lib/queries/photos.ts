@@ -59,8 +59,9 @@ export async function fetchPhotos(): Promise<Photo[]> {
   if (!sanityClient) return LOCAL_PHOTOS;
   try {
     const raw = await sanityClient.fetch<RawPhoto[]>(LIST_QUERY);
-    if (!raw || raw.length === 0) return LOCAL_PHOTOS;
-    return raw.map(mapToPhoto);
+    // Successful empty response = editor intent. Local fallback only on
+    // missing client / thrown error.
+    return (raw ?? []).map(mapToPhoto);
   } catch (error) {
     console.error('[photos] fetch failed, falling back to local data:', error);
     return LOCAL_PHOTOS;
