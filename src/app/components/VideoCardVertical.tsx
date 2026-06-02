@@ -46,16 +46,28 @@ export function VideoCardVertical({
         transitionTimingFunction: 'ease-in-out',
       }}
     >
-      <div className="relative aspect-[9/16] overflow-hidden bg-[#111214]">
+      {/*
+        9:16 zdrojový obrázek (1080×1920, optimalizovaný pro YouTube Shorts)
+        je vystaven v 2:3 kontejneru (6:9). `object-top` přilepí zdroj k
+        horní hraně, takže obličej/oči zůstanou viditelné a spodní pruh
+        (titulky) se schová pod overflow-hidden. Karta je díky tomu ~16 %
+        nižší než předtím.
+      */}
+      <div className="relative aspect-[2/3] overflow-hidden bg-[#111214]">
         <ImageWithFallback
           src={imageUrl}
           alt={title}
-          className="w-full h-full object-cover group-hover:scale-110"
+          className="w-full h-full object-cover object-top group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="w-16 h-16 rounded-full bg-[#F59E0B] flex items-center justify-center">
-            <Play className="text-[#0A0A0B] fill-[#0A0A0B] ml-1" size={24} />
+        {/*
+          Play button zobrazený trvale (žádný opacity-0). Hover jen lehce
+          zvětšuje (scale-125 ≈ 25 % v rámci specifikovaného rozsahu 20–30 %),
+          žádný bounce, žádná rotace, žádný color shift.
+        */}
+        <div className="absolute top-[66%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="w-14 h-14 rounded-full bg-[#F59E0B]/60 flex items-center justify-center transition-transform duration-200 ease-soft group-hover:scale-125">
+            <Play className="text-[#0A0A0B] fill-[#0A0A0B] ml-1" size={20} />
           </div>
         </div>
         <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-[#F9FAFB] flex items-center gap-1">

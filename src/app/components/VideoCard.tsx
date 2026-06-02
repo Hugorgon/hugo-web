@@ -46,12 +46,13 @@ export function VideoCard({
         <ImageWithFallback
           src={imageUrl}
           alt={title}
-          className="w-full h-full object-cover group-hover:scale-110"
+          className="w-full h-full object-cover object-top group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="w-16 h-16 rounded-full bg-[#F59E0B] flex items-center justify-center">
-            <Play className="text-[#0A0A0B] fill-[#0A0A0B] ml-1" size={24} />
+        {/* Play button trvale viditelný; lehké zvětšení na hover. */}
+        <div className="absolute top-[66%] left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="w-14 h-14 rounded-full bg-[#F59E0B]/60 flex items-center justify-center transition-transform duration-200 ease-soft group-hover:scale-125">
+            <Play className="text-[#0A0A0B] fill-[#0A0A0B] ml-1" size={20} />
           </div>
         </div>
         <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/80 rounded text-xs text-[#F9FAFB] flex items-center gap-1">
