@@ -3,6 +3,16 @@ import { Footer } from '../components/Footer';
 import { LinkButton } from '../components/LinkButton';
 import { ROUTES } from '../../data/routes';
 
+/**
+ * 404 Not Found.
+ * Catch-all route v `App.tsx` (path="*") sem směruje všechno, co neodpovídá
+ * žádné existující stránce. Drží stejnou kostru jako ostatní stránky
+ * (Navbar + main + Footer) a stejný design system — žádné nové barvy,
+ * žádný nový typografický rytmus.
+ *
+ * CTAs: primární vede zpět na homepage, sekundární na video archiv —
+ * dva nejpravděpodobnější cíle, když uživatel skončí na 404.
+ */
 export function NotFoundPage() {
   return (
     <div className="min-h-screen bg-[#0A0A0B] flex flex-col">
@@ -13,12 +23,18 @@ export function NotFoundPage() {
             404
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-[#F9FAFB] mb-4">
-            Vypadá to, že jste zabloudili
+            Tohle jsem taky nenašel.
           </h1>
           <p className="text-[#D1D5DB] mb-8 leading-relaxed">
-            Ani já, pes s vyhraněnými názory na navigaci, tuhle stránku nenajdu. Vraťme vás zpět tam, kde se vyznáte.
+            A že hledám dobře. Asi sis spletl stopu — pojď, vrátíme se někam,
+            kde to voní známě.
           </p>
-          <LinkButton to={ROUTES.home}>Zpět na domovskou stránku</LinkButton>
+          <div className="flex flex-wrap justify-center gap-3">
+            <LinkButton to={ROUTES.home}>Zpět na domovskou stránku</LinkButton>
+            <LinkButton variant="secondary" to={ROUTES.videos}>
+              Prozkoumat archiv
+            </LinkButton>
+          </div>
         </div>
       </main>
       <Footer />
