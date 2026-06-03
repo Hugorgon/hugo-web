@@ -2,6 +2,7 @@ import type { LucideIcon } from 'lucide-react';
 import { Facebook, Instagram, Mail, Twitter, Youtube } from 'lucide-react';
 import { sanityClient } from '../sanity';
 import { CONTACT as LOCAL_CONTACT } from '../../data/contact';
+import { PAGES } from '../../data/pages';
 
 /**
  * Fetcher pro `contactPage` singleton — preferuje Sanity, fallback na
@@ -42,7 +43,15 @@ export interface ContactMethod {
   notice?: string;
 }
 
+export interface ContactPageHeader {
+  eyebrow: string;
+  titleLead?: string;
+  titleHighlight: string;
+  subtitle: string;
+}
+
 export interface ContactPageData {
+  pageHeader: ContactPageHeader;
   methods: ContactMethod[];
 }
 
@@ -55,10 +64,22 @@ interface RawContactMethod {
 }
 
 interface RawContactPage {
+  pageHeader?: {
+    eyebrow?: string;
+    titleLead?: string;
+    titleHighlight?: string;
+    subtitle?: string;
+  };
   methods?: RawContactMethod[];
 }
 
 const QUERY = `*[_id == "contactPage"][0] {
+  pageHeader {
+    eyebrow,
+    titleLead,
+    titleHighlight,
+    subtitle
+  },
   "methods": methods[enabled != false] | order(coalesce(displayOrder, 9999) asc) {
     label,
     displayText,
@@ -74,6 +95,12 @@ const QUERY = `*[_id == "contactPage"][0] {
  * na konec, beze URL, s `notice` textem (anti-spam vysvětlivka).
  */
 export const LOCAL_CONTACT_PAGE: ContactPageData = {
+  pageHeader: {
+    eyebrow: PAGES.contact.header.eyebrow,
+    titleLead: PAGES.contact.header.titleLead,
+    titleHighlight: PAGES.contact.header.titleHighlight,
+    subtitle: PAGES.contact.header.subtitle,
+  },
   methods: [
     ...LOCAL_CONTACT.socials.map((s) => ({
       label: s.label,
@@ -105,10 +132,21 @@ function mapToContactPage(raw: RawContactPage): ContactPageData {
       };
     })
     .filter((m): m is ContactMethod => m !== null);
-  // If Studio document exists but methods[] is empty/unset, keep the local
-  // fallback so the page never renders zero contact methods.
   return {
-    methods: mapped.length > 0 ? mapped : LOCAL_CONTACT_PAGE.methods,
+    pageHeader: {
+      eyebrow:
+        raw.pageHeader?.eyebrow ?? LOCAL_CONTACT_PAGE.pageHeader.eyebrow,
+      titleLead:
+        raw.pageHeader?.titleLead ?? LOCAL_CONTACT_PAGE.pageHeader.titleLead,
+      titleHighlight:
+        raw.pageHeader?.titleHighlight ??
+        LOCAL_CONTACT_PAGE.pageHeader.titleHighlight,
+      subtitle:
+        raw.pageHeader?.subtitle ?? LOCAL_CONTACT_PAGE.pageHeader.subtitle,
+    },
+    // Methods: empty array is editor intent ("no methods to show"). Only fall
+    // back to local when the field is missing entirely (undefined / null).
+    methods: raw.methods == null ? LOCAL_CONTACT_PAGE.methods : mapped,
   };
 }
 

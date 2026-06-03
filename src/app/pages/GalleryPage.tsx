@@ -6,8 +6,12 @@ import { PageHeader } from '../components/PageHeader';
 import { PhotoCard } from '../components/PhotoCard';
 import { Lightbox } from '../components/Lightbox';
 import { PHOTOS as LOCAL_PHOTOS, type Photo } from '../../data/photos';
-import { PAGES } from '../../data/pages';
 import { fetchPhotos } from '../../lib/queries/photos';
+import {
+  fetchGalleryPage,
+  LOCAL_GALLERY_PAGE,
+  type GalleryPageData,
+} from '../../lib/queries/galleryPage';
 
 /**
  * Fotogalerie — vizuální feed s mixed aspect ratio mozaikou.
@@ -29,12 +33,16 @@ import { fetchPhotos } from '../../lib/queries/photos';
  */
 export function GalleryPage() {
   const [photos, setPhotos] = useState<Photo[]>(LOCAL_PHOTOS);
+  const [page, setPage] = useState<GalleryPageData>(LOCAL_GALLERY_PAGE);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     fetchPhotos().then((data) => {
       if (!cancelled) setPhotos(data);
+    });
+    fetchGalleryPage().then((data) => {
+      if (!cancelled && data) setPage(data);
     });
     return () => {
       cancelled = true;
@@ -70,16 +78,18 @@ export function GalleryPage() {
       <main className="pt-32 pb-24">
         <Container>
           <PageHeader
-            eyebrow={PAGES.gallery.header.eyebrow}
+            eyebrow={page.pageHeader.eyebrow}
             title={
               <>
-                {PAGES.gallery.header.titleLead}{' '}
+                {page.pageHeader.titleLead && (
+                  <>{page.pageHeader.titleLead}{' '}</>
+                )}
                 <span className="text-[#F59E0B]">
-                  {PAGES.gallery.header.titleHighlight}
+                  {page.pageHeader.titleHighlight}
                 </span>
               </>
             }
-            subtitle={PAGES.gallery.header.subtitle}
+            subtitle={page.pageHeader.subtitle}
           />
         </Container>
 

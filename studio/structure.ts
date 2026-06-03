@@ -19,6 +19,8 @@ export const SINGLETON_TYPES: ReadonlySet<string> = new Set([
   'aboutPage',
   'contactPage',
   'videosArchive',
+  'storiesArchive',
+  'galleryPage',
 ]);
 
 export const deskStructure = (S: StructureBuilder) =>
@@ -73,6 +75,22 @@ export const deskStructure = (S: StructureBuilder) =>
           S.document()
             .schemaType('videosArchive')
             .documentId('videosArchive'),
+        ),
+      S.listItem()
+        .title('Archiv příběhů (/stories)')
+        .id('storiesArchive')
+        .child(
+          S.document()
+            .schemaType('storiesArchive')
+            .documentId('storiesArchive'),
+        ),
+      S.listItem()
+        .title('Fotogalerie (/fotogalerie)')
+        .id('galleryPage')
+        .child(
+          S.document()
+            .schemaType('galleryPage')
+            .documentId('galleryPage'),
         ),
       S.divider(),
       // Ostatní collection-style document types (story, video, ...)

@@ -31,6 +31,45 @@ export const contactPage = defineType({
 
   fields: [
     defineField({
+      name: 'pageHeader',
+      title: 'Hero hlavička stránky',
+      type: 'object',
+      description:
+        'Eyebrow plaketa, lead/highlight nadpis a podtitulek nad stránkou /kontakt.',
+      fields: [
+        defineField({
+          name: 'eyebrow',
+          title: 'Eyebrow plaketa',
+          type: 'string',
+          description: 'Oranžová pill plaketa nad h1, např. „Napište nám".',
+          validation: (Rule) => Rule.required().max(60),
+        }),
+        defineField({
+          name: 'titleLead',
+          title: 'Nadpis — bílá část',
+          type: 'string',
+          description:
+            'První, bílá část nadpisu (např. „Kontaktujte"). Volitelné — když ' +
+            'chybí, celý nadpis je oranžový.',
+        }),
+        defineField({
+          name: 'titleHighlight',
+          title: 'Nadpis — oranžová část',
+          type: 'string',
+          description: 'Oranžová zvýrazněná část nadpisu (např. „Huga").',
+          validation: (Rule) => Rule.required().max(60),
+        }),
+        defineField({
+          name: 'subtitle',
+          title: 'Podnadpis',
+          type: 'text',
+          rows: 2,
+          validation: (Rule) => Rule.required().max(220),
+        }),
+      ],
+    }),
+
+    defineField({
       name: 'methods',
       title: 'Kontaktní metody',
       type: 'array',

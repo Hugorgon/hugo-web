@@ -8,13 +8,16 @@ import { homePage } from './homePage';
 import { aboutPage } from './aboutPage';
 import { contactPage } from './contactPage';
 import { videosArchive } from './videosArchive';
+import { storiesArchive } from './storiesArchive';
+import { galleryPage } from './galleryPage';
 
 /**
  * Centrální registr všech schemat zahrnutých do studia.
  *
  * Singletons (siteSettings, navigation, homePage, aboutPage, contactPage,
- * videosArchive) mají speciální chování — viz `studio/structure.ts`.
- * `photo`, `story`, `video`, `videoCategory` jsou standardní collections.
+ * videosArchive, storiesArchive, galleryPage) mají speciální chování —
+ * viz `studio/structure.ts`. `photo`, `story`, `video`, `videoCategory`
+ * jsou standardní collections.
  */
 export const schemaTypes = [
   story,
@@ -27,4 +30,6 @@ export const schemaTypes = [
   aboutPage,
   contactPage,
   videosArchive,
+  storiesArchive,
+  galleryPage,
 ];

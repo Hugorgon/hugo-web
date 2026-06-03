@@ -6,10 +6,14 @@ import { StoryCard } from '../components/StoryCard';
 import { PageHeader } from '../components/PageHeader';
 import { Button } from '../components/Button';
 import { STORIES as LOCAL_STORIES, type Story } from '../../data/stories';
-import { PAGES } from '../../data/pages';
 import { UI } from '../../data/ui';
 import { interpolate } from '../../lib/format';
 import { fetchStories } from '../../lib/queries/stories';
+import {
+  fetchStoriesArchive,
+  LOCAL_STORIES_ARCHIVE,
+  type StoriesArchiveData,
+} from '../../lib/queries/storiesArchive';
 
 const PAGE_SIZE = 6;
 
@@ -17,12 +21,18 @@ export function StoriesPage() {
   // Initial state z local fallbacku — visual 1:1 s předchozí verzí.
   // Sanity data přepíší state až po async fetchi (pokud existují).
   const [stories, setStories] = useState<Story[]>(LOCAL_STORIES);
+  const [archive, setArchive] = useState<StoriesArchiveData>(
+    LOCAL_STORIES_ARCHIVE,
+  );
   const [visible, setVisible] = useState(PAGE_SIZE);
 
   useEffect(() => {
     let cancelled = false;
     fetchStories().then((data) => {
       if (!cancelled) setStories(data);
+    });
+    fetchStoriesArchive().then((data) => {
+      if (!cancelled && data) setArchive(data);
     });
     return () => {
       cancelled = true;
@@ -38,13 +48,18 @@ export function StoriesPage() {
       <main className="pt-32 pb-24">
         <Container>
           <PageHeader
-            eyebrow={PAGES.stories.header.eyebrow}
+            eyebrow={archive.pageHeader.eyebrow}
             title={
-              <span className="text-[#F59E0B]">
-                {PAGES.stories.header.titleHighlight}
-              </span>
+              <>
+                {archive.pageHeader.titleLead && (
+                  <>{archive.pageHeader.titleLead}{' '}</>
+                )}
+                <span className="text-[#F59E0B]">
+                  {archive.pageHeader.titleHighlight}
+                </span>
+              </>
             }
-            subtitle={PAGES.stories.header.subtitle}
+            subtitle={archive.pageHeader.subtitle}
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

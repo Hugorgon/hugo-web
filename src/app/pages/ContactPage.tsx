@@ -4,7 +4,6 @@ import { Footer } from '../components/Footer';
 import { Container } from '../components/Container';
 import { PageHeader } from '../components/PageHeader';
 import { CONTACT } from '../../data/contact';
-import { PAGES } from '../../data/pages';
 import {
   fetchContactPage,
   LOCAL_CONTACT_PAGE,
@@ -15,15 +14,16 @@ import {
 /**
  * Statická kontaktní stránka.
  *
- * Sjednocený seznam kontaktních metod přichází ze Sanity `contactPage`
- * singletonu s lokálním fallbackem. Pravidla renderování:
+ * Page header + sjednocený seznam kontaktních metod přichází ze Sanity
+ * `contactPage` singletonu s lokálním fallbackem (`PAGES.contact.header`
+ * → `LOCAL_CONTACT_PAGE.pageHeader`). Pravidla renderování metod:
  *  - `url` vyplněná → external link (target="_blank", rel="noopener noreferrer")
  *  - `url` chybí → plain block bez anchoru (anti-spam pattern pro e-mail —
  *    žádný `mailto:`, žádný anchor, který by scrapeři dokázali odhalit)
  *  - `notice` vyplněná → drobný šedý řádek pod displayText (vysvětlivka)
  *
- * Card heading / lead / closing a page header copy zůstávají v lokálních
- * datech — Sanity zatím spravuje pouze metody.
+ * Card heading / lead / closing texty zůstávají v lokálních datech —
+ * Sanity zatím spravuje page header + metody.
  */
 export function ContactPage() {
   const [data, setData] = useState<ContactPageData>(LOCAL_CONTACT_PAGE);
@@ -44,16 +44,18 @@ export function ContactPage() {
       <main className="pt-32 pb-24">
         <Container>
           <PageHeader
-            eyebrow={PAGES.contact.header.eyebrow}
+            eyebrow={data.pageHeader.eyebrow}
             title={
               <>
-                {PAGES.contact.header.titleLead}{' '}
+                {data.pageHeader.titleLead && (
+                  <>{data.pageHeader.titleLead}{' '}</>
+                )}
                 <span className="text-[#F59E0B]">
-                  {PAGES.contact.header.titleHighlight}
+                  {data.pageHeader.titleHighlight}
                 </span>
               </>
             }
-            subtitle={PAGES.contact.header.subtitle}
+            subtitle={data.pageHeader.subtitle}
           />
 
           <div className="max-w-2xl mx-auto">
