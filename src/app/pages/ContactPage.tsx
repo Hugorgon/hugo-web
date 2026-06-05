@@ -63,10 +63,6 @@ export function ContactPage() {
               <h2 className="text-2xl font-semibold text-[#F9FAFB] mb-2">
                 {CONTACT.card.heading}
               </h2>
-              <p className="text-[#9CA3AF] text-sm mb-8">
-                {CONTACT.card.lead}
-              </p>
-
               <div className="space-y-6">
                 {data.methods.map((method) => (
                   <ContactMethodRow key={method.label} method={method} />
@@ -74,9 +70,6 @@ export function ContactPage() {
               </div>
             </div>
 
-            <p className="text-[#9CA3AF] text-sm text-center mt-8">
-              {CONTACT.closing}
-            </p>
           </div>
         </Container>
       </main>

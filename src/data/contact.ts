@@ -20,7 +20,6 @@ export interface ContactSocialItem {
 export const CONTACT = {
   card: {
     heading: 'Najdete mě tady',
-    lead: 'Sociální sítě jsou nejrychlejší. Na e-maily reagujeme jednou týdně.',
   },
   socials: [
     {
@@ -42,6 +41,4 @@ export const CONTACT = {
     obfuscated: 'hugo [zavináč] hugorgon [tečka] cz',
     notice: 'Zapsáno schválně — proti spamovým robotům. Sestavte si adresu sami.',
   },
-  closing:
-    'Odpovídám obvykle do týdne. Pokud máte spěšnější dotaz, zkuste sociální sítě.',
 } as const;
