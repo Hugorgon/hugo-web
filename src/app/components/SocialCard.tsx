@@ -7,10 +7,9 @@ interface SocialCardProps {
   description: string;
   handle: string;
   /**
-   * Optional profile URL. When present, the handle becomes an external link
-   * (opens in a new tab). When absent, the handle is rendered as a styled
-   * span — same color, weight, hover transition — so the card looks identical
-   * either way.
+   * Optional profile URL. When present, the entire card is a clickable
+   * external link (opens in a new tab) — same pattern as CategoryCard.
+   * When absent, the card renders as a plain div with no false affordance.
    */
   url?: string;
 }
@@ -23,17 +22,13 @@ export function SocialCard({
   handle,
   url,
 }: SocialCardProps) {
-  // Identical visual treatment for both states — only the underlying tag
-  // changes. The hover color shift still fires on the <a> via Tailwind's
-  // group-less hover utilities; on the <span> it stays static (no false
-  // affordance of clickability when there's nowhere to go).
-  const handleClassName =
-    'text-[#F59E0B] text-sm font-medium hover:text-[#FFB84D] transition-colors';
+  const cardClassName =
+    'group bg-[#161618] rounded-lg p-6 border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300';
 
-  return (
-    <div className="bg-[#161618] rounded-lg p-6 border border-[#2A2B31] hover:border-[#F59E0B] transition-all duration-300">
+  const inner = (
+    <>
       <div className="flex items-start justify-between mb-4">
-        <div className="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center">
+        <div className="w-12 h-12 rounded-lg bg-[#F59E0B]/10 flex items-center justify-center group-hover:bg-[#F59E0B]/20 transition-colors">
           <div className="text-[#F59E0B]">
             {icon}
           </div>
@@ -46,19 +41,29 @@ export function SocialCard({
       <p className="text-[#D1D5DB] text-sm mb-3">
         {description}
       </p>
-      {url ? (
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${platform}: ${handle}`}
-          className={handleClassName}
-        >
-          {handle}
-        </a>
-      ) : (
-        <span className={handleClassName}>{handle}</span>
-      )}
+      <span className="text-[#F59E0B] text-sm font-medium group-hover:text-[#FFB84D] transition-colors">
+        {handle}
+      </span>
+    </>
+  );
+
+  if (url) {
+    return (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${platform} – ${handle}`}
+        className={cardClassName}
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <div className={cardClassName}>
+      {inner}
     </div>
   );
 }
