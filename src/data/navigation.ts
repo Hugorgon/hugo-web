@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Facebook, Instagram, Youtube } from 'lucide-react';
+import { Instagram, Youtube } from 'lucide-react';
 import { ROUTES } from './routes';
 
 /**
@@ -67,7 +67,6 @@ export const FOOTER_COLUMNS = {
     links: [
       { href: 'https://instagram.com/hugorgon', label: 'Instagram', Icon: Instagram },
       { href: 'https://youtube.com/@Hugorgon', label: 'YouTube', Icon: Youtube },
-      { href: '#', label: 'Facebook', Icon: Facebook },
     ] satisfies FooterSocialLink[],
   },
 } as const;
