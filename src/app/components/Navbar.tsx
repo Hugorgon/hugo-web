@@ -80,8 +80,11 @@ export function Navbar() {
             className="flex items-center gap-2 rounded-md"
             aria-label={`${site.brand.name} ${site.brand.suffix} ${UI.nav.homeAriaSuffix}`}
           >
-            <h1 className="text-2xl font-bold text-[#F9FAFB]">{site.brand.name}</h1>
-            <span className="text-[#F59E0B] text-sm">{site.brand.suffix}</span>
+            <img
+              src="/logo-hugo-white.svg"
+              alt="Hugorgon"
+              className="h-8 w-auto"
+            />
           </Link>
 
           <div className="hidden md:flex items-center gap-8">

@@ -70,8 +70,11 @@ export function Footer() {
               className="flex items-center gap-2 mb-4"
               aria-label={`${site.brand.name} ${site.brand.suffix} ${UI.nav.homeAriaSuffix}`}
             >
-              <h2 className="text-2xl font-bold text-[#F9FAFB]">{site.brand.name}</h2>
-              <span className="text-[#F59E0B] text-sm">{site.brand.suffix}</span>
+              <img
+                src="/logo-hugo-white.svg"
+                alt="Hugorgon"
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="text-[#9CA3AF] text-sm leading-relaxed">
               {site.description}
