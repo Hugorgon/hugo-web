@@ -7,7 +7,7 @@ import { Container } from '../components/Container';
 import { StoryCard } from '../components/StoryCard';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { NotFoundPage } from './NotFoundPage';
-import { STORIES as LOCAL_STORIES, type Story } from '../../data/stories';
+import { type Story } from '../../data/stories';
 import { ROUTES } from '../../data/routes';
 import { UI } from '../../data/ui';
 import { fetchStoryBySlug, fetchRelatedStories } from '../../lib/queries/stories';
@@ -15,23 +15,21 @@ import { fetchStoryBySlug, fetchRelatedStories } from '../../lib/queries/stories
 export function StoryDetailPage() {
   const { slug } = useParams<{ slug: string }>();
 
-  // Initial state z local fallbacku — pokud slug existuje lokálně, první render
-  // je synchronní a vizuálně identický. Sanity data přepíší state až po fetchi.
-  const localMatch = slug
-    ? LOCAL_STORIES.find((s) => s.slug === slug)
-    : undefined;
-  const localRelated = slug
-    ? LOCAL_STORIES.filter((s) => s.slug !== slug).slice(0, 3)
-    : [];
-
-  const [story, setStory] = useState<Story | undefined>(localMatch);
-  const [related, setRelated] = useState<Story[]>(localRelated);
+  // null  = still loading (don't render anything yet)
+  // undefined = Sanity returned no match (show NotFoundPage)
+  // Story = found, render detail
+  const [story, setStory] = useState<Story | undefined | null>(null);
+  const [related, setRelated] = useState<Story[]>([]);
 
   useEffect(() => {
-    if (!slug) return;
+    if (!slug) {
+      setStory(undefined);
+      return;
+    }
     let cancelled = false;
+    setStory(null); // reset to loading on slug change
     fetchStoryBySlug(slug).then((data) => {
-      if (!cancelled && data) setStory(data);
+      if (!cancelled) setStory(data); // undefined if not found
     });
     fetchRelatedStories(slug, 3).then((data) => {
       if (!cancelled) setRelated(data);
@@ -41,9 +39,8 @@ export function StoryDetailPage() {
     };
   }, [slug]);
 
-  if (!slug || !story) {
-    return <NotFoundPage />;
-  }
+  if (story === null) return null; // still loading
+  if (!slug || !story) return <NotFoundPage />; // not found
 
   const paragraphs = story.body.split(/\n\s*\n/);
 

@@ -5,25 +5,20 @@ import { Container } from '../components/Container';
 import { StoryCard } from '../components/StoryCard';
 import { PageHeader } from '../components/PageHeader';
 import { Button } from '../components/Button';
-import { STORIES as LOCAL_STORIES, type Story } from '../../data/stories';
+import { type Story } from '../../data/stories';
 import { UI } from '../../data/ui';
 import { interpolate } from '../../lib/format';
 import { fetchStories } from '../../lib/queries/stories';
 import {
   fetchStoriesArchive,
-  LOCAL_STORIES_ARCHIVE,
   type StoriesArchiveData,
 } from '../../lib/queries/storiesArchive';
 
 const PAGE_SIZE = 6;
 
 export function StoriesPage() {
-  // Initial state z local fallbacku — visual 1:1 s předchozí verzí.
-  // Sanity data přepíší state až po async fetchi (pokud existují).
-  const [stories, setStories] = useState<Story[]>(LOCAL_STORIES);
-  const [archive, setArchive] = useState<StoriesArchiveData>(
-    LOCAL_STORIES_ARCHIVE,
-  );
+  const [stories, setStories] = useState<Story[] | null>(null);
+  const [archive, setArchive] = useState<StoriesArchiveData | null>(null);
   const [visible, setVisible] = useState(PAGE_SIZE);
 
   useEffect(() => {
@@ -38,6 +33,8 @@ export function StoriesPage() {
       cancelled = true;
     };
   }, []);
+
+  if (!stories || !archive) return null;
 
   const visibleStories = stories.slice(0, visible);
   const hasMore = visible < stories.length;

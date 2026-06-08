@@ -68,18 +68,17 @@ export async function fetchStories(): Promise<Story[]> {
 }
 
 export async function fetchStoryBySlug(slug: string): Promise<Story | undefined> {
-  const localMatch = LOCAL_STORIES.find((s) => s.slug === slug);
-  if (!sanityClient) return localMatch;
+  if (!sanityClient) return undefined;
   try {
     const raw = await sanityClient.fetch<RawStory | null>(BY_SLUG_QUERY, { slug });
     if (raw) return mapToStory(raw);
-    return localMatch;
+    return undefined;
   } catch (error) {
     console.error(
-      `[stories] fetch by slug "${slug}" failed, falling back to local:`,
+      `[stories] fetch by slug "${slug}" failed:`,
       error,
     );
-    return localMatch;
+    return undefined;
   }
 }
 

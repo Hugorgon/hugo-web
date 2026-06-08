@@ -2,20 +2,17 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { StoryCardFeatured } from './StoryCardFeatured';
 import { Container } from './Container';
-import { STORIES as LOCAL_STORIES, type Story } from '../../data/stories';
+import { type Story } from '../../data/stories';
 import { ROUTES } from '../../data/routes';
 import { fetchStories } from '../../lib/queries/stories';
 import {
   fetchHomePage,
-  LOCAL_HOME,
   type HomePageData,
 } from '../../lib/queries/homePage';
 
 export function StoriesGrid() {
-  // Initial state z local fallbacku — první render je synchronní a vizuálně
-  // identický s předchozí verzí. Sanity data přepíšou state až po async fetchi.
-  const [stories, setStories] = useState<Story[]>(LOCAL_STORIES);
-  const [home, setHome] = useState<HomePageData>(LOCAL_HOME);
+  const [stories, setStories] = useState<Story[] | null>(null);
+  const [home, setHome] = useState<HomePageData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -29,6 +26,8 @@ export function StoriesGrid() {
       cancelled = true;
     };
   }, []);
+
+  if (!stories || !home) return null;
 
   const featured = stories.slice(0, 2);
   const section = home.storiesGrid;

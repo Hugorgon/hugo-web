@@ -9,7 +9,6 @@ import { Button } from '../components/Button';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { NotFoundPage } from './NotFoundPage';
 import {
-  VIDEOS as LOCAL_VIDEOS,
   VIDEO_TYPE_LABELS,
   type Video,
 } from '../../data/videos';
@@ -20,57 +19,29 @@ import { fetchVideoBySlug, fetchRelatedVideos } from '../../lib/queries/videos';
 import {
   fetchVideoCategories,
   getCategoryTitle,
-  LOCAL_VIDEO_CATEGORIES,
   type VideoCategoryEntry,
 } from '../../lib/queries/videoCategories';
 import { getYouTubeEmbedUrl } from '../../lib/youtube';
 
-/**
- * Detail videa ve stylu Reels / Shorts / TikTok.
- *
- * Layout:
- * - Mobile a tablet: jednosloupcový — vertikální 9:16 přehrávač nahoře
- *   (max-w-[400px], vycentrovaný), informace o videu pod ním.
- * - Desktop (lg+): dvousloupcový — přehrávač vlevo (sticky, 360px široký),
- *   informace vpravo. Pomer 9:16 je vždy zachovaný, takže video není
- *   nikdy ořezáno ani na menších desktopových rozlišeních.
- *
- * Související videa dole používají stejné VideoCardVertical jako homepage
- * a archiv — celá video sekce webu drží jednotný social-first jazyk.
- */
 export function VideoDetailPage() {
   const { slug } = useParams<{ slug: string }>();
 
-  // Initial state z local fallbacku — pokud slug existuje lokálně, první render
-  // je synchronní a vizuálně identický s předchozí verzí. Sanity data přepíší
-  // state až po async fetchi (pokud existují).
-  const localMatch = slug
-    ? LOCAL_VIDEOS.find((v) => v.slug === slug)
-    : undefined;
-
-  // Local „related" replikuje category-priority logiku z fetchRelatedVideos,
-  // aby initial render měl stejné pořadí karet jako po fetchi z Sanity.
-  const localRelated = (() => {
-    if (!slug) return [];
-    const others = LOCAL_VIDEOS.filter((v) => v.slug !== slug);
-    if (!localMatch) return others.slice(0, 4);
-    return [
-      ...others.filter((v) => v.category === localMatch.category),
-      ...others.filter((v) => v.category !== localMatch.category),
-    ].slice(0, 4);
-  })();
-
-  const [video, setVideo] = useState<Video | undefined>(localMatch);
-  const [related, setRelated] = useState<Video[]>(localRelated);
-  const [categories, setCategories] = useState<VideoCategoryEntry[]>(
-    LOCAL_VIDEO_CATEGORIES,
-  );
+  // null  = still loading (don't render anything yet)
+  // undefined = Sanity returned no match (show NotFoundPage)
+  // Video = found, render detail
+  const [video, setVideo] = useState<Video | undefined | null>(null);
+  const [related, setRelated] = useState<Video[]>([]);
+  const [categories, setCategories] = useState<VideoCategoryEntry[]>([]);
 
   useEffect(() => {
-    if (!slug) return;
+    if (!slug) {
+      setVideo(undefined);
+      return;
+    }
     let cancelled = false;
+    setVideo(null); // reset to loading on slug change
     fetchVideoBySlug(slug).then((data) => {
-      if (!cancelled && data) setVideo(data);
+      if (!cancelled) setVideo(data); // undefined if not found
     });
     fetchRelatedVideos(slug, 4).then((data) => {
       if (!cancelled) setRelated(data);
@@ -90,9 +61,8 @@ export function VideoDetailPage() {
     };
   }, []);
 
-  if (!slug || !video) {
-    return <NotFoundPage />;
-  }
+  if (video === null) return null; // still loading
+  if (!slug || !video) return <NotFoundPage />; // not found
 
   const paragraphs = video.longDescription.split(/\n\s*\n/);
   const embedUrl = getYouTubeEmbedUrl(video.youtubeUrl);

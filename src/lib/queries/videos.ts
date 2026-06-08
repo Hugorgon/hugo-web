@@ -107,20 +107,19 @@ export async function fetchVideos(): Promise<Video[]> {
 export async function fetchVideoBySlug(
   slug: string,
 ): Promise<Video | undefined> {
-  const localMatch = LOCAL_VIDEOS.find((v) => v.slug === slug);
-  if (!sanityClient) return localMatch;
+  if (!sanityClient) return undefined;
   try {
     const raw = await sanityClient.fetch<RawVideo | null>(BY_SLUG_QUERY, {
       slug,
     });
     if (raw) return mapToVideo(raw);
-    return localMatch;
+    return undefined;
   } catch (error) {
     console.error(
-      `[videos] fetch by slug "${slug}" failed, falling back to local:`,
+      `[videos] fetch by slug "${slug}" failed:`,
       error,
     );
-    return localMatch;
+    return undefined;
   }
 }
 

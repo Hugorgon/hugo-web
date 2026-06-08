@@ -6,12 +6,10 @@ import { ROUTES } from '../../data/routes';
 import { UI } from '../../data/ui';
 import {
   fetchSiteSettings,
-  LOCAL_SITE_SETTINGS,
   type SiteSettings,
 } from '../../lib/queries/siteSettings';
 import {
   fetchNavigation,
-  LOCAL_NAVIGATION,
   type NavigationData,
 } from '../../lib/queries/navigation';
 
@@ -42,10 +40,8 @@ function LinkColumn({
 }
 
 export function Footer() {
-  // Initial state z local fallbacku — Footer je v každé stránce, první
-  // render musí být sync (žádný flash prázdného footeru).
-  const [site, setSite] = useState<SiteSettings>(LOCAL_SITE_SETTINGS);
-  const [navigation, setNavigation] = useState<NavigationData>(LOCAL_NAVIGATION);
+  const [site, setSite] = useState<SiteSettings | null>(null);
+  const [navigation, setNavigation] = useState<NavigationData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -59,6 +55,8 @@ export function Footer() {
       cancelled = true;
     };
   }, []);
+
+  if (!site || !navigation) return null;
 
   return (
     <footer className="bg-[#111214] border-t border-[#2A2B31]">

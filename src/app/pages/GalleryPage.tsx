@@ -5,35 +5,16 @@ import { Container } from '../components/Container';
 import { PageHeader } from '../components/PageHeader';
 import { PhotoCard } from '../components/PhotoCard';
 import { Lightbox } from '../components/Lightbox';
-import { PHOTOS as LOCAL_PHOTOS, type Photo } from '../../data/photos';
+import { type Photo } from '../../data/photos';
 import { fetchPhotos } from '../../lib/queries/photos';
 import {
   fetchGalleryPage,
-  LOCAL_GALLERY_PAGE,
   type GalleryPageData,
 } from '../../lib/queries/galleryPage';
 
-/**
- * Fotogalerie — vizuální feed s mixed aspect ratio mozaikou.
- * Stránka záměrně nepoužívá Container pro samotnou mozaiku — galerie sahá
- * až k `max-w-[1920px]` s vlastním horizontálním paddingem, aby na velkých
- * monitorech působila organičtěji než klasický 1280px archiv.
- *
- * Masonry layout = čisté CSS `columns-*` + `break-inside-avoid` na kartách
- * (žádná knihovna). Reveal a hover je řešený přímo v PhotoCard.
- *
- * Lightbox je vykreslený vedle main na úrovni page rootu, aby překryl
- * navbar i celou galerii. Otevření / zavírání / navigaci řídí lokální stav
- * `selectedIndex`.
- *
- * Data flow:
- *  - Initial state z local fallbacku (`LOCAL_PHOTOS`) — první render je
- *    synchronní a vizuálně identický s předchozí verzí.
- *  - Sanity data přepíšou state až po async fetchi (pokud existují).
- */
 export function GalleryPage() {
-  const [photos, setPhotos] = useState<Photo[]>(LOCAL_PHOTOS);
-  const [page, setPage] = useState<GalleryPageData>(LOCAL_GALLERY_PAGE);
+  const [photos, setPhotos] = useState<Photo[] | null>(null);
+  const [page, setPage] = useState<GalleryPageData | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -48,6 +29,8 @@ export function GalleryPage() {
       cancelled = true;
     };
   }, []);
+
+  if (!photos || !page) return null;
 
   const selectedPhoto =
     selectedIndex !== null ? photos[selectedIndex] ?? null : null;

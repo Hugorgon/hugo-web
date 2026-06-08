@@ -5,21 +5,11 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 import { ROUTES } from '../../data/routes';
 import {
   fetchAboutPage,
-  LOCAL_ABOUT,
   type AboutPageData,
 } from '../../lib/queries/aboutPage';
 
-/**
- * Homepage About sekce.
- * Initial state z local fallbacku (`LOCAL_ABOUT`) — první render je sync,
- * vizuálně identický s předchozí verzí. Sanity data přepíšou state až
- * po async fetchi (pokud singleton existuje).
- *
- * CTA cíl drží frontend (`ROUTES.about`), aby Sanity nemohla omylem rozbít
- * interní routing. Schema záměrně nemá ctaTo field — pouze label.
- */
 export function AboutHugo() {
-  const [about, setAbout] = useState<AboutPageData>(LOCAL_ABOUT);
+  const [about, setAbout] = useState<AboutPageData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -30,6 +20,8 @@ export function AboutHugo() {
       cancelled = true;
     };
   }, []);
+
+  if (!about) return null;
 
   return (
     <section id="about" className="bg-[#111214] py-24">

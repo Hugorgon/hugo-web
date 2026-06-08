@@ -2,29 +2,23 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { VideoCardVertical } from './VideoCardVertical';
 import { Container } from './Container';
-import { VIDEOS as LOCAL_VIDEOS, type Video } from '../../data/videos';
+import { type Video } from '../../data/videos';
 import { ROUTES } from '../../data/routes';
 import { fetchVideos } from '../../lib/queries/videos';
 import {
   fetchHomePage,
-  LOCAL_HOME,
   type HomePageData,
 } from '../../lib/queries/homePage';
 import {
   fetchVideoCategories,
   getCategoryTitle,
-  LOCAL_VIDEO_CATEGORIES,
   type VideoCategoryEntry,
 } from '../../lib/queries/videoCategories';
 
 export function FeaturedVideos() {
-  // Initial state z local fallbacku — první render je synchronní a vizuálně
-  // identický s předchozí verzí. Sanity data přepíšou state až po async fetchi.
-  const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
-  const [home, setHome] = useState<HomePageData>(LOCAL_HOME);
-  const [categories, setCategories] = useState<VideoCategoryEntry[]>(
-    LOCAL_VIDEO_CATEGORIES,
-  );
+  const [videos, setVideos] = useState<Video[] | null>(null);
+  const [home, setHome] = useState<HomePageData | null>(null);
+  const [categories, setCategories] = useState<VideoCategoryEntry[] | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -41,6 +35,8 @@ export function FeaturedVideos() {
       cancelled = true;
     };
   }, []);
+
+  if (!videos || !home || !categories) return null;
 
   const featured = videos.slice(0, 4);
   const section = home.featuredVideos;

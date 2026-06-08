@@ -8,12 +8,10 @@ import { ROUTES } from '../../data/routes';
 import { UI } from '../../data/ui';
 import {
   fetchSiteSettings,
-  LOCAL_SITE_SETTINGS,
   type SiteSettings,
 } from '../../lib/queries/siteSettings';
 import {
   fetchNavigation,
-  LOCAL_NAVIGATION,
   type NavigationData,
 } from '../../lib/queries/navigation';
 
@@ -27,11 +25,8 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
 
-  // Initial state z local fallbacku — Navbar je v každé stránce a první
-  // render musí být sync (žádný flash prázdného navbaru). Sanity přepíše
-  // state až po async fetchi (pokud singleton existuje).
-  const [site, setSite] = useState<SiteSettings>(LOCAL_SITE_SETTINGS);
-  const [navigation, setNavigation] = useState<NavigationData>(LOCAL_NAVIGATION);
+  const [site, setSite] = useState<SiteSettings | null>(null);
+  const [navigation, setNavigation] = useState<NavigationData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -59,6 +54,8 @@ export function Navbar() {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
+  if (!site || !navigation) return null;
 
   function isLinkActive(link: NavLink): boolean {
     if (link.kind !== 'route') return false;

@@ -6,27 +6,12 @@ import { PageHeader } from '../components/PageHeader';
 import { CONTACT } from '../../data/contact';
 import {
   fetchContactPage,
-  LOCAL_CONTACT_PAGE,
   type ContactMethod,
   type ContactPageData,
 } from '../../lib/queries/contactPage';
 
-/**
- * Statická kontaktní stránka.
- *
- * Page header + sjednocený seznam kontaktních metod přichází ze Sanity
- * `contactPage` singletonu s lokálním fallbackem (`PAGES.contact.header`
- * → `LOCAL_CONTACT_PAGE.pageHeader`). Pravidla renderování metod:
- *  - `url` vyplněná → external link (target="_blank", rel="noopener noreferrer")
- *  - `url` chybí → plain block bez anchoru (anti-spam pattern pro e-mail —
- *    žádný `mailto:`, žádný anchor, který by scrapeři dokázali odhalit)
- *  - `notice` vyplněná → drobný šedý řádek pod displayText (vysvětlivka)
- *
- * Card heading / lead / closing texty zůstávají v lokálních datech —
- * Sanity zatím spravuje page header + metody.
- */
 export function ContactPage() {
-  const [data, setData] = useState<ContactPageData>(LOCAL_CONTACT_PAGE);
+  const [data, setData] = useState<ContactPageData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -37,6 +22,8 @@ export function ContactPage() {
       cancelled = true;
     };
   }, []);
+
+  if (!data) return null;
 
   return (
     <div className="min-h-screen bg-[#0A0A0B]">

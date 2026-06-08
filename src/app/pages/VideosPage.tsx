@@ -7,22 +7,17 @@ import { VideoCardVertical } from '../components/VideoCardVertical';
 import { PageHeader } from '../components/PageHeader';
 import { CategoryFilter } from '../components/CategoryFilter';
 import { Button } from '../components/Button';
-import {
-  VIDEOS as LOCAL_VIDEOS,
-  type Video,
-} from '../../data/videos';
+import { type Video } from '../../data/videos';
 import { UI } from '../../data/ui';
 import { interpolate } from '../../lib/format';
 import { fetchVideos } from '../../lib/queries/videos';
 import {
   fetchVideoCategories,
   getCategoryTitle,
-  LOCAL_VIDEO_CATEGORIES,
   type VideoCategoryEntry,
 } from '../../lib/queries/videoCategories';
 import {
   fetchVideosArchive,
-  LOCAL_VIDEOS_ARCHIVE,
   type VideosArchiveData,
 } from '../../lib/queries/videosArchive';
 
@@ -33,13 +28,9 @@ export function VideosPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [visible, setVisible] = useState(PAGE_SIZE);
 
-  // Initial state z local fallbacků — první render je synchronní a vizuálně
-  // identický s předchozí verzí. Sanity data přepíšou state až po async fetchi.
-  const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
-  const [categories, setCategories] = useState<VideoCategoryEntry[]>(
-    LOCAL_VIDEO_CATEGORIES,
-  );
-  const [archive, setArchive] = useState<VideosArchiveData>(LOCAL_VIDEOS_ARCHIVE);
+  const [videos, setVideos] = useState<Video[] | null>(null);
+  const [categories, setCategories] = useState<VideoCategoryEntry[] | null>(null);
+  const [archive, setArchive] = useState<VideosArchiveData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -57,34 +48,27 @@ export function VideosPage() {
     };
   }, []);
 
-  // Filter pill labels = { ALL_FILTER } + { kategorie z CMS v jejich pořadí }.
-  // Pillky používají `title` jako vizuální label, ale filtrujeme podle `value`
-  // (stabilní slug, který odpovídá `video.category` po dereferenci).
-  // Mapování label ↔ value drží `categoryByTitle` lookup.
+  // useMemo hooks must be declared before any conditional return.
+  // They are null-safe so they produce empty/default values while loading.
   const filters = useMemo(
-    () => [ALL_FILTER, ...categories.map((c) => c.title)],
+    () => [ALL_FILTER, ...(categories ?? []).map((c) => c.title)],
     [categories],
   );
 
   const categoryByTitle = useMemo(() => {
     const map = new Map<string, VideoCategoryEntry>();
-    for (const c of categories) map.set(c.title, c);
+    for (const c of (categories ?? [])) map.set(c.title, c);
     return map;
   }, [categories]);
 
-  // Filtr je řízený URL parametrem ?category=<value> — homepage Categories karty
-  // tak mohou linkovat přímo na předfiltrovaný archiv, back/forward navigace
-  // funguje přirozeně a URL je sdílitelná.
   const urlCategory = searchParams.get('category');
   const activeCategory = useMemo(() => {
     if (!urlCategory) return null;
-    return categories.find((c) => c.value === urlCategory) ?? null;
+    return (categories ?? []).find((c) => c.value === urlCategory) ?? null;
   }, [urlCategory, categories]);
 
   const activeFilter = activeCategory ? activeCategory.title : ALL_FILTER;
 
-  // Reset stránkování při změně kategorie (ať už přes filter pill nebo
-  // přímý odkaz z Categories sekce).
   useEffect(() => {
     setVisible(PAGE_SIZE);
   }, [urlCategory]);
@@ -105,12 +89,14 @@ export function VideosPage() {
   }
 
   const filtered = useMemo(() => {
-    if (!activeCategory) return videos;
-    return videos.filter((v) => v.category === activeCategory.value);
+    if (!activeCategory) return videos ?? [];
+    return (videos ?? []).filter((v) => v.category === activeCategory.value);
   }, [activeCategory, videos]);
 
   const visibleVideos = filtered.slice(0, visible);
   const hasMore = visible < filtered.length;
+
+  if (!videos || !categories || !archive) return null;
 
   return (
     <div className="min-h-screen bg-[#0A0A0B]">

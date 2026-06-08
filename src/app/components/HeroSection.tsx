@@ -5,18 +5,15 @@ import { LinkButton } from './LinkButton';
 import { Container } from './Container';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { ROUTES } from '../../data/routes';
-import { VIDEOS as LOCAL_VIDEOS, type Video } from '../../data/videos';
+import { type Video } from '../../data/videos';
 import { fetchVideos } from '../../lib/queries/videos';
 import {
   fetchHomePage,
-  LOCAL_HOME,
   type HomePageData,
 } from '../../lib/queries/homePage';
 
 export function HeroSection() {
-  // Initial state z local fallbacku — první render je synchronní a vizuálně
-  // identický s předchozí verzí. Sanity data přepíší state až po async fetchi.
-  const [home, setHome] = useState<HomePageData>(LOCAL_HOME);
+  const [home, setHome] = useState<HomePageData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -28,11 +25,7 @@ export function HeroSection() {
     };
   }, []);
 
-  // Videos pro primární CTA — mirror existujícího patternu z FeaturedVideos.
-  // Initial state z local fallbacku (LOCAL_VIDEOS je už řazený publishedAt
-  // desc, takže videos[0] je nejnovější i před fetchem). Sanity přepíše po
-  // async fetchi se zachovaným pořadím (GROQ projection: order(publishedAt desc)).
-  const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
+  const [videos, setVideos] = useState<Video[] | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -44,11 +37,12 @@ export function HeroSection() {
     };
   }, []);
 
+  if (!home || !videos) return null;
+
   const hero = home.hero;
   const newestVideo = videos[0];
   // Defensive: pokud by se z nějakého důvodu nedostal žádný video, CTA padá
-  // na archiv `/videos` místo broken detail URL. V praxi nenastane —
-  // LOCAL_VIDEOS má 9 entries a fetchVideos vrací local při jakémkoliv selhání.
+  // na archiv `/videos` místo broken detail URL.
   const primaryHref = newestVideo
     ? ROUTES.videoDetail(newestVideo.slug)
     : ROUTES.videos;

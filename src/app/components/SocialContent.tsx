@@ -3,16 +3,11 @@ import { SocialCard } from './SocialCard';
 import { Container } from './Container';
 import {
   fetchHomePage,
-  LOCAL_HOME,
   type HomePageData,
 } from '../../lib/queries/homePage';
 
 export function SocialContent() {
-  // Initial state z local fallbacku — Sanity přepíše jak section copy
-  // (title + highlight + subtitle), tak `platforms[]`. Local fallback
-  // tvar je identický s tvarem z adapteru, takže první render je sync
-  // a vizuálně shodný s tím, co přijde po fetchi.
-  const [home, setHome] = useState<HomePageData>(LOCAL_HOME);
+  const [home, setHome] = useState<HomePageData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -23,6 +18,8 @@ export function SocialContent() {
       cancelled = true;
     };
   }, []);
+
+  if (!home) return null;
 
   const section = home.socialContent;
   const platforms = section.platforms;

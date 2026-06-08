@@ -8,34 +8,22 @@ import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { VideoCardVertical } from '../components/VideoCardVertical';
 import { StoryCard } from '../components/StoryCard';
 import { ROUTES } from '../../data/routes';
-import { VIDEOS as LOCAL_VIDEOS, type Video } from '../../data/videos';
-import { STORIES as LOCAL_STORIES, type Story } from '../../data/stories';
+import { type Video } from '../../data/videos';
+import { type Story } from '../../data/stories';
 import { fetchStories } from '../../lib/queries/stories';
 import { fetchVideos } from '../../lib/queries/videos';
 import {
   fetchAboutPage,
-  LOCAL_ABOUT,
   type AboutPageData,
 } from '../../lib/queries/aboutPage';
 import {
   fetchVideoCategories,
   getCategoryTitle,
-  LOCAL_VIDEO_CATEGORIES,
   type VideoCategoryEntry,
 } from '../../lib/queries/videoCategories';
 
-/**
- * Plnohodnotná „O mně" stránka.
- * Vizuálně staví na sekci AboutHugo z homepage a doplňuje řádek
- * nejnovějších videí a nejnovějších příběhů.
- *
- * About copy (portrét, badge, bio, features, headlines) tahá z `aboutPage`
- * Sanity singletonu s lokálním fallbackem (`LOCAL_ABOUT`). Latest videos /
- * latest stories tahají z `video` / `story` collections jako předtím.
- */
 export function AboutPage() {
-  // About content: initial z local fallbacku → Sanity fetch.
-  const [about, setAbout] = useState<AboutPageData>(LOCAL_ABOUT);
+  const [about, setAbout] = useState<AboutPageData | null>(null);
   useEffect(() => {
     let cancelled = false;
     fetchAboutPage().then((data) => {
@@ -46,14 +34,7 @@ export function AboutPage() {
     };
   }, []);
 
-  const allParagraphs = [
-    ...about.bioParagraphs,
-    about.pageSection.extraParagraph,
-  ];
-
-  // Stories: initial z local fallbacku → Sanity fetch → top 3 slice.
-  // Visual identický s předchozí verzí (LATEST_STORIES = STORIES.slice(0, 3)).
-  const [stories, setStories] = useState<Story[]>(LOCAL_STORIES);
+  const [stories, setStories] = useState<Story[] | null>(null);
   useEffect(() => {
     let cancelled = false;
     fetchStories().then((data) => {
@@ -63,15 +44,9 @@ export function AboutPage() {
       cancelled = true;
     };
   }, []);
-  const latestStories = stories.slice(0, 3);
 
-  // Videos: stejný pattern jako stories — initial z local fallbacku, Sanity fetch
-  // přepíše state pokud má data. Visual identický s předchozí verzí
-  // (LATEST_VIDEOS = VIDEOS.slice(0, 4)).
-  const [videos, setVideos] = useState<Video[]>(LOCAL_VIDEOS);
-  const [categories, setCategories] = useState<VideoCategoryEntry[]>(
-    LOCAL_VIDEO_CATEGORIES,
-  );
+  const [videos, setVideos] = useState<Video[] | null>(null);
+  const [categories, setCategories] = useState<VideoCategoryEntry[] | null>(null);
   useEffect(() => {
     let cancelled = false;
     fetchVideos().then((data) => {
@@ -84,6 +59,14 @@ export function AboutPage() {
       cancelled = true;
     };
   }, []);
+
+  if (!about || !stories || !videos || !categories) return null;
+
+  const allParagraphs = [
+    ...about.bioParagraphs,
+    about.pageSection.extraParagraph,
+  ];
+  const latestStories = stories.slice(0, 3);
   const latestVideos = videos.slice(0, 4);
 
   return (

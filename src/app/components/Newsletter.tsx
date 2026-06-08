@@ -4,14 +4,11 @@ import { Button } from './Button';
 import { Container } from './Container';
 import {
   fetchHomePage,
-  LOCAL_HOME,
   type HomePageData,
 } from '../../lib/queries/homePage';
 
 export function Newsletter() {
-  // Initial state z local fallbacku — první render je synchronní a vizuálně
-  // identický s předchozí verzí. Sanity data přepíší state až po async fetchi.
-  const [home, setHome] = useState<HomePageData>(LOCAL_HOME);
+  const [home, setHome] = useState<HomePageData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -22,6 +19,8 @@ export function Newsletter() {
       cancelled = true;
     };
   }, []);
+
+  if (!home) return null;
 
   const newsletter = home.newsletter;
 
